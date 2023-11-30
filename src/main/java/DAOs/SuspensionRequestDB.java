@@ -28,6 +28,8 @@ public class SuspensionRequestDB implements SuspensionRequestDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally{
+            
         }
         return null;
     }
@@ -47,6 +49,8 @@ public class SuspensionRequestDB implements SuspensionRequestDAO {
             return affectedRows >0;
         } catch (SQLException e) {
             e.printStackTrace();
+        }finally{
+            
         }
         return false;
     }
@@ -67,6 +71,8 @@ public class SuspensionRequestDB implements SuspensionRequestDAO {
             return affectedRows>0;
         } catch (SQLException e) {
             e.printStackTrace();
+        }finally{
+            
         }
         return false;
     }
@@ -80,6 +86,8 @@ public class SuspensionRequestDB implements SuspensionRequestDAO {
             return affectedRows > 0;
         } catch (SQLException e) {
             e.printStackTrace();
+        }finally{
+            
         }
         return false;
     }
@@ -96,6 +104,8 @@ public class SuspensionRequestDB implements SuspensionRequestDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }finally{
+            
         }
         return suspensionRequests;
     }
@@ -112,6 +122,8 @@ public class SuspensionRequestDB implements SuspensionRequestDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }finally{
+            
         }
         return activeSuspensionRequests;
     }
@@ -129,6 +141,8 @@ public class SuspensionRequestDB implements SuspensionRequestDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }finally{
+            
         }
         return studentSuspensionRequest;
     }

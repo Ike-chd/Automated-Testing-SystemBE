@@ -30,6 +30,8 @@ public class TestDB implements TestDAO{
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
+        } finally{
+            
         }
         return null;
     }
@@ -44,6 +46,8 @@ public class TestDB implements TestDAO{
             return affectedRows > 0;
         } catch (SQLException ex) {
             ex.printStackTrace();
+        } finally{
+            
         }
         return false;
     }
@@ -57,6 +61,8 @@ public class TestDB implements TestDAO{
             return affectedRows > 0;
         } catch (SQLException ex) {
             ex.printStackTrace();
+        }finally{
+            
         }
         return false;
     }
@@ -72,6 +78,8 @@ public class TestDB implements TestDAO{
             return affectedRows > 0;
         } catch (SQLException ex) {
             ex.printStackTrace();
+        }finally{
+            
         }
         return false;
     }
@@ -89,6 +97,8 @@ public class TestDB implements TestDAO{
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
+        }finally{
+            
         }
         return tests;
     }
@@ -105,6 +115,8 @@ public class TestDB implements TestDAO{
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }finally{
+            
         }
         return tests;
     }
@@ -114,26 +126,5 @@ public class TestDB implements TestDAO{
         String testName = resultSet.getString("testName");
         int moduleId = resultSet.getInt("moduleID");
         return new Test(testId,testName,mdao.getModule(moduleId).getModuleID());
-    }
-
-    private Module getModuleById(int moduleId){
-        try {
-            ps = connection.getConnection().prepareStatement("SELECT * FROM Modules WHERE moduleID = ?");
-            ps.setInt(1, moduleId);
-            rs = ps.executeQuery();
-            if(rs.next()){
-                return extractModuleFromResultSet(rs);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private Module extractModuleFromResultSet(ResultSet resultSet) throws SQLException {
-        int moduleId = resultSet.getInt("moduleID");
-        String moduleName = resultSet.getString("moduleName");
-        String moduleDescription = resultSet.getString("moduleDescription");
-        return new Module(moduleId,moduleName,moduleDescription);
     }
 }

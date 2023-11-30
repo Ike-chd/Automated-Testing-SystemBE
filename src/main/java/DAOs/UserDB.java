@@ -46,6 +46,8 @@ public class UserDB extends DBConnection implements UserDAO{
             updated = ps.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
+        } finally{
+            
         }
         return updated == 1;
     }
@@ -64,6 +66,8 @@ public class UserDB extends DBConnection implements UserDAO{
         } catch (SQLException ex) {
             Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
             return null;
+        } finally{
+            
         }
     }
     

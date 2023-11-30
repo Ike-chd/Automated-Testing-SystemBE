@@ -24,6 +24,8 @@ public class TopicDB extends DBConnection implements TopicDAO{
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }finally{
+            
         }
         return null;
     }
@@ -39,6 +41,8 @@ public class TopicDB extends DBConnection implements TopicDAO{
             updated = ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        }finally{
+            
         }
         return updated == 1;
     }
@@ -52,6 +56,8 @@ public class TopicDB extends DBConnection implements TopicDAO{
             return affectedRows > 0;
         } catch (SQLException e) {
             e.printStackTrace();
+        }finally{
+            
         }
         return false;
     }
@@ -68,6 +74,8 @@ public class TopicDB extends DBConnection implements TopicDAO{
             return affectedRows >0;
         } catch (SQLException e) {
             e.printStackTrace();
+        }finally{
+            
         }
         return false;
     }
