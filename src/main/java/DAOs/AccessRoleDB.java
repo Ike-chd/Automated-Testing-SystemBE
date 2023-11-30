@@ -27,6 +27,8 @@ public class AccessRoleDB implements AccessRoleDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            
         }
         return null;
     }
@@ -40,6 +42,8 @@ public class AccessRoleDB implements AccessRoleDAO {
             return affectedRows > 0;
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            
         }
         return false;
     }
@@ -54,6 +58,8 @@ public class AccessRoleDB implements AccessRoleDAO {
             return affectedRows > 0;
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            
         }
         return false;
     }
@@ -67,6 +73,8 @@ public class AccessRoleDB implements AccessRoleDAO {
             return affectedRows > 0;
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally{
+            
         }
         return false;
     }
@@ -83,6 +91,8 @@ public class AccessRoleDB implements AccessRoleDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally{
+            
         }
         return accessRoles;
     }
