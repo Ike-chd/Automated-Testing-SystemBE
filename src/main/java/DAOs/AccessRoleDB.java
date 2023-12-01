@@ -16,6 +16,7 @@ public class AccessRoleDB implements AccessRoleDAO {
     private ResultSet rs;
     private DBConnection connection;
     private Statement s;
+    
     @Override
     public AccessRole getAccessRole(int accessRoleId) {
         try {
