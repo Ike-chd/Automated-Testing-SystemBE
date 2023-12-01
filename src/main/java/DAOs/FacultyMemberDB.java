@@ -10,16 +10,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-public class FacultyMemberDB implements FacultyMemberDAO {
+public class FacultyMemberDB extends DBConnection implements FacultyMemberDAO {
 
     private PreparedStatement ps;
     private ResultSet rs;
-    private DBConnection connection;
 
     @Override
     public FacultyMember getFacultyMember(int userId) {
         try {
-            ps = connection.getConnection().prepareStatement("SELECT * FROM Users WHERE userID = ?");
+            ps = getConnection().prepareStatement("SELECT * FROM Users WHERE userID = ?");
             ps.setInt(1, userId);
             rs = ps.executeQuery();
             if (rs.next()) {
@@ -40,7 +39,7 @@ public class FacultyMemberDB implements FacultyMemberDAO {
     @Override
     public boolean addFacultyMember(FacultyMember facultyMember) {
         try {
-            ps = connection.getConnection().prepareStatement("INSERT INTO Users (firstname, surname, email, idNumber, password) VALUES (?,?,?,?,?)");
+            ps = getConnection().prepareStatement("INSERT INTO Users (firstname, surname, email, idNumber, password) VALUES (?,?,?,?,?)");
             ps.setString(1, facultyMember.getName());
             ps.setString(2, facultyMember.getSurname());
             ps.setString(3, facultyMember.getEmail());
@@ -63,7 +62,7 @@ public class FacultyMemberDB implements FacultyMemberDAO {
     @Override
     public boolean updateFacultyMember(FacultyMember facultyMember) {
         try {
-            ps = connection.getConnection().prepareStatement("UPDATE Users SET firstname = ?, surname = ?, email = ?, idNumber = ?, password = ? WHERE userID = ?");
+            ps = getConnection().prepareStatement("UPDATE Users SET firstname = ?, surname = ?, email = ?, idNumber = ?, password = ? WHERE userID = ?");
             ps.setString(1, facultyMember.getName());
             ps.setString(2, facultyMember.getSurname());
             ps.setString(3, facultyMember.getEmail());
@@ -85,9 +84,9 @@ public class FacultyMemberDB implements FacultyMemberDAO {
     }
 
     @Override
-    public boolean deleteFacultyMember(FacultyMember facultyMember) {
+    public boolean deleteFacultyMember(FacultyMember facultyMember)  {
         try {
-            ps = connection.getConnection().prepareStatement("DELETE FROM Users WHERE userID = ?");
+            ps = getConnection().prepareStatement("DELETE FROM Users WHERE userID = ?");
             ps.setInt(1, facultyMember.getUserID());
             int affectedRows = ps.executeUpdate();
             return affectedRows > 0;

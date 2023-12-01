@@ -13,14 +13,13 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class ModuleDB implements ModuleDAO{
+public class ModuleDB extends DBConnection implements ModuleDAO{
     private PreparedStatement ps;
     private ResultSet rs;
-    private DBConnection connection;
     @Override
     public Module getModule(int moduleId) {
         try {
-            ps = connection.getConnection().prepareStatement("SELECT * FROM Modules WHERE moduleID = ?");
+            ps = getConnection().prepareStatement("SELECT * FROM Modules WHERE moduleID = ?");
             ps.setInt(1, moduleId);
             rs = ps.executeQuery();
             if(rs.next()){
@@ -37,11 +36,10 @@ public class ModuleDB implements ModuleDAO{
         }
         return null;
     }
-
     @Override
     public boolean insertModule(Module module) {
         try {
-            ps = connection.getConnection().prepareStatement("INSERT INTO Modules (moduleName, moduleDescription) VALUES (?,?)");
+            ps = getConnection().prepareStatement("INSERT INTO Modules (moduleName, moduleDescription) VALUES (?,?)");
             ps.setString(1, module.getModuleName());
             ps.setString(2, module.getModuleDescription());
             int affectedRows = ps.executeUpdate();
@@ -57,11 +55,10 @@ public class ModuleDB implements ModuleDAO{
         }
         return false;
     }
-
     @Override
     public boolean deleteModule(Module module) {
         try {
-            ps = connection.getConnection().prepareStatement("DELETE FROM Modules WHERE moduleID = ?");
+            ps = getConnection().prepareStatement("DELETE FROM Modules WHERE moduleID = ?");
             ps.setInt(1, module.getModuleID());
             int affectedRows = ps.executeUpdate();
             return affectedRows > 0;
@@ -76,11 +73,10 @@ public class ModuleDB implements ModuleDAO{
         }
         return false;
     }
-
     @Override
     public boolean updateModule(Module module) {
         try {
-            ps = connection.getConnection().prepareStatement("UPDATE Modules SET moduleName = ?, moduleDescription = ? WHERE moduleID = ?");
+            ps = getConnection().prepareStatement("UPDATE Modules SET moduleName = ?, moduleDescription = ? WHERE moduleID = ?");
             ps.setString(1, module.getModuleName());
             ps.setString(2, module.getModuleDescription());
             ps.setInt(3,module.getModuleID());

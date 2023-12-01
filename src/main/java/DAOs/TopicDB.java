@@ -9,8 +9,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class TopicDB extends DBConnection implements TopicDAO{
     private PreparedStatement ps;
@@ -36,7 +34,6 @@ public class TopicDB extends DBConnection implements TopicDAO{
         }
         return null;
     }
-
     @Override
     public boolean insertTopic(Topic topic) {
         int updated = 0;
@@ -57,7 +54,6 @@ public class TopicDB extends DBConnection implements TopicDAO{
         }
         return updated == 1;
     }
-
     @Override
     public boolean deleteTopic(Topic topic) {
         try {
@@ -72,11 +68,10 @@ public class TopicDB extends DBConnection implements TopicDAO{
         }
         return false;
     }
-
     @Override
     public boolean updateTopic(Topic topic) {
         try {
-            ps = getConnection().prepareStatement("UPDATE Topics SET topicName = ?, description = ?, infoLiStrnk = ? WHERE topicID = ?");
+            ps = getConnection().prepareStatement("UPDATE Topics SET topicName = ?, description = ?, infoLink = ? WHERE topicID = ?");
             ps.setString(1, topic.getTopicName());
             ps.setString(2, topic.getDescription());
             ps.setString(3,topic.getInfoLink());
@@ -94,12 +89,10 @@ public class TopicDB extends DBConnection implements TopicDAO{
         }
         return false;
     }
-
     @Override
     public List<Topic> allTopics() {
         return null;
     }
-    
     private Topic extractTopicsFromResultSet(ResultSet resultSet) throws SQLException{
         int topicID = resultSet.getInt("topicID");
         String topicName = resultSet.getString("topicName");

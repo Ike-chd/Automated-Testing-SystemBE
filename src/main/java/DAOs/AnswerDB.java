@@ -14,17 +14,16 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AnswerDB implements AnswerDAO{
+public class AnswerDB extends DBConnection implements AnswerDAO{
     private PreparedStatement ps;
     private ResultSet rs;
-    private DBConnection connection;
     private Statement s;
     private QuestionDAO qdao = new QuestionDB();
 
     @Override
     public Answer getAnswer(int answerId) {
         try {
-            ps = connection.getConnection().prepareStatement("SELECT * FROM Answers WHERE answerID = ?");
+            ps = getConnection().prepareStatement("SELECT * FROM Answers WHERE answerID = ?");
             ps.setInt(1, answerId);
             rs = ps.executeQuery();
             if (rs.next()) {
@@ -39,7 +38,7 @@ public class AnswerDB implements AnswerDAO{
     @Override
     public boolean insertAnswer(Answer answer) {
         try {
-            ps = connection.getConnection().prepareStatement("INSERT INTO Answers (questionID, answer, correctAnswer) VALUES(?,?,?)");
+            ps = getConnection().prepareStatement("INSERT INTO Answers (questionID, answer, correctAnswer) VALUES(?,?,?)");
             ps.setInt(1, answer.getQuestion().getQuestionID());
             ps.setString(2, answer.getAnswer());
             //ps.setString(3, answer.getCorrectAnswer());
@@ -60,7 +59,7 @@ public class AnswerDB implements AnswerDAO{
     @Override
     public boolean updateAnswer(Answer answer) {
         try {
-            ps = connection.getConnection().prepareStatement("UPDATE Answers SET questionID = ?, answer = ?, correctAnswer = ? WHERE answerID = ?");
+            ps = getConnection().prepareStatement("UPDATE Answers SET questionID = ?, answer = ?, correctAnswer = ? WHERE answerID = ?");
             ps.setInt(1, answer.getQuestion().getQuestionID());
             ps.setString(2, answer.getAnswer());
            // ps.setString(3, answer.getCorrectAnswer());
@@ -82,7 +81,7 @@ public class AnswerDB implements AnswerDAO{
     @Override
     public boolean deleteAnswer(Answer answer) {
         try {
-            ps = connection.getConnection().prepareStatement("DELETE FROM Answer WHERE answerID = ?");
+            ps = getConnection().prepareStatement("DELETE FROM Answer WHERE answerID = ?");
             ps.setInt(1, answer.getAnswerID());
             int affectedRows = ps.executeUpdate();
             return affectedRows>0;
@@ -102,7 +101,7 @@ public class AnswerDB implements AnswerDAO{
     public List<Answer> allQuestionAnswers(Question question) {
         List<Answer> answers = new ArrayList<>();
         try {
-            ps = connection.getConnection().prepareStatement("SELECT * FROM Answers WHERE questionID = ?");
+            ps = getConnection().prepareStatement("SELECT * FROM Answers WHERE questionID = ?");
             ps.setInt(1, question.getQuestionID());
             rs = ps.executeQuery();
             while(rs.next()){

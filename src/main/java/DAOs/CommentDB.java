@@ -20,14 +20,12 @@ import java.util.logging.Logger;
 public class CommentDB extends DBConnection implements CommentDAO{
     private PreparedStatement ps;
     private ResultSet rs;
-    private Connection con;
     private StudentDAO sdao = new StudentDB();
     private FacultyMemberDAO fadao = new FacultyMemberDB();
     @Override
     public Comment getComment(int commentId) {
         try {
-            con = getConnection();
-            ps = con.prepareStatement("SELECT * FROM Comments WHERE commentID = ?");
+            ps = getConnection().prepareStatement("SELECT * FROM Comments WHERE commentID = ?");
             ps.setInt(1, commentId);
             rs = ps.executeQuery();
             if(rs.next()){
@@ -47,8 +45,7 @@ public class CommentDB extends DBConnection implements CommentDAO{
     @Override
     public boolean insertComment(Comment comment) {
         try {
-            con = getConnection();
-            ps = con.prepareStatement("INSERT INTO Comments (comment, studentID, userID) VALUES (?, ?, ?)");
+            ps = getConnection().prepareStatement("INSERT INTO Comments (comment, studentID, userID) VALUES (?, ?, ?)");
             ps.setString(1, comment.getComment());
             ps.setString(2, comment.getStudent().getUsername());
             ps.setInt(3, comment.getFaculty().getUserID());
@@ -74,8 +71,7 @@ public class CommentDB extends DBConnection implements CommentDAO{
     @Override
     public boolean updateComment(Comment comment) {
         try {
-            con = getConnection();
-            ps = con.prepareStatement("UPDATE Comment SET comment = ? WHERE commentID = ?");
+            ps = getConnection().prepareStatement("UPDATE Comment SET comment = ? WHERE commentID = ?");
             ps.setString(1, comment.getComment());
             ps.setInt(2, comment.getCommentID());
             int affectedRows = ps.executeUpdate();
@@ -94,8 +90,7 @@ public class CommentDB extends DBConnection implements CommentDAO{
     @Override
     public boolean deleteComment(Comment comment) {
         try {
-            con = getConnection();
-            ps = con.prepareStatement("DELETE FROM Comment WHERE commentID = ?");
+            ps = getConnection().prepareStatement("DELETE FROM Comment WHERE commentID = ?");
             ps.setInt(1, comment.getCommentID());
             int affectedRows = ps.executeUpdate();
             return affectedRows > 0;
@@ -114,8 +109,7 @@ public class CommentDB extends DBConnection implements CommentDAO{
     public List<Comment> getAllStudentComments(Student student) {
         List<Comment> studentComments = new ArrayList<>();
         try {
-            con = getConnection();
-            ps = con.prepareStatement("SELECT * FROM Comments WHERE studentID = ?");
+            ps = getConnection().prepareStatement("SELECT * FROM Comments WHERE studentID = ?");
             ps.setString(1, student.getUsername());
             rs = ps.executeQuery();
             while(rs.next()){
@@ -136,9 +130,8 @@ public class CommentDB extends DBConnection implements CommentDAO{
     @Override
     public List<Comment> getAllCommentsByFaculty(FacultyMember faculty) {
         List<Comment> facultyComments = new ArrayList<>();
-        con = getConnection();
         try {
-            ps = con.prepareStatement("SELECT * FROM Comments WHERE userID = ?");
+            ps = getConnection().prepareStatement("SELECT * FROM Comments WHERE userID = ?");
             ps.setInt(1, faculty.getUserID());
             rs = ps.executeQuery();
             while(rs.next()){
