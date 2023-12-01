@@ -1,5 +1,6 @@
 package DAOs;
 
+import DAOs.CloseStreams.CloseStreams;
 import DAOs.DAOControllers.Courses.CourseDAO;
 import DBConnection.DBConnection;
 import Models.Courses.Course;
@@ -26,6 +27,12 @@ public class CourseDB extends DBConnection implements CourseDAO{
             }
         } catch (SQLException ex) {
         ex.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closeRsPs(rs, ps);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
         return null;
     }
@@ -40,6 +47,12 @@ public class CourseDB extends DBConnection implements CourseDAO{
             return affectedRows > 0;
         } catch (SQLException ex) {
         ex.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closePreparedStatment(ps);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return false;
     }
@@ -53,6 +66,12 @@ public class CourseDB extends DBConnection implements CourseDAO{
             return affectedRows>0;
         } catch (SQLException ex) {
         ex.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closePreparedStatment(ps);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return false;
     }
@@ -68,6 +87,12 @@ public class CourseDB extends DBConnection implements CourseDAO{
             return affectedRows>0;
         } catch (SQLException ex) {
         ex.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closePreparedStatment(ps);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return false;
     }
@@ -84,6 +109,17 @@ public class CourseDB extends DBConnection implements CourseDAO{
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
+        } finally {
+                try {
+                    if(s != null){
+                    s.close();
+                } else if(rs != null){
+                    rs.close();
+                }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
         }
         return courses;
     }

@@ -1,5 +1,6 @@
 package DAOs;
 
+import DAOs.CloseStreams.CloseStreams;
 import DAOs.DAOControllers.Courses.CourseDAO;
 import DAOs.DAOControllers.SuspensionRequest.SuspensionRequestDAO;
 import DBConnection.DBConnection;
@@ -9,6 +10,8 @@ import Models.Users.Student;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class SuspensionRequestDB implements SuspensionRequestDAO {
     private PreparedStatement ps;
@@ -29,7 +32,11 @@ public class SuspensionRequestDB implements SuspensionRequestDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally{
-            
+            try {
+                CloseStreams.closeRsPs(rs, ps);
+            } catch (SQLException ex) {
+            ex.printStackTrace();
+            }
         }
         return null;
     }
@@ -50,7 +57,11 @@ public class SuspensionRequestDB implements SuspensionRequestDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }finally{
-            
+            try {
+                CloseStreams.closePreparedStatment(ps);
+            } catch (SQLException ex) {
+               ex.printStackTrace();
+            }
         }
         return false;
     }
@@ -72,7 +83,11 @@ public class SuspensionRequestDB implements SuspensionRequestDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }finally{
-            
+            try {
+                CloseStreams.closePreparedStatment(ps);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
         return false;
     }
@@ -87,7 +102,11 @@ public class SuspensionRequestDB implements SuspensionRequestDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }finally{
-            
+            try {
+                CloseStreams.closePreparedStatment(ps);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
         return false;
     }
@@ -123,6 +142,14 @@ public class SuspensionRequestDB implements SuspensionRequestDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }finally{
+                try {if(statement != null){
+                statement.close();
+            } else if(rs != null){
+                    rs.close();
+                }
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
             
         }
         return activeSuspensionRequests;
@@ -142,7 +169,11 @@ public class SuspensionRequestDB implements SuspensionRequestDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }finally{
-            
+            try {
+                CloseStreams.closeRsPs(rs, ps);
+            } catch (SQLException ex) {
+            ex.printStackTrace();
+            }
         }
         return studentSuspensionRequest;
     }

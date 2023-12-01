@@ -1,5 +1,6 @@
 package DAOs;
 
+import DAOs.CloseStreams.CloseStreams;
 import DAOs.DAOControllers.Courses.TopicDAO;
 import DBConnection.DBConnection;
 import Models.Courses.Topic;
@@ -8,6 +9,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class TopicDB extends DBConnection implements TopicDAO{
     private PreparedStatement ps;
@@ -25,7 +28,11 @@ public class TopicDB extends DBConnection implements TopicDAO{
         } catch (SQLException e) {
             e.printStackTrace();
         }finally{
-            
+            try {
+                CloseStreams.closeRsPs(rs, ps);
+            } catch (SQLException ex) {
+            ex.printStackTrace();
+            }
         }
         return null;
     }
@@ -42,7 +49,11 @@ public class TopicDB extends DBConnection implements TopicDAO{
         } catch (SQLException e) {
             e.printStackTrace();
         }finally{
-            
+            try {
+                CloseStreams.closePreparedStatment(ps);
+            } catch (SQLException ex) {
+             ex.printStackTrace();
+            }
         }
         return updated == 1;
     }
@@ -75,7 +86,11 @@ public class TopicDB extends DBConnection implements TopicDAO{
         } catch (SQLException e) {
             e.printStackTrace();
         }finally{
-            
+            try {
+                CloseStreams.closePreparedStatment(ps);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
         return false;
     }

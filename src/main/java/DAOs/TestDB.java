@@ -1,5 +1,6 @@
 package DAOs;
 
+import DAOs.CloseStreams.CloseStreams;
 import DAOs.DAOControllers.Courses.ModuleDAO;
 import DAOs.DAOControllers.Tests.TestDAO;
 import DBConnection.DBConnection;
@@ -10,6 +11,8 @@ import Models.Tests.Test;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class TestDB implements TestDAO{
@@ -31,7 +34,11 @@ public class TestDB implements TestDAO{
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally{
-            
+            try {
+                CloseStreams.closeRsPs(rs, ps);
+            } catch (SQLException ex) {
+            ex.printStackTrace();
+            }
         }
         return null;
     }
@@ -47,7 +54,11 @@ public class TestDB implements TestDAO{
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally{
-            
+            try {
+                CloseStreams.closePreparedStatment(ps);
+            } catch (SQLException ex) {
+            ex.printStackTrace();
+            }
         }
         return false;
     }
@@ -62,7 +73,11 @@ public class TestDB implements TestDAO{
         } catch (SQLException ex) {
             ex.printStackTrace();
         }finally{
-            
+            try {
+                CloseStreams.closePreparedStatment(ps);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
         return false;
     }
@@ -79,7 +94,11 @@ public class TestDB implements TestDAO{
         } catch (SQLException ex) {
             ex.printStackTrace();
         }finally{
-            
+            try {
+                CloseStreams.closePreparedStatment(ps);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
         return false;
     }
@@ -98,7 +117,11 @@ public class TestDB implements TestDAO{
         } catch (SQLException ex) {
             ex.printStackTrace();
         }finally{
-            
+            try {
+                CloseStreams.closeRsPs(rs, ps);
+            } catch (SQLException ex) {
+            ex.printStackTrace();
+            }
         }
         return tests;
     }
@@ -116,6 +139,15 @@ public class TestDB implements TestDAO{
         } catch (SQLException e) {
             e.printStackTrace();
         }finally{
+                try {
+                    if (s!=null) {
+                    s.close();
+                    } else if(rs != null){
+                        rs.close();
+                    }
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
             
         }
         return tests;

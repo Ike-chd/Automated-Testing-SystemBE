@@ -1,5 +1,6 @@
 package DAOs;
 
+import DAOs.CloseStreams.CloseStreams;
 import DAOs.DAOControllers.Courses.TopicDAO;
 import DAOs.DAOControllers.QA.QuestionDAO;
 import DBConnection.DBConnection;
@@ -27,6 +28,12 @@ public class QuestionDB extends DBConnection implements QuestionDAO{
             }
         } catch (SQLException ex) {
            ex.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closeRsPs(rs, ps);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
         return null;
     }
@@ -42,6 +49,12 @@ public class QuestionDB extends DBConnection implements QuestionDAO{
             updated = ps.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closePreparedStatment(ps);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return updated == 1;
     }
@@ -55,6 +68,12 @@ public class QuestionDB extends DBConnection implements QuestionDAO{
             updated = ps.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closePreparedStatment(ps);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return updated == 1;
     }
@@ -70,6 +89,12 @@ public class QuestionDB extends DBConnection implements QuestionDAO{
             updated = ps.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closePreparedStatment(ps);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return updated == 1;
     }
@@ -87,6 +112,12 @@ public class QuestionDB extends DBConnection implements QuestionDAO{
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closeRsPs(rs, ps);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
         return questions;
     }

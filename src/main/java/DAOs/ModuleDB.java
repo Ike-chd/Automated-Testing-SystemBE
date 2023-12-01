@@ -1,5 +1,6 @@
 package DAOs;
 
+import DAOs.CloseStreams.CloseStreams;
 import DAOs.DAOControllers.Courses.ModuleDAO;
 import DBConnection.DBConnection;
 import java.sql.Connection;
@@ -27,6 +28,12 @@ public class ModuleDB implements ModuleDAO{
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closeRsPs(rs, ps);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
         return null;
     }
@@ -41,6 +48,12 @@ public class ModuleDB implements ModuleDAO{
             return affectedRows > 0;
         } catch (SQLException ex) {
             ex.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closePreparedStatment(ps);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return false;
     }
@@ -54,6 +67,12 @@ public class ModuleDB implements ModuleDAO{
             return affectedRows > 0;
         } catch (SQLException ex) {
             ex.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closePreparedStatment(ps);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return false;
     }
@@ -69,6 +88,12 @@ public class ModuleDB implements ModuleDAO{
             return affectedRows > 0;
         } catch (SQLException ex) {
             ex.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closePreparedStatment(ps);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return false;
     }

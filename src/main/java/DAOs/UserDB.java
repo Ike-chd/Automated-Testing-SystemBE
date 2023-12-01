@@ -1,5 +1,6 @@
 package DAOs;
 
+import DAOs.CloseStreams.CloseStreams;
 import DAOs.DAOControllers.Users.UserDAO;
 import DBConnection.DBConnection;
 import Models.Users.User;
@@ -41,9 +42,15 @@ public class UserDB extends DBConnection implements UserDAO{
             }
             return null;    
         } catch (SQLException ex) {
-            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
+            ex.printStackTrace();
+        }finally{
+            try {
+                CloseStreams.closeRsPs(rs, ps);
+            } catch (SQLException ex) {
+            ex.printStackTrace();
+            }
         }
+        return null;
     }
 
     @Override
@@ -58,9 +65,13 @@ public class UserDB extends DBConnection implements UserDAO{
             ps.setString(4, student.getIdNumber());
             updated = ps.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         } finally{
-            
+            try {
+                CloseStreams.closePreparedStatment(ps);
+            } catch (SQLException ex) {
+            ex.printStackTrace();
+            }
         }
         return updated == 1;
     }
@@ -77,11 +88,15 @@ public class UserDB extends DBConnection implements UserDAO{
             }
             return null;    
         } catch (SQLException ex) {
-            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
+           ex.printStackTrace();
         } finally{
-            
+            try {
+                CloseStreams.closeRsPs(rs, ps);
+            } catch (SQLException ex) {
+            ex.printStackTrace();
+            }
         }
+        return null;
     }
     
     public User extractUserFromDB(ResultSet rs){

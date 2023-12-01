@@ -1,5 +1,6 @@
 package DAOs;
 
+import DAOs.CloseStreams.CloseStreams;
 import DAOs.DAOControllers.Courses.CourseDAO;
 import DAOs.DAOControllers.Users.StudentDAO;
 import DBConnection.DBConnection;
@@ -30,6 +31,12 @@ public class StudentDB implements StudentDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }finally{
+            try {
+                CloseStreams.closeRsPs(rs, ps);
+            } catch (SQLException ex) {
+            ex.printStackTrace();
+            }
         }
         return null;
     }
@@ -45,6 +52,12 @@ public class StudentDB implements StudentDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }finally{
+            try {
+                CloseStreams.closeRsPs(rs, ps);
+            } catch (SQLException ex) {
+            ex.printStackTrace();
+            }
         }
         return null;
     }
@@ -76,6 +89,12 @@ public class StudentDB implements StudentDAO {
             return affectedRows > 0;
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally{
+            try {
+                CloseStreams.closePreparedStatment(ps);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
         return false;
     }
@@ -89,6 +108,12 @@ public class StudentDB implements StudentDAO {
             return affectedRows > 0;
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally{
+            try {
+                CloseStreams.closePreparedStatment(ps);
+            } catch (SQLException ex) {
+              ex.printStackTrace();
+            }
         }
         return false;
     }
@@ -110,6 +135,12 @@ public class StudentDB implements StudentDAO {
             return affectedRows > 0;
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally{
+            try {
+                CloseStreams.closePreparedStatment(ps);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
         return false;
     }

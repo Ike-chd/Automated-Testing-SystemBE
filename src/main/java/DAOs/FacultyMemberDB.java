@@ -1,5 +1,6 @@
 package DAOs;
 
+import DAOs.CloseStreams.CloseStreams;
 import DAOs.DAOControllers.Users.FacultyMemberDAO;
 import DBConnection.DBConnection;
 import Models.Users.FacultyMember;
@@ -26,6 +27,12 @@ public class FacultyMemberDB implements FacultyMemberDAO {
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closeRsPs(rs, ps);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
         return null;
     }
@@ -43,6 +50,12 @@ public class FacultyMemberDB implements FacultyMemberDAO {
             return affectedRows > 0;
         } catch (SQLException ex) {
             ex.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closePreparedStatment(ps);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return false;
     }
@@ -61,6 +74,12 @@ public class FacultyMemberDB implements FacultyMemberDAO {
             return affectedRows > 0;
         } catch (SQLException ex) {
             ex.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closePreparedStatment(ps);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return false;
     }
@@ -74,6 +93,12 @@ public class FacultyMemberDB implements FacultyMemberDAO {
             return affectedRows > 0;
         } catch (SQLException ex) {
             ex.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closePreparedStatment(ps);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return false;
     }

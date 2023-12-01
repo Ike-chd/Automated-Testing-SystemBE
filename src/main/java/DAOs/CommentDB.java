@@ -1,5 +1,6 @@
 package DAOs;
 
+import DAOs.CloseStreams.CloseStreams;
 import DAOs.DAOControllers.Communications.CommentDAO;
 import DAOs.DAOControllers.Users.FacultyMemberDAO;
 import DAOs.DAOControllers.Users.StudentDAO;
@@ -27,15 +28,19 @@ public class CommentDB extends DBConnection implements CommentDAO{
         try {
             con = getConnection();
             ps = con.prepareStatement("SELECT * FROM Comments WHERE commentID = ?");
-            
             ps.setInt(1, commentId);
             rs = ps.executeQuery();
-            
             if(rs.next()){
                 return extractCommentFromResultSet(rs);
             }
         } catch (SQLException ex) {
         ex.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closeRsPs(rs, ps);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
         return null;
     }
@@ -57,6 +62,12 @@ public class CommentDB extends DBConnection implements CommentDAO{
             }
         } catch (SQLException ex) {
         ex.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closePreparedStatment(ps);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return false;
     }
@@ -71,6 +82,12 @@ public class CommentDB extends DBConnection implements CommentDAO{
             return affectedRows > 0;
         } catch (SQLException ex) {
         ex.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closePreparedStatment(ps);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return false;
     }
@@ -84,6 +101,12 @@ public class CommentDB extends DBConnection implements CommentDAO{
             return affectedRows > 0;
         } catch (SQLException ex) {
         ex.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closePreparedStatment(ps);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return false;
     }
@@ -100,7 +123,13 @@ public class CommentDB extends DBConnection implements CommentDAO{
                 studentComments.add(comment);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(CommentDB.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+        } finally{
+            try {
+                CloseStreams.closeRsPs(rs, ps);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
         return studentComments;
     }
@@ -118,6 +147,12 @@ public class CommentDB extends DBConnection implements CommentDAO{
             }
         } catch (SQLException ex) {
         ex.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closeRsPs(rs, ps);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
         return facultyComments;
     }
