@@ -1,4 +1,4 @@
-package Models.SuspensionRequest;
+    package Models.SuspensionRequest;
 
 import Models.Users.Student;
 import lombok.AllArgsConstructor;
