@@ -16,17 +16,17 @@ public class ModuleHandler implements ModuleService {
     }
 
     @Override
-    public boolean addModule(Module module) {
-        return mdao.insertModule(module);
+    public boolean addModule(int moduleId) {
+        return mdao.insertModule(moduleId);
     }
 
     @Override
-    public boolean deleteModule(Module module) {
-        return mdao.deleteModule(module);
+    public boolean deleteModule(int moduleId) {
+        return mdao.deleteModule(moduleId);
     }
 
     @Override
-    public boolean updateModule(Module module) {
-        return mdao.updateModule(module);
+    public boolean updateModule(int moduleId) {
+        return mdao.updateModule(moduleId);
     }
 }

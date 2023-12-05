@@ -54,7 +54,7 @@ public class AccessRoleDB implements AccessRoleDAO {
         try {
             ps = DBConnection.getConnection().prepareStatement("UPDATE AccessRoles SET accessRole = ? WHERE accessRoleID = ?");
             ps.setString(1, accessRole.getRoleName());
-            ps.setInt(2, accessRole.getRoleId());
+            ps.setInt(2, accessRole.getAccessRoleID());
             int affectedRows = ps.executeUpdate();
             return affectedRows > 0;
         } catch (SQLException e) {
@@ -69,7 +69,7 @@ public class AccessRoleDB implements AccessRoleDAO {
     public boolean deleteAccessRole(AccessRole accessRole) {
         try {
             ps = DBConnection.getConnection().prepareStatement("DELETE FROM AccessRoles WHERE accessRoleID = ?");
-            ps.setInt(1, accessRole.getRoleId());
+            ps.setInt(1, accessRole.getAccessRoleID());
             int affectedRows = ps.executeUpdate();
             return affectedRows > 0;
         } catch (SQLException e) {

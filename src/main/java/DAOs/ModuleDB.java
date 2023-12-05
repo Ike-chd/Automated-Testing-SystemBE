@@ -13,6 +13,7 @@ public class ModuleDB implements ModuleDAO {
 
     private PreparedStatement ps;
     private ResultSet rs;
+    private Module module;
 
     @Override
     public Module getModule(int moduleId) {
@@ -30,7 +31,7 @@ public class ModuleDB implements ModuleDAO {
     }
 
     @Override
-    public boolean insertModule(Module module) {
+    public boolean insertModule(int moduleId) {
         try {
             ps = DBConnection.getConnection().prepareStatement("INSERT INTO Modules (moduleName, moduleDescription) VALUES (?,?)");
             ps.setString(1, module.getModuleName());
@@ -44,7 +45,7 @@ public class ModuleDB implements ModuleDAO {
     }
 
     @Override
-    public boolean deleteModule(Module module) {
+    public boolean deleteModule(int moduleId) {
         try {
             ps = DBConnection.getConnection().prepareStatement("DELETE FROM Modules WHERE moduleID = ?");
             ps.setInt(1, module.getModuleID());
@@ -57,7 +58,7 @@ public class ModuleDB implements ModuleDAO {
     }
 
     @Override
-    public boolean updateModule(Module module) {
+    public boolean updateModule(int moduleId) {
         try {
             ps = DBConnection.getConnection().prepareStatement("UPDATE Modules SET moduleName = ?, moduleDescription = ? WHERE moduleID = ?");
             ps.setString(1, module.getModuleName());
