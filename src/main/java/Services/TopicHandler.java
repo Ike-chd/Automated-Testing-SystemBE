@@ -6,10 +6,10 @@ import Models.Courses.Topic;
 import Services.ServicesInterfaces.TopicService;
 import java.util.Optional;
 
-public class TopicHandler implements TopicService{
+public class TopicHandler implements TopicService {
 
     TopicDAO topdao = new TopicDB();
-    
+
     @Override
     public Optional<Topic> getTopic(int topicId) {
         return Optional.ofNullable(topdao.getTopic(topicId));
@@ -29,5 +29,5 @@ public class TopicHandler implements TopicService{
     public boolean deleteTopic(int topicId) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
+
 }

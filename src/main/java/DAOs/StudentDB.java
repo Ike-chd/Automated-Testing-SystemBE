@@ -16,13 +16,12 @@ public class StudentDB implements StudentDAO {
 
     private PreparedStatement ps;
     private ResultSet rs;
-    private DBConnection connection;
     private CourseDAO cdao = new CourseDB();
 
     @Override
     public Student getStudent(int id) {
         try {
-            ps = connection.getConnection().prepareStatement("SELECT * FROM Students WHERE studentID = ?");
+            ps = DBConnection.getConnection().prepareStatement("SELECT * FROM Students WHERE studentID = ?");
             ps.setInt(1, id);
             rs = ps.executeQuery();
             if (rs.next()) {
@@ -37,7 +36,7 @@ public class StudentDB implements StudentDAO {
     @Override
     public Student getStudent(String stID) {
         try {
-            ps = connection.getConnection().prepareStatement("SELECT * FROM Students WHERE studentNum = ?");
+            ps = DBConnection.getConnection().prepareStatement("SELECT * FROM Students WHERE studentNum = ?");
             ps.setString(1, stID);
             rs = ps.executeQuery();
             if (rs.next()) {
@@ -63,7 +62,7 @@ public class StudentDB implements StudentDAO {
     @Override
     public boolean insertStudent(Student student) {
         try {
-            ps = connection.getConnection().prepareStatement("INSERT INTO Students (firstname, surname, email, address, idNumber, courseID, password, studentNum) VALUES (?,?,?,?,?,?,?,?)");
+            ps = DBConnection.getConnection().prepareStatement("INSERT INTO Students (firstname, surname, email, address, idNumber, courseID, password, studentNum) VALUES (?,?,?,?,?,?,?,?)");
             ps.setString(1, student.getName());
             ps.setString(2, student.getSurname());
             ps.setString(3, student.getEmail());
@@ -83,7 +82,7 @@ public class StudentDB implements StudentDAO {
     @Override
     public boolean deleteStudent(Student student) {
         try {
-            ps = connection.getConnection().prepareStatement("DELETE FROM students WHERE studentID = ?");
+            ps = DBConnection.getConnection().prepareStatement("DELETE FROM students WHERE studentID = ?");
             ps.setInt(1, student.getUserID());
             int affectedRows = ps.executeUpdate();
             return affectedRows > 0;
@@ -96,7 +95,7 @@ public class StudentDB implements StudentDAO {
     @Override
     public boolean updateStudent(Student student) {
         try {
-            ps = connection.getConnection().prepareStatement("UPDATE Students SET firstname = ?, surname = ?, email = ?, address = ?, idNumber = ?, courseID = ?, password = ?, studentNum = ? WHERE studentID = ?");
+            ps = DBConnection.getConnection().prepareStatement("UPDATE Students SET firstname = ?, surname = ?, email = ?, address = ?, idNumber = ?, courseID = ?, password = ?, studentNum = ? WHERE studentID = ?");
             ps.setString(1, student.getName());
             ps.setString(2, student.getSurname());
             ps.setString(3, student.getEmail());
@@ -127,5 +126,4 @@ public class StudentDB implements StudentDAO {
 //        return new Student(studentID,studentNum,name,surname,email,idNumber,address,password,1,cdao.getCourse(courseID));
         return null;
     }
-
 }

@@ -3,7 +3,6 @@ package DAOs;
 import DAOs.DAOControllers.Users.FacultyMemberDAO;
 import DBConnection.DBConnection;
 import Models.Users.FacultyMember;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,7 +17,7 @@ public class FacultyMemberDB implements FacultyMemberDAO {
     @Override
     public FacultyMember getFacultyMember(int userId) {
         try {
-            ps = connection.getConnection().prepareStatement("SELECT * FROM Users WHERE userID = ?");
+            ps = DBConnection.getConnection().prepareStatement("SELECT * FROM Users WHERE userID = ?");
             ps.setInt(1, userId);
             rs = ps.executeQuery();
             if (rs.next()) {
@@ -33,7 +32,7 @@ public class FacultyMemberDB implements FacultyMemberDAO {
     @Override
     public boolean addFacultyMember(FacultyMember facultyMember) {
         try {
-            ps = connection.getConnection().prepareStatement("INSERT INTO Users (firstname, surname, email, idNumber, password) VALUES (?,?,?,?,?)");
+            ps = DBConnection.getConnection().prepareStatement("INSERT INTO Users (firstname, surname, email, idNumber, password) VALUES (?,?,?,?,?)");
             ps.setString(1, facultyMember.getName());
             ps.setString(2, facultyMember.getSurname());
             ps.setString(3, facultyMember.getEmail());
@@ -50,7 +49,7 @@ public class FacultyMemberDB implements FacultyMemberDAO {
     @Override
     public boolean updateFacultyMember(FacultyMember facultyMember) {
         try {
-            ps = connection.getConnection().prepareStatement("UPDATE Users SET firstname = ?, surname = ?, email = ?, idNumber = ?, password = ? WHERE userID = ?");
+            ps = DBConnection.getConnection().prepareStatement("UPDATE Users SET firstname = ?, surname = ?, email = ?, idNumber = ?, password = ? WHERE userID = ?");
             ps.setString(1, facultyMember.getName());
             ps.setString(2, facultyMember.getSurname());
             ps.setString(3, facultyMember.getEmail());

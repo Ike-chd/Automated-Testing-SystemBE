@@ -9,16 +9,16 @@ import jakarta.ws.rs.core.Response;
 
 @Path("comments")
 public class CommentREST {
-    
+
     @Path("postcomment")
     @POST
-    public void postComment(Comment comment){
-        
+    public void postComment(Comment comment) {
+
     }
-    
+
     @Path("{commentId}")
     @GET
-    public Response getComment(@PathParam("commentId") int id){
+    public Response getComment(@PathParam("commentId") int id) {
         return Response.accepted().build();
     }
 }

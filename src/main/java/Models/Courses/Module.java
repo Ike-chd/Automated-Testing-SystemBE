@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Module {
+
     private int moduleID;
     private String moduleName;
     private String moduleDescription;

@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class StudentAnswer {
+
     private int qaId;
     private Student student;
     private Question question;

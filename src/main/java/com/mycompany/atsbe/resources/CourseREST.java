@@ -32,17 +32,17 @@ public class CourseREST {
             return Response.ok().status(Response.Status.NOT_FOUND).build();
         }
     }
-    
+
     @Path("updateCourse")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateCourse(Course course){
+    public Response updateCourse(Course course) {
         return (cs.updateCourse(course)) ? Response.ok("Course updated").status(Response.Status.CREATED).build()
                 : Response.ok("Course Not updated").status(Response.Status.NOT_ACCEPTABLE).build();
     }
-    
+
     @Path("deleteCourse")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response deleteCourse(Course course){
+    public Response deleteCourse(Course course) {
         return (cs.deleteCourse(course)) ? Response.ok("Course deleted").status(Response.Status.CREATED).build()
                 : Response.ok("Course Not delete").status(Response.Status.NOT_ACCEPTABLE).build();
     }

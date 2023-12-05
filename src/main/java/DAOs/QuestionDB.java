@@ -11,26 +11,28 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuestionDB extends DBConnection implements QuestionDAO{
+public class QuestionDB extends DBConnection implements QuestionDAO {
+
     private PreparedStatement ps;
     private ResultSet rs;
     private TopicDAO topDao = new TopicDB();
+
     @Override
-    
+
     public Question getQuestion(int questionId) {
         try {
             ps = getConnection().prepareStatement("SELECT * FROM Questions WHERE questionID = ?");
-            ps.setInt(1 , questionId);
+            ps.setInt(1, questionId);
             rs = ps.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 return extractQuestionFromResultSet(rs);
             }
         } catch (SQLException ex) {
-           ex.printStackTrace();
+            ex.printStackTrace();
         }
         return null;
     }
-    
+
     @Override
     public boolean insertQuestion(Question question) {
         int updated = 0;
@@ -45,7 +47,7 @@ public class QuestionDB extends DBConnection implements QuestionDAO{
         }
         return updated == 1;
     }
-    
+
     @Override
     public boolean deleteQuestion(int questionId) {
         int updated = 0;
@@ -58,7 +60,7 @@ public class QuestionDB extends DBConnection implements QuestionDAO{
         }
         return updated == 1;
     }
-    
+
     @Override
     public boolean updateQuestion(Question question) {
         int updated = 0;
@@ -73,15 +75,15 @@ public class QuestionDB extends DBConnection implements QuestionDAO{
         }
         return updated == 1;
     }
-    
+
     @Override
     public List<Question> allQuestionUnderATopic(Topic topic) {
-        List <Question> questions = new ArrayList<>();
+        List<Question> questions = new ArrayList<>();
         try {
             ps = getConnection().prepareStatement("SELECT * FROM Questions WHERE topicID = ?");
             ps.setInt(1, topic.getTopicID());
             rs = ps.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 Question question = extractQuestionFromResultSet(rs);
                 questions.add(question);
             }
@@ -90,13 +92,13 @@ public class QuestionDB extends DBConnection implements QuestionDAO{
         }
         return questions;
     }
-    
+
     private Question extractQuestionFromResultSet(ResultSet resultSet) throws SQLException {
         int questionID = resultSet.getInt("questionID");
         String question = resultSet.getString("question");
         int markAllocation = resultSet.getInt("markAllocation");
         int topicID = resultSet.getInt("topicID");
-        return new Question(questionID,question,markAllocation,topDao.getTopic(topicID));
+        return new Question(questionID, question, markAllocation, topDao.getTopic(topicID));
     }
 
     @Override
