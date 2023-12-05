@@ -45,10 +45,10 @@ public class TopicDB extends DBConnection implements TopicDAO {
     }
 
     @Override
-    public boolean deleteTopic(Topic topic) {
+    public boolean deleteTopic(int topicId) {
         try {
             ps = getConnection().prepareStatement("DELETE FROM Topics WHERE topicID = ?");
-            ps.setInt(1, topic.getTopicID());
+            ps.setInt(1, topicId);
             int affectedRows = ps.executeUpdate();
             return affectedRows > 0;
         } catch (SQLException e) {
