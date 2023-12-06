@@ -11,12 +11,12 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.util.NoSuchElementException;
 
-@Path("topics")
+@Path("/topics")
 public class TopicREST {
 
     TopicService tops = new TopicHandler();
 
-    @Path("postTopic")
+    @Path("/postTopic")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response postTopic(Topic topic) {

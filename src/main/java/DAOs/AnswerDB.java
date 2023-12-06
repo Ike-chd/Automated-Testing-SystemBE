@@ -6,7 +6,6 @@ import DAOs.DAOControllers.QA.QuestionDAO;
 import DBConnection.DBConnection;
 import Models.QA.Answer;
 import Models.QA.Question;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -31,6 +30,12 @@ public class AnswerDB extends DBConnection implements AnswerDAO{
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closeRsPs(rs,ps);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return null;
     }
@@ -43,7 +48,7 @@ public class AnswerDB extends DBConnection implements AnswerDAO{
             ps.setString(2, answer.getAnswer());
             //ps.setString(3, answer.getCorrectAnswer());
             int affectedRows = ps.executeUpdate();
-            return affectedRows>0;
+            return affectedRows > 0;
         } catch (SQLException ex) {
            ex.printStackTrace();
         } finally {
@@ -62,10 +67,10 @@ public class AnswerDB extends DBConnection implements AnswerDAO{
             ps = getConnection().prepareStatement("UPDATE Answers SET questionID = ?, answer = ?, correctAnswer = ? WHERE answerID = ?");
             ps.setInt(1, answer.getQuestion().getQuestionID());
             ps.setString(2, answer.getAnswer());
-           // ps.setString(3, answer.getCorrectAnswer());
+            // ps.setString(3, answer.getCorrectAnswer());
             ps.setInt(4, answer.getAnswerID());
             int affectedRows = ps.executeUpdate();
-            return affectedRows>0;
+            return affectedRows > 0;
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
@@ -84,7 +89,7 @@ public class AnswerDB extends DBConnection implements AnswerDAO{
             ps = getConnection().prepareStatement("DELETE FROM Answer WHERE answerID = ?");
             ps.setInt(1, answer.getAnswerID());
             int affectedRows = ps.executeUpdate();
-            return affectedRows>0;
+            return affectedRows > 0;
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
@@ -94,7 +99,7 @@ public class AnswerDB extends DBConnection implements AnswerDAO{
                 e.printStackTrace();
             }
         }
-        return false;   
+        return false;
     }
 
     @Override
@@ -104,7 +109,7 @@ public class AnswerDB extends DBConnection implements AnswerDAO{
             ps = getConnection().prepareStatement("SELECT * FROM Answers WHERE questionID = ?");
             ps.setInt(1, question.getQuestionID());
             rs = ps.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 Answer answer = extractAnswerFromResultSet(rs);
                 answers.add(answer);
             }
@@ -119,12 +124,12 @@ public class AnswerDB extends DBConnection implements AnswerDAO{
         }
         return answers;
     }
-    
+
     private Answer extractAnswerFromResultSet(ResultSet resultSet) throws SQLException {
         int answerId = resultSet.getInt("answerID");
         String answer = resultSet.getString("answer");
         int questionID = resultSet.getInt("questionID");
         boolean correctAnswer = resultSet.getBoolean("correctAnswer");
-        return new Answer(answerId, answer,correctAnswer,qdao.getQuestion(questionID));
+        return new Answer(answerId, answer, correctAnswer, qdao.getQuestion(questionID));
     }
 }

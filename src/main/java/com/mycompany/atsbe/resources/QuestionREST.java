@@ -20,7 +20,7 @@ import java.util.NoSuchElementException;
 public class QuestionREST {
 
     QuestionService qs = new QuestionHandler();
-    TopicService ts=new TopicHandler();
+    TopicService ts = new TopicHandler();
 
     @Path("postQuestion/{topicId}")
     @POST

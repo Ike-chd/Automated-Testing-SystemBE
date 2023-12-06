@@ -6,9 +6,10 @@ import Models.Users.User;
 import Services.ServicesInterfaces.UserService;
 import java.util.Optional;
 
-public class UserHandler implements UserService{
+public class UserHandler implements UserService {
+
     UserDAO udao = new UserDB();
-    
+
     @Override
     public boolean addAccountRequest(User student) {
         if(checkIfEmailExists(student.getEmail())){

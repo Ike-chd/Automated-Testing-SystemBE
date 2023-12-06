@@ -6,6 +6,7 @@ import lombok.Data;
 @AllArgsConstructor
 @Data
 public class AccessRole {
+
     private int roleId;
     private String roleName;
 }

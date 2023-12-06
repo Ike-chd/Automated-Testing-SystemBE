@@ -13,6 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Question {
+
     private int questionID;
     private String question;
     private int markAllocation;

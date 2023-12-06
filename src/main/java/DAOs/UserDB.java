@@ -9,7 +9,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import lombok.Builder;
 
 public class UserDB extends DBConnection implements UserDAO {
 
@@ -18,24 +17,51 @@ public class UserDB extends DBConnection implements UserDAO {
 
     @Override
     public void insertUser(User user) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            ps = getConnection().prepareStatement("INSERT INTO users(firstname, surname, email, idNumber, password)"
+                    + "VALUES(?,?,?,?,?)");
+            ps.setString(1, user.getName());
+            ps.setString(2, user.getSurname());
+            ps.setString(3, user.getEmail());
+            ps.setString(4, user.getIdNumber());
+            ps.setString(5, user.getPassword());
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
     public void updateUser(User user) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            ps = getConnection().prepareStatement("UPDATE users SET firstname=?, surname=?, email=?, idNumber=?, password=? WHERE userId=?");
+            ps.setString(1, user.getName());
+            ps.setString(2, user.getSurname());
+            ps.setString(3, user.getEmail());
+            ps.setString(4, user.getIdNumber());
+            ps.setString(5, user.getPassword());
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
     public void deleteUser(int userID) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            ps = getConnection().prepareStatement("DELETE FROM users WHERE userId=?");
+            ps.setInt(1, userID);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
     public User getUser(int userId) {
         try {
             ps = getConnection().prepareStatement("SELECT * FROM users "
-                    + "WHERE username = ?");
+                    + "WHERE userId = ?");
             ps.setInt(1, userId);
             rs = ps.executeQuery();
             if (rs.next()) {
@@ -81,7 +107,7 @@ public class UserDB extends DBConnection implements UserDAO {
     public User getUser(User user) {
         try {
             ps = getConnection().prepareStatement("SELECT * FROM users "
-                    + "WHERE username = ?");
+                    + "WHERE userId = ?");
             ps.setString(1, user.getUsername());
             rs = ps.executeQuery();
             if (rs.next()) {

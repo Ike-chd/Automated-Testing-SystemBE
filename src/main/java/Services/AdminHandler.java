@@ -15,7 +15,7 @@ public class AdminHandler {
             adminService.createModule(moduleName, moduleDescription);
         }
     }
- 
+
     public void modifyModule(int moduleID, String moduleName, String moduleDescription) {
         if (moduleID != 0) {
             adminService.modifyModule(moduleID, moduleName, moduleDescription);

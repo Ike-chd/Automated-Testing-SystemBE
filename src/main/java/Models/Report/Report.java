@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class Report {
+
     Topic[] hardestTopics = new Topic[5];
     private Map<Test, Double> testMarks = new HashMap<>();
     private Map<Test, testAttempt> attemps = new HashMap<>();

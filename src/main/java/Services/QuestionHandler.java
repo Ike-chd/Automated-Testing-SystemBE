@@ -6,9 +6,10 @@ import Models.QA.Question;
 import Services.ServicesInterfaces.QuestionService;
 import java.util.Optional;
 
-public class QuestionHandler implements QuestionService{
+public class QuestionHandler implements QuestionService {
 
     QuestionDAO qdao = new QuestionDB();
+
     @Override
     public Optional<Question> getQuestion(int questionId) {
         return Optional.ofNullable(qdao.getQuestion(questionId));
@@ -28,5 +29,5 @@ public class QuestionHandler implements QuestionService{
     public boolean deleteQuestion(int questionId) {
         return qdao.deleteQuestion(questionId);
     }
-    
+
 }

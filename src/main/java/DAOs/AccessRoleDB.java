@@ -1,5 +1,6 @@
 package DAOs;
 
+import DAOs.CloseStreams.CloseStreams;
 import DAOs.DAOControllers.Users.AccessRoleDAO;
 import DBConnection.DBConnection;
 import Models.Users.AccessRole;
@@ -28,7 +29,11 @@ public class AccessRoleDB extends DBConnection implements AccessRoleDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            
+            try {
+                CloseStreams.closeRsPs(rs,ps);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return null;
     }
@@ -43,7 +48,11 @@ public class AccessRoleDB extends DBConnection implements AccessRoleDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            
+            try {
+                CloseStreams.closePreparedStatment(ps);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return false;
     }
@@ -59,7 +68,11 @@ public class AccessRoleDB extends DBConnection implements AccessRoleDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            
+            try {
+                CloseStreams.closePreparedStatment(ps);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return false;
     }
@@ -74,7 +87,11 @@ public class AccessRoleDB extends DBConnection implements AccessRoleDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally{
-            
+            try {
+                CloseStreams.closePreparedStatment(ps);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return false;
     }
@@ -92,7 +109,15 @@ public class AccessRoleDB extends DBConnection implements AccessRoleDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally{
-            
+            try {
+                if(s != null){
+                    s.close();
+                } else if(rs != null){
+                    rs.close();
+                }
+            }catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return accessRoles;
     }

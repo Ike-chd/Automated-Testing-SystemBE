@@ -11,7 +11,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Student extends User {
+
     private Course currentCourse;
+
     public Student(int userID, String username, String name, String surname, String email, String idNumber, String address, String password, Course currentCourse) {
         super(userID, username, name, surname, email, idNumber, address, password);
         this.currentCourse = currentCourse;
