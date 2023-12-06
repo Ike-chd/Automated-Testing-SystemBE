@@ -15,7 +15,8 @@ public class UserDB extends DBConnection implements UserDAO {
     private ResultSet rs;
 
     @Override
-    public void insertUser(User user) {
+    public boolean insertUser(User user) {
+        int updated = 0;
         try {
             ps = getConnection().prepareStatement("INSERT INTO users(firstname, surname, email, idNumber, password)"
                     + "VALUES(?,?,?,?,?)");
@@ -28,6 +29,7 @@ public class UserDB extends DBConnection implements UserDAO {
         } catch (SQLException ex) {
             Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return updated == 1;
     }
 
     @Override

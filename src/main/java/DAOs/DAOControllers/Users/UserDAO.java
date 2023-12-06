@@ -4,7 +4,7 @@ import Models.Users.User;
 
 public interface UserDAO {
 
-    public void insertUser(User user);
+    public boolean insertUser(User user);
 
     public void updateUser(User user);
 

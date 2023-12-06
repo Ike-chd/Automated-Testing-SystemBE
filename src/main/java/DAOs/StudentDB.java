@@ -63,7 +63,7 @@ public class StudentDB implements StudentDAO {
     public boolean insertStudent(Student student) {
         try {
             ps = DBConnection.getConnection().prepareStatement("INSERT INTO Students (firstname, surname, email, address, idNumber, courseID, password, studentNum) "
-                    + "VALUES (? , ?, ?, ?, ?, ?, ?, ?)");
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
             setPSValues(student);
             int affectedRows = ps.executeUpdate();
             return affectedRows > 0;
@@ -100,6 +100,7 @@ public class StudentDB implements StudentDAO {
                     + "studentNum = ? "
                     + "WHERE studentID = ?");
             setPSValues(student);
+            ps.setInt(8, student.getUserID());
             int affectedRows = ps.executeUpdate();
             return affectedRows > 0;
         } catch (SQLException e) {
@@ -116,7 +117,6 @@ public class StudentDB implements StudentDAO {
         ps.setString(5, student.getIdNumber());
         ps.setInt(6, student.getCurrentCourse().getCourseID());
         ps.setString(7, student.getPassword());
-        ps.setInt(8, student.getUserID());
     }
 
     private Student extractStudentFromResultSet(ResultSet resultSet) throws SQLException {

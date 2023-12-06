@@ -33,4 +33,9 @@ public class UserHandler implements UserService {
                 : null;
         return Optional.ofNullable(user);
     }
+
+    @Override
+    public boolean addAccount(User user) {
+        return udao.insertUser(user);
+    }
 }

@@ -22,7 +22,6 @@ public class UserREST {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response logIn(User user) {
-
         return Response.ok(new Gson().toJson(user)).build();
     }
 
@@ -33,6 +32,20 @@ public class UserREST {
     public Response requestAccount(User student) {
         us.addAccountRequest(student);
         return Response.ok(new Gson().toJson(student)).status(Response.Status.CREATED).build();
+    }
+    
+    @Path("createAccount/admin")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createFacMAccount(User admin){
+        return (us.addAccount(admin)) ? Response.status(Response.Status.CREATED).build()
+                : Response.status(Response.Status.NOT_IMPLEMENTED).build();
+    }
+    
+    @Path("createAccount/facM")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createAdminAccount(User facM){
+        return (us.addAccount(facM)) ? Response.status(Response.Status.CREATED).build()
+                : Response.status(Response.Status.NOT_IMPLEMENTED).build();
     }
     
     @Path("/getUser/byEmail/{email}")

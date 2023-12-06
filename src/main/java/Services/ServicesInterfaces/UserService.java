@@ -10,4 +10,6 @@ public interface UserService {
     public Optional<User> getUser(User user);
     
     public Optional<User> getUserByEmial(String email);
+    
+    public boolean addAccount(User user);
 }
