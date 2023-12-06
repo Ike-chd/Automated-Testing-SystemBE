@@ -129,4 +129,20 @@ public class UserDB extends DBConnection implements UserDAO {
         }
         return false;
     }
+
+    @Override
+    public User getUserByEmail(String email) {
+        try {
+            ps = getConnection().prepareStatement("SELECT * FROM users "
+                    + "WHERE email = ?");
+            ps.setString(1, email);
+            rs = ps.executeQuery();
+            if(rs.next()){
+                return extractUserFromDB(rs);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
 }

@@ -26,4 +26,11 @@ public class UserHandler implements UserService {
     public boolean checkIfEmailExists(String string) {
         return udao.checkForEmail(string);
     }
+
+    @Override
+    public Optional<User> getUserByEmial(String email) {
+        User user  = (checkIfEmailExists(email)) ? udao.getUserByEmail(email)
+                : null;
+        return Optional.ofNullable(user);
+    }
 }

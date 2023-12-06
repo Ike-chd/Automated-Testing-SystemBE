@@ -15,43 +15,57 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import java.util.NoSuchElementException;
 
 @Path("Students")
 public class StudentREST {
+
     StudentService ss = new StudentHandler();
     CourseService cs = new CourseHandler();
-    
-    @Path("postStudent/{courseId}")
+
+    @Path("createAccount/{courseId}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response postStudent(Student student, @PathParam("courseId")int courseId){
-        return null;
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response postStudent(Student student, @PathParam("courseId") int courseId) {
+        try {
+            student.setCurrentCourse(cs.getCourse(courseId).orElseThrow());
+            return (ss.insertStudent(student)) ? 
+                    Response.ok("student" + student.getName() + " " + student.getSurname() + "created")
+                            .status(Response.Status.CREATED)
+                            .build()
+                    : Response.ok("Error in creating student")
+                            .status(Response.Status.NOT_ACCEPTABLE)
+                            .build();
+        } catch (NoSuchElementException ex) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
-    
+
     @Path("getStudent/id/{id}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getStudentById(@PathParam("id")int id){
+    public Response getStudentById(@PathParam("id") int id) {
         return null;
     }
-    
+
     @Path("getStudent/e-mail/{email}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getStudentByEmail(@PathParam("email")String email){
+    public Response getStudentByEmail(@PathParam("email") String email) {
         return null;
     }
-    
+
     @Path("allStudents")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllStudents(){
+    public Response getAllStudents() {
         return Response.ok().status(Response.Status.CREATED).build();
     }
-    
+
     @Path("updateStudent")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateStudent(Student student){
+    public Response updateStudent(Student student) {
         return Response.ok().status(Response.Status.CREATED).build();
     }
 }
