@@ -11,6 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SMS {
+
     private String message;
     private Calendar date;
 }

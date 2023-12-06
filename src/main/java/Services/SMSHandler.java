@@ -5,7 +5,7 @@ import Services.ServicesInterfaces.SMSService;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class SMSHandler implements SMSService{
+public class SMSHandler implements SMSService {
 
     @Override
     public void createSMSTimer(SMS sms) {

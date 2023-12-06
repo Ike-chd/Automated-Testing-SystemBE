@@ -1,36 +1,15 @@
 package DAOs;
 
+import DAOs.DAOControllers.Users.AdminDAO;
+import DBConnection.DBConnection;
 import Models.Tests.Test;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdminDB {
-
-    private static final String URL = "jdbc:mysql://localhost:3306/student_enrolment_system";
-    private static final String USER = "root";
-    private static final String PASSWORD = "root";
+public class AdminDB extends DBConnection {
 
     private static Connection connection;
-
-    static {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection(URL, USER, PASSWORD);
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void closeConnection() {
-        try {
-            if (connection != null) {
-                connection.close();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     public static Test getTestByID(int testID) {
         String query = "SELECT * FROM tests WHERE testID = ?";
@@ -44,8 +23,8 @@ public class AdminDB {
                 test.setTestName(resultSet.getString("testName"));
                 return test;
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
 
         return null;
@@ -101,7 +80,7 @@ public class AdminDB {
             preparedStatement.setLong(1, testID);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-             e.printStackTrace();
+            e.printStackTrace();
         }
     }
 }

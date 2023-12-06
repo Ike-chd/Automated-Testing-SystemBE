@@ -1,4 +1,3 @@
-
 package com.mycompany.atsbe.resources;
 
 import Services.ModuleHandler;
@@ -13,64 +12,74 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import java.util.Optional;
-import Models.Courses.Module;
+import java.util.NoSuchElementException;
 
-@Path("modules")
 public class ModuleREST {
 
-    private ModuleService moduleService = new ModuleHandler();
+    ModuleService moduleService = new ModuleHandler();
 
-    @Path("/{id}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getModule(@PathParam("id") int id) {
-        Optional<Module> module = moduleService.getModule(id);
-        return module.map(value ->
-                Response.ok(value).status(Response.Status.FOUND).build())
-                .orElseGet(() -> Response.status(Response.Status.NOT_FOUND).build());
+    public Response getModule(int moduleId) {
+        try {
+            return Response.ok(moduleService.getModule(moduleId)).status(Response.Status.OK).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
-    @Path("create")
+    @GET
+    @Path("getModule/{moduleID}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getModuleById(@PathParam("moduleID") int moduleID) {
+        try {
+            return Response.ok(moduleService.getModule(moduleID).orElseThrow()).status(Response.Status.OK).build();
+        } catch (NoSuchElementException e) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
     @POST
+    @Path("createModule")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response createModule(Module module) {
-        boolean success = moduleService.addModule(module);
-
-        if (success) {
-            return Response.ok("Module Created").status(Response.Status.CREATED).build();
-        } else {
-            return Response.ok("Module Not Created").status(Response.Status.NOT_ACCEPTABLE).build();
+    public Response createModule(int moduleId) {
+        try {
+            return (moduleService.addModule(moduleId))
+                    ? Response.ok("Module created").status(Response.Status.CREATED).build()
+                    : Response.ok("Module not created").status(Response.Status.NOT_ACCEPTABLE).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
 
-    @Path("update")
     @PUT
+    @Path("updateModule/{moduleID}")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response updateModule(Module module) {
-        boolean success = moduleService.updateModule(module);
-
-        if (success) {
-            return Response.ok("Module Updated").status(Response.Status.OK).build();
-        } else {
-            return Response.ok("Module Not Updated").status(Response.Status.NOT_ACCEPTABLE).build();
+    public Response updateModule(@PathParam("moduleID") int moduleId) {
+        try {
+            return (moduleService.updateModule(moduleId))
+                    ? Response.ok("Module updated").status(Response.Status.OK).build()
+                    : Response.ok("Module not updated").status(Response.Status.NOT_ACCEPTABLE).build();
+        } catch (NoSuchElementException e) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
 
-    @Path("delete")
     @DELETE
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteModule(Module module) {
-        boolean success = moduleService.deleteModule(module);
-
-        if (success) {
-            return Response.ok("Module Deleted").status(Response.Status.OK).build();
-        } else {
-            return Response.ok("Module Not Deleted").status(Response.Status.NOT_ACCEPTABLE).build();
+    @Path("deleteModule/{moduleID}")
+    public Response deleteModule(@PathParam("moduleID") int moduleId) {
+        try {
+            return (moduleService.deleteModule(moduleId))
+                    ? Response.ok("Module deleted").status(Response.Status.OK).build()
+                    : Response.ok("Module not deleted").status(Response.Status.NOT_ACCEPTABLE).build();
+        } catch (NoSuchElementException e) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
 }
-

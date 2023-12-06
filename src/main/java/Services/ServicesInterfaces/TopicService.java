@@ -1,6 +1,7 @@
 package Services.ServicesInterfaces;
 
 import Models.Courses.Topic;
+import java.util.List;
 import java.util.Optional;
 
 public interface TopicService {
@@ -12,4 +13,6 @@ public interface TopicService {
     public boolean updateTopic(Topic topic);
 
     public boolean deleteTopic(int topicId);
+
+    public List<Topic> getAllTopics();
 }

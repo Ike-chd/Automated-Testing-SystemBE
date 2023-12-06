@@ -7,9 +7,9 @@ public interface ModuleService {
 
     public Optional<Module> getModule(int moduleId);
 
-    public boolean addModule(Module module);
+    public boolean addModule(int moduleId);
 
-    public boolean deleteModule(Module module);
+    public boolean deleteModule(int moduleId);
 
-    public boolean updateModule(Module module);
+    public boolean updateModule(int moduleId);
 }

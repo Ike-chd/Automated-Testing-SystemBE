@@ -16,7 +16,8 @@ public class UserDB extends DBConnection implements UserDAO {
     private ResultSet rs;
 
     @Override
-    public void insertUser(User user) {
+    public boolean insertUser(User user) {
+        int updated = 0;
         try {
             ps = getConnection().prepareStatement("INSERT INTO users(firstname, surname, email, idNumber, password)"
                     + "VALUES(?,?,?,?,?)");
@@ -29,6 +30,7 @@ public class UserDB extends DBConnection implements UserDAO {
         } catch (SQLException ex) {
             Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return updated == 1;
     }
 
     @Override
@@ -108,7 +110,7 @@ public class UserDB extends DBConnection implements UserDAO {
         try {
             ps = getConnection().prepareStatement("SELECT * FROM users "
                     + "WHERE userId = ?");
-            ps.setString(1, user.getUsername());
+            ps.setInt(1, user.getUserID());
             rs = ps.executeQuery();
             if (rs.next()) {
                 return extractUserFromDB(rs);
@@ -147,5 +149,21 @@ public class UserDB extends DBConnection implements UserDAO {
             Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
+    }
+
+    @Override
+    public User getUserByEmail(String email) {
+        try {
+            ps = getConnection().prepareStatement("SELECT * FROM users "
+                    + "WHERE email = ?");
+            ps.setString(1, email);
+            rs = ps.executeQuery();
+            if(rs.next()){
+                return extractUserFromDB(rs);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
     }
 }

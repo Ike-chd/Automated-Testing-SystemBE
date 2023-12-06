@@ -14,6 +14,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SuspensionRequest {
+
     Student student;
     FacultyMember requestedBy;
     Admin confirmedBy;

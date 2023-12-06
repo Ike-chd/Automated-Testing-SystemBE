@@ -4,6 +4,7 @@ import DAOs.DAOControllers.Courses.TopicDAO;
 import DAOs.TopicDB;
 import Models.Courses.Topic;
 import Services.ServicesInterfaces.TopicService;
+import java.util.List;
 import java.util.Optional;
 
 public class TopicHandler implements TopicService {
@@ -22,12 +23,17 @@ public class TopicHandler implements TopicService {
 
     @Override
     public boolean updateTopic(Topic topic) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return topdao.updateTopic(topic);
     }
 
     @Override
     public boolean deleteTopic(int topicId) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return topdao.deleteTopic(topicId);
+    }
+
+    @Override
+    public List<Topic> getAllTopics() {
+        return topdao.allTopics();
     }
 
 }

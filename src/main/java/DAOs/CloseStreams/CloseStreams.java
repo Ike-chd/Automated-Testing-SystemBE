@@ -5,15 +5,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class CloseStreams {
-    public static void closePreparedStatment(PreparedStatement ps) throws SQLException{
-        if(ps != null){
+
+    public static void closePreparedStatment(PreparedStatement ps) throws SQLException {
+        if (ps != null) {
             ps.close();
         }
     }
-    
-    public static void closeRsPs(ResultSet rs, PreparedStatement ps) throws SQLException{
+
+    public static void closeRsPs(ResultSet rs, PreparedStatement ps) throws SQLException {
         closePreparedStatment(ps);
-        if(rs != null){
+        if (rs != null) {
             rs.close();
         }
     }

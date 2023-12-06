@@ -1,13 +1,16 @@
-
 package Services.ServicesInterfaces;
 
-import Models.Communication.SuspensionRequest;
+import Models.SuspensionRequest.SuspensionRequest;
 
 import java.util.Optional;
 
 public interface SuspensionRequestService {
-    Optional<SuspensionRequest> getSuspensionRequest(int ssId);
-    boolean addSuspensionRequest(SuspensionRequest request);
-    boolean deleteSuspensionRequest(SuspensionRequest request);
-    boolean updateSuspensionRequest(SuspensionRequest request);
+
+    Optional<SuspensionRequest> getSuspensionRequest(int ssid);
+
+    boolean addSuspensionRequest(SuspensionRequest suspensionRequest);
+
+    boolean updateSuspensionRequest(int ssid, SuspensionRequest suspensionRequest);
+
+    boolean deleteSuspensionRequest(int ssid);
 }

@@ -1,51 +1,71 @@
 package com.mycompany.atsbe.resources;
 
-import Models.Communication.SuspensionRequest;
+import Models.SuspensionRequest.SuspensionRequest;
 import Services.ServicesInterfaces.SuspensionRequestService;
 import Services.SuspensionRequestHandler;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+
 import java.util.NoSuchElementException;
 
-@Path("/suspensionRequests")
+@Path("/suspension-requests")
 public class SuspensionRequestREST {
 
-    private SuspensionRequestService srs = new SuspensionRequestHandler();
-
-    @POST
-    @Path("/create")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response createSuspensionRequest(SuspensionRequest request) {
-        try {
-            boolean result = srs.addSuspensionRequest(request);
-            if (result) {
-                return Response.ok().status(Response.Status.CREATED).build();
-            } else {
-                return Response.ok().status(Response.Status.INTERNAL_SERVER_ERROR).build();
-            }
-        } catch (Exception e) {
-            return Response.ok().status(Response.Status.INTERNAL_SERVER_ERROR).build();
-        }
-    }
+    SuspensionRequestService suspensionRequestService = new SuspensionRequestHandler();
 
     @GET
-    @Path("/{requestID}")
+    @Path("/{ssid}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getSuspensionRequest(@PathParam("requestID") int requestID) {
+    public Response getSuspensionRequestById(@PathParam("ssid") int ssid) {
         try {
-            SuspensionRequest suspensionRequest = srs.getSuspensionRequest(requestID).orElseThrow();
-            return Response.ok(suspensionRequest).status(Response.Status.OK).build();
+            return Response.ok(suspensionRequestService.getSuspensionRequest(ssid).orElseThrow()).status(Response.Status.OK).build();
         } catch (NoSuchElementException e) {
-            return Response.ok().status(Response.Status.NOT_FOUND).build();
+            return Response.status(Response.Status.NOT_FOUND).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
 
-}
+    @POST
+    @Path("/createSuspensionRequest")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createSuspensionRequest(SuspensionRequest suspensionRequest) {
+        try {
+            return (suspensionRequestService.addSuspensionRequest(suspensionRequest))
+                    ? Response.ok("Suspension Request created").status(Response.Status.CREATED).build()
+                    : Response.ok("Suspension Request not created").status(Response.Status.NOT_ACCEPTABLE).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
+    @PUT
+    @Path("/updateSuspensionRequest/{ssid}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateSuspensionRequest(@PathParam("ssid") int ssid, SuspensionRequest suspensionRequest) {
+        try {
+            return (suspensionRequestService.updateSuspensionRequest(ssid, suspensionRequest))
+                    ? Response.ok("Suspension Request updated").status(Response.Status.OK).build()
+                    : Response.ok("Suspension Request not updated").status(Response.Status.NOT_ACCEPTABLE).build();
+        } catch (NoSuchElementException e) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @DELETE
+    @Path("/deleteSuspensionRequest/{ssid}")
+    public Response deleteSuspensionRequest(@PathParam("ssid") int ssid) {
+        try {
+            return (suspensionRequestService.deleteSuspensionRequest(ssid))
+                    ? Response.ok("Suspension Request deleted").status(Response.Status.OK).build()
+                    : Response.ok("Suspension Request not deleted").status(Response.Status.NOT_ACCEPTABLE).build();
+        } catch (NoSuchElementException e) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+}
