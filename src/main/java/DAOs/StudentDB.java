@@ -62,15 +62,9 @@ public class StudentDB implements StudentDAO {
     @Override
     public boolean insertStudent(Student student) {
         try {
-            ps = DBConnection.getConnection().prepareStatement("INSERT INTO Students (firstname, surname, email, address, idNumber, courseID, password, studentNum) VALUES (?,?,?,?,?,?,?,?)");
-            ps.setString(1, student.getName());
-            ps.setString(2, student.getSurname());
-            ps.setString(3, student.getEmail());
-            ps.setString(4, student.getAddress());
-            ps.setString(5, student.getIdNumber());
-            ps.setInt(6, student.getCurrentCourse().getCourseID());
-            ps.setString(7, student.getPassword());
-            ps.setString(8, student.getUsername());
+            ps = DBConnection.getConnection().prepareStatement("INSERT INTO Students (firstname, surname, email, address, idNumber, courseID, password, studentNum) "
+                    + "VALUES (? , ?, ?, ?, ?, ?, ?, ?)");
+            setPSValues(student);
             int affectedRows = ps.executeUpdate();
             return affectedRows > 0;
         } catch (SQLException e) {
@@ -80,10 +74,10 @@ public class StudentDB implements StudentDAO {
     }
 
     @Override
-    public boolean deleteStudent(Student student) {
+    public boolean deleteStudent(int id) {
         try {
             ps = DBConnection.getConnection().prepareStatement("DELETE FROM students WHERE studentID = ?");
-            ps.setInt(1, student.getUserID());
+            ps.setInt(1, id);
             int affectedRows = ps.executeUpdate();
             return affectedRows > 0;
         } catch (SQLException e) {
@@ -95,22 +89,34 @@ public class StudentDB implements StudentDAO {
     @Override
     public boolean updateStudent(Student student) {
         try {
-            ps = DBConnection.getConnection().prepareStatement("UPDATE Students SET firstname = ?, surname = ?, email = ?, address = ?, idNumber = ?, courseID = ?, password = ?, studentNum = ? WHERE studentID = ?");
-            ps.setString(1, student.getName());
-            ps.setString(2, student.getSurname());
-            ps.setString(3, student.getEmail());
-            ps.setString(4, student.getAddress());
-            ps.setString(5, student.getIdNumber());
-            ps.setInt(6, student.getCurrentCourse().getCourseID());
-            ps.setString(7, student.getPassword());
-            ps.setString(8, student.getUsername());
-            ps.setInt(9, student.getUserID());
+            ps = DBConnection.getConnection().prepareStatement("UPDATE Students "
+                    + "SET firstname = ?, "
+                    + "surname = ?, "
+                    + "email = ?, "
+                    + "address = ?, "
+                    + "idNumber = ?, "
+                    + "courseID = ?, "
+                    + "password = ?, "
+                    + "studentNum = ? "
+                    + "WHERE studentID = ?");
+            setPSValues(student);
             int affectedRows = ps.executeUpdate();
             return affectedRows > 0;
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public void setPSValues(Student student) throws SQLException {
+        ps.setString(1, student.getName());
+        ps.setString(2, student.getSurname());
+        ps.setString(3, student.getEmail());
+        ps.setString(4, student.getAddress());
+        ps.setString(5, student.getIdNumber());
+        ps.setInt(6, student.getCurrentCourse().getCourseID());
+        ps.setString(7, student.getPassword());
+        ps.setInt(8, student.getUserID());
     }
 
     private Student extractStudentFromResultSet(ResultSet resultSet) throws SQLException {

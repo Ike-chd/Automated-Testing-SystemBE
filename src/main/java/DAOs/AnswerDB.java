@@ -66,10 +66,10 @@ public class AnswerDB implements AnswerDAO {
     }
 
     @Override
-    public boolean deleteAnswer(Answer answer) {
+    public boolean deleteAnswer(int id) {
         try {
             ps = DBConnection.getConnection().prepareStatement("DELETE FROM Answer WHERE answerID = ?");
-            ps.setInt(1, answer.getAnswerID());
+            ps.setInt(1, id);
             int affectedRows = ps.executeUpdate();
             return affectedRows > 0;
         } catch (SQLException ex) {
@@ -101,5 +101,16 @@ public class AnswerDB implements AnswerDAO {
         int questionID = resultSet.getInt("questionID");
         boolean correctAnswer = resultSet.getBoolean("correctAnswer");
         return new Answer(answerId, answer, correctAnswer, qdao.getQuestion(questionID));
+    }
+
+    @Override
+    public boolean[] insertAnswers(List<Answer> answers) {
+        boolean[] insertedAnswers = new boolean[answers.size()];
+        int i = 0;
+        for (Answer answer : answers) {
+            insertedAnswers[i] =  insertAnswer(answer);
+            i++;
+        }
+        return insertedAnswers;
     }
 }

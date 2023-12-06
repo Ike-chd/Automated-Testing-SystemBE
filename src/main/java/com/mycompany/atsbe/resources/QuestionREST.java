@@ -2,7 +2,9 @@ package com.mycompany.atsbe.resources;
 
 import Models.Courses.Topic;
 import Models.QA.Question;
+import Services.AnswerHandler;
 import Services.QuestionHandler;
+import Services.ServicesInterfaces.AnswerService;
 import Services.ServicesInterfaces.QuestionService;
 import Services.ServicesInterfaces.TopicService;
 import Services.TopicHandler;
@@ -21,6 +23,7 @@ public class QuestionREST {
 
     QuestionService qs = new QuestionHandler();
     TopicService ts = new TopicHandler();
+    AnswerService as = new AnswerHandler();
 
     @Path("postQuestion/{topicId}")
     @POST
@@ -29,6 +32,7 @@ public class QuestionREST {
     public Response postQuestion(Question question, @PathParam("topicId") int id) {
         try {
             question.setTopic(ts.getTopic(id).orElseThrow());
+            as.addAnswers(question.getAnswers());
         } catch (NoSuchElementException e) {
             return Response.ok("Topic not found").status(Response.Status.NOT_FOUND).build();
         }
@@ -45,5 +49,13 @@ public class QuestionREST {
         } catch (NoSuchElementException e) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
+    }
+    
+    public Response getAllQuestions(){
+        return null;
+    }
+    
+    public Response getAllQuestionsByTopic(){
+        return null;
     }
 }

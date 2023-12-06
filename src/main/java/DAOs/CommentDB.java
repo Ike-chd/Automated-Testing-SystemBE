@@ -48,7 +48,7 @@ public class CommentDB extends DBConnection implements CommentDAO {
             con = getConnection();
             ps = con.prepareStatement("INSERT INTO Comments (comment, studentID, userID) VALUES (?, ?, ?)");
             ps.setString(1, comment.getComment());
-            ps.setString(2, comment.getStudent().getUsername());
+            ps.setInt(2, comment.getStudent().getUserID());
             ps.setInt(3, comment.getFaculty().getUserID());
             int affectedRows = ps.executeUpdate();
             if (affectedRows > 0) {
@@ -99,7 +99,7 @@ public class CommentDB extends DBConnection implements CommentDAO {
         try {
             con = getConnection();
             ps = con.prepareStatement("SELECT * FROM Comments WHERE studentID = ?");
-            ps.setString(1, student.getUsername());
+            ps.setInt(1, student.getUserID());
             rs = ps.executeQuery();
             while (rs.next()) {
                 Comment comment = extractCommentFromResultSet(rs);

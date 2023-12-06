@@ -37,7 +37,8 @@ public class QuestionDB extends DBConnection implements QuestionDAO {
     public boolean insertQuestion(Question question) {
         int updated = 0;
         try {
-            ps = getConnection().prepareStatement("INSERT INTO Questions (question, markAllocation, topicID) VALUES (?,?,?)");
+            ps = getConnection().prepareStatement("INSERT INTO Questions (question, markAllocation, topicID) "
+                    + "VALUES (?,?,?)");
             ps.setString(1, question.getQuestion());
             ps.setInt(2, question.getMarkAllocation());
             ps.setInt(3, question.getTopic().getTopicID());

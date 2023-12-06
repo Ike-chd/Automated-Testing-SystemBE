@@ -36,13 +36,12 @@ public class SuspensionRequestDB implements SuspensionRequestDAO {
     public boolean insertSuspensionRequest(SuspensionRequest ssRequest) {
         try {
             ps = DBConnection.getConnection().prepareStatement("INSERT INTO SuspensionRequests (studentID, requestID, duration, confirmID, reason, active, dateInitiated) VALUES (?,?,?,?,?,?,?)");
-            ps.setString(1, ssRequest.getStudent().getUsername());
-            ps.setInt(2, ssRequest.getRequestId());
-            ps.setInt(3, ssRequest.getDuration());
-            ps.setInt(4, ssRequest.getConfirmId());
-            ps.setString(5, ssRequest.getReason());
-            ps.setBoolean(6, ssRequest.isActive());
-            ps.setTimestamp(7, Timestamp.valueOf(ssRequest.getDateInitiated()));
+            ps.setInt(1, ssRequest.getRequestId());
+            ps.setInt(2, ssRequest.getDuration());
+            ps.setInt(3, ssRequest.getConfirmId());
+            ps.setString(4, ssRequest.getReason());
+            ps.setBoolean(5, ssRequest.isActive());
+            ps.setTimestamp(6, Timestamp.valueOf(ssRequest.getDateInitiated()));
             int affectedRows = ps.executeUpdate();
             return affectedRows > 0;
         } catch (SQLException e) {
@@ -55,14 +54,13 @@ public class SuspensionRequestDB implements SuspensionRequestDAO {
     public boolean updateSuspensionRequest(SuspensionRequest ssRequest) {
         try {
             ps = DBConnection.getConnection().prepareStatement("UPDATE SuspensionRequests SET studentID = ?, requestID = ?, duration = ?, confirmID = ?, reason = ?, active = ?, dateInitiated = ? WHERE SSID = ?");
-            ps.setString(1, ssRequest.getStudent().getUsername());
-            ps.setInt(2, ssRequest.getRequestId());
-            ps.setInt(3, ssRequest.getDuration());
-            ps.setInt(4, ssRequest.getConfirmId());
-            ps.setString(5, ssRequest.getReason());
-            ps.setBoolean(6, ssRequest.isActive());
-            ps.setTimestamp(7, Timestamp.valueOf(ssRequest.getDateInitiated()));
-            ps.setInt(8, ssRequest.getSsId());
+            ps.setInt(1, ssRequest.getRequestId());
+            ps.setInt(2, ssRequest.getDuration());
+            ps.setInt(3, ssRequest.getConfirmId());
+            ps.setString(4, ssRequest.getReason());
+            ps.setBoolean(5, ssRequest.isActive());
+            ps.setTimestamp(6, Timestamp.valueOf(ssRequest.getDateInitiated()));
+            ps.setInt(7, ssRequest.getSsId());
             int affectedRows = ps.executeUpdate();
             return affectedRows > 0;
         } catch (SQLException e) {
@@ -121,7 +119,7 @@ public class SuspensionRequestDB implements SuspensionRequestDAO {
         List<SuspensionRequest> studentSuspensionRequest = new ArrayList<>();
         try {
             ps = DBConnection.getConnection().prepareStatement("SELECT * FROM SuspensionRequests WHERE studentID = ?");
-            ps.setString(1, student.getUsername());
+//            ps.setString(1, student.getUsername());
             rs = ps.executeQuery();
             while (rs.next()) {
                 SuspensionRequest suspensionRequest = extractSuspensionRequestFromResultSet(rs);

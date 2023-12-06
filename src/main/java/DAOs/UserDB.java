@@ -95,7 +95,7 @@ public class UserDB extends DBConnection implements UserDAO {
         try {
             ps = getConnection().prepareStatement("SELECT * FROM users "
                     + "WHERE userId = ?");
-            ps.setString(1, user.getUsername());
+            ps.setInt(1, user.getUserID());
             rs = ps.executeQuery();
             if (rs.next()) {
                 return extractUserFromDB(rs);

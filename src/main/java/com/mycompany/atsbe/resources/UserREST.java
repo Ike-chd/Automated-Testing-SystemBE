@@ -16,7 +16,7 @@ public class UserREST {
 
     UserService us = new UserHandler();
 
-    @Path("login")
+    @Path("/login")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
