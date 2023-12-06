@@ -57,7 +57,7 @@ public class StudentAnswerDB extends DBConnection implements StudentAnswerDAO {
     public boolean insertStudentAnswer(StudentAnswer studentAnswer) {
         try {
             ps = getConnection().prepareStatement("INSERT INTO Student_Answers (studentID, questionID, correctAns, testID) VALUES (?, ?, ?, ?)");
-            ps.setString(1, studentAnswer.getStudent().getUsername());
+            //ps.setString(1, studentAnswer.getStudent().getUsername());TODO
             ps.setInt(2, studentAnswer.getQuestion().getQuestionID());
             ps.setInt(3, studentAnswer.getCorrectAns());//TODO
             ps.setInt(4, studentAnswer.getTest().getTestID());
@@ -79,7 +79,7 @@ public class StudentAnswerDB extends DBConnection implements StudentAnswerDAO {
     public boolean updateStudentAnswer(StudentAnswer studentAnswer) {
         try {
             ps = getConnection().prepareStatement("UPDATE Student_Answers SET studentID = ?, questionID = ?, correctAns = ?, testID = ? WHERE qaID = ?");
-            ps.setString(1, studentAnswer.getStudent().getUsername());
+            //ps.setString(1, studentAnswer.getStudent().getUsername());TODO
             ps.setInt(2, studentAnswer.getQuestion().getQuestionID());
             ps.setInt(3, studentAnswer.getCorrectAns());
             ps.setInt(4, studentAnswer.getTest().getTestID());
@@ -147,7 +147,7 @@ public class StudentAnswerDB extends DBConnection implements StudentAnswerDAO {
         List<StudentAnswer> studentAnswers = new ArrayList<>();
         try {
             ps = getConnection().prepareStatement("SELECT * FROM Student_Answers WHERE studentID = ?");
-            ps.setString(1, student.getUsername());
+            //ps.setString(1, student.getUsername());TODO
             rs = ps.executeQuery();
             while (rs.next()) {
                 StudentAnswer studentAnswer = extractStudentAnswerFromResultSet(rs);

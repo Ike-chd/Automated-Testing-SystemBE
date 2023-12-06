@@ -3,7 +3,7 @@ package DAOs;
 import DAOs.DAOControllers.Courses.CourseDAO;
 import DAOs.DAOControllers.SuspensionRequest.SuspensionRequestDAO;
 import DBConnection.DBConnection;
-import Models.SuspensionRequest.SuspensionRequest;
+import Models.Communication.SuspensionRequest;
 import Models.Users.Student;
 
 import java.sql.*;
@@ -36,12 +36,12 @@ public class SuspensionRequestDB implements SuspensionRequestDAO {
     public boolean insertSuspensionRequest(SuspensionRequest ssRequest) {
         try {
             ps = DBConnection.getConnection().prepareStatement("INSERT INTO SuspensionRequests (studentID, requestID, duration, confirmID, reason, active, dateInitiated) VALUES (?,?,?,?,?,?,?)");
-            ps.setInt(1, ssRequest.getRequestId());
-            ps.setInt(2, ssRequest.getDuration());
-            ps.setInt(3, ssRequest.getConfirmId());
-            ps.setString(4, ssRequest.getReason());
-            ps.setBoolean(5, ssRequest.isActive());
-            ps.setTimestamp(6, Timestamp.valueOf(ssRequest.getDateInitiated()));
+//            ps.setInt(1, ssRequest.getRequestId());
+//            ps.setInt(2, ssRequest.getDuration());
+//            ps.setInt(3, ssRequest.getConfirmId());
+//            ps.setString(4, ssRequest.getReason());
+//            ps.setBoolean(5, ssRequest.isActive());
+//            ps.setTimestamp(6, Timestamp.valueOf(ssRequest.getDateInitiated()));
             int affectedRows = ps.executeUpdate();
             return affectedRows > 0;
         } catch (SQLException e) {
@@ -54,13 +54,13 @@ public class SuspensionRequestDB implements SuspensionRequestDAO {
     public boolean updateSuspensionRequest(SuspensionRequest ssRequest) {
         try {
             ps = DBConnection.getConnection().prepareStatement("UPDATE SuspensionRequests SET studentID = ?, requestID = ?, duration = ?, confirmID = ?, reason = ?, active = ?, dateInitiated = ? WHERE SSID = ?");
-            ps.setInt(1, ssRequest.getRequestId());
-            ps.setInt(2, ssRequest.getDuration());
-            ps.setInt(3, ssRequest.getConfirmId());
-            ps.setString(4, ssRequest.getReason());
-            ps.setBoolean(5, ssRequest.isActive());
-            ps.setTimestamp(6, Timestamp.valueOf(ssRequest.getDateInitiated()));
-            ps.setInt(7, ssRequest.getSsId());
+//            ps.setInt(1, ssRequest.getRequestId());
+//            ps.setInt(2, ssRequest.getDuration());
+//            ps.setInt(3, ssRequest.getConfirmId());
+//            ps.setString(4, ssRequest.getReason());
+//            ps.setBoolean(5, ssRequest.isActive());
+//            ps.setTimestamp(6, Timestamp.valueOf(ssRequest.getDateInitiated()));
+//            ps.setInt(7, ssRequest.getSsId());
             int affectedRows = ps.executeUpdate();
             return affectedRows > 0;
         } catch (SQLException e) {
@@ -73,7 +73,7 @@ public class SuspensionRequestDB implements SuspensionRequestDAO {
     public boolean deleteSuspensionRequest(SuspensionRequest ssRequest) {
         try {
             ps = DBConnection.getConnection().prepareStatement("DELETE FROM SuspensionRequests WHERE SSID = ?");
-            ps.setInt(1, ssRequest.getSsId());
+            //ps.setInt(1, ssRequest.getSsId());
             int affectedRows = ps.executeUpdate();
             return affectedRows > 0;
         } catch (SQLException e) {
@@ -83,7 +83,7 @@ public class SuspensionRequestDB implements SuspensionRequestDAO {
     }
 
     @Override
-    public List<SuspensionRequest> getAllSuspensionRequests() {
+    public List <SuspensionRequest> getAllSuspensionRequests() {
         List<SuspensionRequest> suspensionRequests = new ArrayList<>();
         try {
             statement = DBConnection.getConnection().createStatement();
@@ -141,7 +141,8 @@ public class SuspensionRequestDB implements SuspensionRequestDAO {
         boolean active = resultSet.getBoolean("active");
         Timestamp dateInitiated = resultSet.getTimestamp("dateInitiated");
         Student student = getStudentById(studentId);
-        return new SuspensionRequest(ssId, student, requestId, duration, confirmId, reason, active, dateInitiated.toLocalDateTime());
+        //return new SuspensionRequest(ssId, student, requestId, duration, confirmId, reason, active, dateInitiated.toLocalDateTime());
+        return null;
     }
 
     private Student getStudentById(int studentId) throws SQLException {

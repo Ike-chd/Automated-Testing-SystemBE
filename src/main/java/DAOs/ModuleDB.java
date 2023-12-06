@@ -36,6 +36,7 @@ public class ModuleDB extends DBConnection implements ModuleDAO{
         }
         return null;
     }
+
     @Override
     public boolean insertModule(Module module) {
         try {

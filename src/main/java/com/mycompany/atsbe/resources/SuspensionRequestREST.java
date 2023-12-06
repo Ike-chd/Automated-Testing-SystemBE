@@ -1,6 +1,5 @@
 package com.mycompany.atsbe.resources;
 
-import Models.SuspensionRequest.SuspensionRequest;
 import Services.ServicesInterfaces.SuspensionRequestService;
 import Services.SuspensionRequestHandler;
 import jakarta.ws.rs.*;
