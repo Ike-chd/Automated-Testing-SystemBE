@@ -17,7 +17,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.util.NoSuchElementException;
 
-@Path("Students")
+//@Path("/students")
 public class StudentREST {
 
     StudentService ss = new StudentHandler();
@@ -48,21 +48,21 @@ public class StudentREST {
         return null;
     }
 
-    @Path("getStudent/e-mail/{email}")
+    @Path("getStudent/email/{email}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getStudentByEmail(@PathParam("email") String email) {
         return null;
     }
 
-    @Path("allStudents")
+    @Path("/allStudents")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllStudents() {
         return Response.ok().status(Response.Status.CREATED).build();
     }
 
-    @Path("updateStudent")
+    @Path("/updateStudent")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateStudent(Student student) {

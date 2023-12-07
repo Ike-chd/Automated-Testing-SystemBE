@@ -76,7 +76,7 @@ public class StudentDB extends DBConnection implements StudentDAO {
     @Override
     public boolean insertStudent(Student student) {
         try {
-            ps = getConnection().prepareStatement("INSERT INTO Students (firstname, surname, email, address, idNumber, courseID, password, studentNum) VALUES (?,?,?,?,?,?,?,?)");
+            ps = getConnection().prepareStatement("INSERT INTO Students (firstname, surname, email, address, idNumber, courseID, password) VALUES (?,?,?,?,?,?,?)");
             ps.setString(1, student.getName());
             ps.setString(2, student.getSurname());
             ps.setString(3, student.getEmail());
@@ -84,7 +84,6 @@ public class StudentDB extends DBConnection implements StudentDAO {
             ps.setString(5, student.getIdNumber());
             ps.setInt(6, student.getCurrentCourse().getCourseID());
             ps.setString(7, student.getPassword());
-            //ps.setString(8, student.getStudentNum()); TODO
             int affectedRows = ps.executeUpdate();
             return affectedRows > 0;
         } catch (SQLException e) {
@@ -100,10 +99,10 @@ public class StudentDB extends DBConnection implements StudentDAO {
     }
 
     @Override
-    public boolean deleteStudent(Student student) {
+    public boolean deleteStudent(int id) {
         try {
             ps = getConnection().prepareStatement("DELETE FROM students WHERE studentID = ?");
-            ps.setInt(1, student.getUserID());
+            ps.setInt(1, id);
             int affectedRows = ps.executeUpdate();
             return affectedRows > 0;
         } catch (SQLException e) {
@@ -121,7 +120,7 @@ public class StudentDB extends DBConnection implements StudentDAO {
     @Override
     public boolean updateStudent(Student student) {
         try {
-            ps = getConnection().prepareStatement("UPDATE Students SET firstname = ?, surname = ?, email = ?, address = ?, idNumber = ?, courseID = ?, password = ?, studentNum = ? WHERE studentID = ?");
+            ps = getConnection().prepareStatement("UPDATE Students SET firstname = ?, surname = ?, email = ?, address = ?, idNumber = ?, courseID = ?, password = ? WHERE studentID = ?");
             ps.setString(1, student.getName());
             ps.setString(2, student.getSurname());
             ps.setString(3, student.getEmail());
@@ -129,8 +128,7 @@ public class StudentDB extends DBConnection implements StudentDAO {
             ps.setString(5, student.getIdNumber());
             ps.setInt(6, student.getCurrentCourse().getCourseID());
             ps.setString(7, student.getPassword());
-            //ps.setString(8, student.getUsername());TODO
-            ps.setInt(9, student.getUserID());
+            ps.setInt(8, student.getUserID());
             int affectedRows = ps.executeUpdate();
             return affectedRows > 0;
         } catch (SQLException e) {

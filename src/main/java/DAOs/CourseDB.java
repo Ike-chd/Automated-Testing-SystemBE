@@ -40,12 +40,13 @@ public class CourseDB extends DBConnection implements CourseDAO {
 
     @Override
     public boolean insertCourse(Course course) {
+        int update = 0;
         try {
             ps = getConnection().prepareStatement("INSERT INTO Courses (courseName, courseNumber) VALUES (?, ?)");
             ps.setString(1, course.getCourseName());
             ps.setString(2, course.getCourseNumber());
-            int affectedRows = ps.executeUpdate();
-            return affectedRows > 0;
+            update = ps.executeUpdate();
+
         } catch (SQLException ex) {
         ex.printStackTrace();
         } finally {
@@ -55,16 +56,17 @@ public class CourseDB extends DBConnection implements CourseDAO {
                 e.printStackTrace();
             }
         }
-        return false;
+        return update == 1;
     }
 
     @Override
     public boolean deleteCourse(Course course) {
+        int update = 0;
         try {
             ps = getConnection().prepareStatement("DELETE FROM Courses WHERE courseID = ?");
             ps.setInt(1, course.getCourseID());
-            int affectedRows = ps.executeUpdate();
-            return affectedRows > 0;
+            update = ps.executeUpdate();
+
         } catch (SQLException ex) {
         ex.printStackTrace();
         } finally {
@@ -74,18 +76,19 @@ public class CourseDB extends DBConnection implements CourseDAO {
                 e.printStackTrace();
             }
         }
-        return false;
+        return update == 1;
     }
 
     @Override
     public boolean updateCourse(Course course) {
+        int update = 0;
         try {
             ps = getConnection().prepareStatement("UPDATE Courses SET courseName = ?, courseNumber = ? WHERE courseID = ?");
             ps.setString(1, course.getCourseName());
             ps.setString(2, course.getCourseNumber());
             ps.setInt(3, course.getCourseID());
-            int affectedRows = ps.executeUpdate();
-            return affectedRows > 0;
+            update = ps.executeUpdate();
+
         } catch (SQLException ex) {
         ex.printStackTrace();
         } finally {
@@ -95,7 +98,7 @@ public class CourseDB extends DBConnection implements CourseDAO {
                 e.printStackTrace();
             }
         }
-        return false;
+        return update > 0;
     }
 
     @Override

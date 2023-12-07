@@ -9,7 +9,7 @@ public interface ModuleDAO {
 
     public boolean insertModule(Module module);
 
-    public boolean deleteModule(Module module);
+    public boolean deleteModule(int module);
 
     public boolean updateModule(Module module);
 

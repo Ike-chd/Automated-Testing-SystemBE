@@ -7,6 +7,7 @@ import Models.Users.FacultyMember;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class FacultyMemberDB extends DBConnection implements FacultyMemberDAO {
@@ -37,6 +38,7 @@ public class FacultyMemberDB extends DBConnection implements FacultyMemberDAO {
 
     @Override
     public boolean addFacultyMember(FacultyMember facultyMember) {
+        int rowsAffected = 0;
         try {
             ps = getConnection().prepareStatement("INSERT INTO Users (firstname, surname, email, idNumber, password) VALUES (?,?,?,?,?)");
             ps.setString(1, facultyMember.getName());
@@ -44,8 +46,7 @@ public class FacultyMemberDB extends DBConnection implements FacultyMemberDAO {
             ps.setString(3, facultyMember.getEmail());
             ps.setString(4, facultyMember.getIdNumber());
             ps.setString(5, facultyMember.getPassword());
-            int affectedRows = ps.executeUpdate();
-            return affectedRows > 0;
+            rowsAffected = ps.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
@@ -55,11 +56,12 @@ public class FacultyMemberDB extends DBConnection implements FacultyMemberDAO {
                 e.printStackTrace();
             }
         }
-        return false;
+        return rowsAffected > 0;
     }
 
     @Override
     public boolean updateFacultyMember(FacultyMember facultyMember) {
+        int rowsAffected = 0;
         try {
             ps = getConnection().prepareStatement("UPDATE Users SET firstname = ?, surname = ?, email = ?, idNumber = ?, password = ? WHERE userID = ?");
             ps.setString(1, facultyMember.getName());
@@ -68,8 +70,7 @@ public class FacultyMemberDB extends DBConnection implements FacultyMemberDAO {
             ps.setString(4, facultyMember.getIdNumber());
             ps.setString(5, facultyMember.getPassword());
             ps.setInt(6, facultyMember.getUserID());
-            int affectedRows = ps.executeUpdate();
-            return affectedRows > 0;
+            rowsAffected = ps.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
@@ -79,16 +80,16 @@ public class FacultyMemberDB extends DBConnection implements FacultyMemberDAO {
                 e.printStackTrace();
             }
         }
-        return false;
+        return rowsAffected > 0;
     }
 
     @Override
     public boolean deleteFacultyMember(FacultyMember facultyMember)  {
+        int rowsAffected = 0;
         try {
             ps = getConnection().prepareStatement("DELETE FROM Users WHERE userID = ?");
             ps.setInt(1, facultyMember.getUserID());
-            int affectedRows = ps.executeUpdate();
-            return affectedRows > 0;
+            rowsAffected = ps.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
@@ -98,11 +99,13 @@ public class FacultyMemberDB extends DBConnection implements FacultyMemberDAO {
                 e.printStackTrace();
             }
         }
-        return false;
+        return rowsAffected > 0;
     }
 
     @Override
     public List<FacultyMember> getAllFacultyMembers() {
+        List<FacultyMember> facultyMembers = new ArrayList<>();
+        //ps = getConnection().prepareStatement("SELECT * FROM Users WHERE userID")
         return null;
     }
 

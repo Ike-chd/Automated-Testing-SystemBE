@@ -9,7 +9,7 @@ public interface TopicDAO {
 
     public boolean insertTopic(Topic topic);
 
-    public boolean deleteTopic(Topic topic);
+    public boolean deleteTopic(int topicId);
 
     public boolean updateTopic(Topic topic);
 

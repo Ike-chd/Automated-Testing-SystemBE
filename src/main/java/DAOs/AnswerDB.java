@@ -23,7 +23,6 @@ public class AnswerDB extends DBConnection implements AnswerDAO{
     public Answer getAnswer(int answerId) {
         try {
             ps = getConnection().prepareStatement("SELECT * FROM Answers WHERE answerID = ?");
-            ps = DBConnection.getConnection().prepareStatement("SELECT * FROM Answers WHERE answerID = ?");
             ps.setInt(1, answerId);
             rs = ps.executeQuery();
             if (rs.next()) {
@@ -43,14 +42,13 @@ public class AnswerDB extends DBConnection implements AnswerDAO{
 
     @Override
     public boolean insertAnswer(Answer answer) {
+        int affectedRows = 0;
         try {
             ps = getConnection().prepareStatement("INSERT INTO Answers (questionID, answer, correctAnswer) VALUES(?,?,?)");
-            ps = DBConnection.getConnection().prepareStatement("INSERT INTO Answers (questionID, answer, correctAnswer) VALUES(?,?,?)");
             ps.setInt(1, answer.getQuestion().getQuestionID());
             ps.setString(2, answer.getAnswer());
-            //ps.setString(3, answer.getCorrectAnswer());
-            int affectedRows = ps.executeUpdate();
-            return affectedRows > 0;
+            ps.setBoolean(3, answer.isCorrect());
+            affectedRows = ps.executeUpdate();
         } catch (SQLException ex) {
            ex.printStackTrace();
         } finally {
@@ -60,20 +58,19 @@ public class AnswerDB extends DBConnection implements AnswerDAO{
                 e.printStackTrace();
             }
         }
-        return false;
+        return affectedRows == 1;
     }
 
     @Override
     public boolean updateAnswer(Answer answer) {
+        int affectedRows = 0;
         try {
             ps = getConnection().prepareStatement("UPDATE Answers SET questionID = ?, answer = ?, correctAnswer = ? WHERE answerID = ?");
-            ps = DBConnection.getConnection().prepareStatement("UPDATE Answers SET questionID = ?, answer = ?, correctAnswer = ? WHERE answerID = ?");
             ps.setInt(1, answer.getQuestion().getQuestionID());
             ps.setString(2, answer.getAnswer());
-            // ps.setString(3, answer.getCorrectAnswer());
+            ps.setBoolean(3, answer.isCorrect());
             ps.setInt(4, answer.getAnswerID());
-            int affectedRows = ps.executeUpdate();
-            return affectedRows > 0;
+            affectedRows = ps.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
@@ -83,18 +80,16 @@ public class AnswerDB extends DBConnection implements AnswerDAO{
                 e.printStackTrace();
             }
         }
-        return false;
+        return affectedRows == 1;
     }
 
     @Override
     public boolean deleteAnswer(int id) {
+        int rowsAffected = 0;
         try {
             ps = getConnection().prepareStatement("DELETE FROM Answer WHERE answerID = ?");
-            ps.setInt(1, answer.getAnswerID());
-            ps = DBConnection.getConnection().prepareStatement("DELETE FROM Answer WHERE answerID = ?");
             ps.setInt(1, id);
-            int affectedRows = ps.executeUpdate();
-            return affectedRows > 0;
+            rowsAffected = ps.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
@@ -104,7 +99,7 @@ public class AnswerDB extends DBConnection implements AnswerDAO{
                 e.printStackTrace();
             }
         }
-        return false;
+        return rowsAffected == 1;
     }
 
     @Override
@@ -112,7 +107,6 @@ public class AnswerDB extends DBConnection implements AnswerDAO{
         List<Answer> answers = new ArrayList<>();
         try {
             ps = getConnection().prepareStatement("SELECT * FROM Answers WHERE questionID = ?");
-            ps = DBConnection.getConnection().prepareStatement("SELECT * FROM Answers WHERE questionID = ?");
             ps.setInt(1, question.getQuestionID());
             rs = ps.executeQuery();
             while (rs.next()) {

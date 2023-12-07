@@ -5,6 +5,7 @@ import Services.ServicesInterfaces.UserService;
 import Services.UserHandler;
 import com.google.gson.Gson;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
@@ -34,14 +35,16 @@ public class UserREST {
         return Response.ok(new Gson().toJson(student)).status(Response.Status.CREATED).build();
     }
     
-    @Path("createAccount/admin")
+    @Path("/createAccount/admin")
+    @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createFacMAccount(User admin){
         return (us.addAccount(admin)) ? Response.status(Response.Status.CREATED).build()
                 : Response.status(Response.Status.NOT_IMPLEMENTED).build();
     }
     
-    @Path("createAccount/facM")
+    @Path("/createAccount/facM")
+    @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createAdminAccount(User facM){
         return (us.addAccount(facM)) ? Response.status(Response.Status.CREATED).build()
@@ -49,6 +52,7 @@ public class UserREST {
     }
     
     @Path("/getUser/byEmail/{email}")
+    @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPassword(@PathParam("email")String email){
         return Response.ok(us.getUserByEmial(email)).status(Response.Status.CREATED).build();

@@ -1,6 +1,5 @@
 package com.mycompany.atsbe.resources;
 
-import Models.Courses.Topic;
 import Models.QA.Question;
 import Services.AnswerHandler;
 import Services.QuestionHandler;
@@ -34,7 +33,7 @@ public class QuestionREST {
             question.setTopic(ts.getTopic(id).orElseThrow());
             as.addAnswers(question.getAnswers());
         } catch (NoSuchElementException e) {
-            return Response.ok("Topic not found").status(Response.Status.NOT_FOUND).build();
+            return Response.ok("Topic not found").status(Response.Status.NOT_ACCEPTABLE).build();
         }
         return (qs.addQuestion(question)) ? Response.ok("created").status(Response.Status.CREATED).build()
                 : Response.ok("not created").status(Response.Status.NOT_ACCEPTABLE).build();

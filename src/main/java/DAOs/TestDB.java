@@ -7,14 +7,11 @@ import DAOs.DAOControllers.Tests.TestDAO;
 import DAOs.ModuleDB;
 import DBConnection.DBConnection;
 import Models.Courses.Module;
-import Models.Courses.Topic;
 import Models.Tests.Test;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 public class TestDB extends DBConnection implements TestDAO{
@@ -47,12 +44,13 @@ public class TestDB extends DBConnection implements TestDAO{
 
     @Override
     public boolean insetTest(Test test) {
+        int update =0;
         try {
             ps = getConnection().prepareStatement("INSERT INTO Tests (testName, moduleID) VALUES (?,?)");
             ps.setString(1, test.getTestName());
             ps.setInt(2, test.getModuleID());
-            int affectedRows = ps.executeUpdate();
-            return affectedRows > 0;
+            update = ps.executeUpdate();
+            
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally{
@@ -61,8 +59,7 @@ public class TestDB extends DBConnection implements TestDAO{
             } catch (SQLException ex) {
             ex.printStackTrace();
             }
-        }
-        return false;
+        }return update == 1;
     }
 
     @Override
@@ -159,6 +156,7 @@ public class TestDB extends DBConnection implements TestDAO{
         int testId = resultSet.getInt("testID");
         String testName = resultSet.getString("testName");
         int moduleId = resultSet.getInt("moduleID");
-        return new Test(testId,testName,mdao.getModule(moduleId).getModuleID());
+        //return new Test(testId,testName,mdao.getModule(moduleId).getModuleID());
+        return null;
     }
 }

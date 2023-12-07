@@ -7,18 +7,18 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.core.Response;
 
-@Path("comments")
+//@Path("comments")
 public class CommentREST {
 
-    @Path("postcomment")
-    @POST
-    public void postComment(Comment comment) {
-
-    }
-
-    @Path("{commentId}")
-    @GET
-    public Response getComment(@PathParam("commentId") int id) {
-        return Response.accepted().build();
-    }
+//    @Path("postcomment")
+//    @POST
+//    public void postComment(Comment comment) {
+//
+//    }
+//
+//    @Path("{commentId}")
+//    @GET
+//    public Response getComment(@PathParam("commentId") int id) {
+//        return Response.accepted().build();
+//    }
 }

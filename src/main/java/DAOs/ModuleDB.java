@@ -57,10 +57,10 @@ public class ModuleDB extends DBConnection implements ModuleDAO{
         return false;
     }
     @Override
-    public boolean deleteModule(Module module) {
+    public boolean deleteModule(int module) {
         try {
             ps = getConnection().prepareStatement("DELETE FROM Modules WHERE moduleID = ?");
-            ps.setInt(1, module.getModuleID());
+            ps.setInt(1, module);
             int affectedRows = ps.executeUpdate();
             return affectedRows > 0;
         } catch (SQLException ex) {
