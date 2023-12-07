@@ -37,7 +37,7 @@ public class TestDB implements TestDAO {
         try {
             ps = DBConnection.getConnection().prepareStatement("INSERT INTO Tests (testName, moduleID) VALUES (?,?)");
             ps.setString(1, test.getTestName());
-            ps.setInt(2, test.getModuleID());
+            ps.setInt(2, test.getModule().getModuleID());
             int affectedRows = ps.executeUpdate();
             return affectedRows > 0;
         } catch (SQLException ex) {
@@ -64,7 +64,7 @@ public class TestDB implements TestDAO {
         try {
             ps = DBConnection.getConnection().prepareStatement("UPDATE Tests SET testName = ?, moduleID = ? WHERE testID = ?");
             ps.setString(1, test.getTestName());
-            ps.setInt(2, test.getModuleID());
+            ps.setInt(2, test.getModule().getModuleID());
             ps.setInt(3, test.getTestID());
             int affectedRows = ps.executeUpdate();
             return affectedRows > 0;
@@ -111,27 +111,6 @@ public class TestDB implements TestDAO {
         int testId = resultSet.getInt("testID");
         String testName = resultSet.getString("testName");
         int moduleId = resultSet.getInt("moduleID");
-        return new Test(testId, testName, mdao.getModule(moduleId).getModuleID());
-    }
-
-    private Module getModuleById(int moduleId) {
-        try {
-            ps = DBConnection.getConnection().prepareStatement("SELECT * FROM Modules WHERE moduleID = ?");
-            ps.setInt(1, moduleId);
-            rs = ps.executeQuery();
-            if (rs.next()) {
-                return extractModuleFromResultSet(rs);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private Module extractModuleFromResultSet(ResultSet resultSet) throws SQLException {
-        int moduleId = resultSet.getInt("moduleID");
-        String moduleName = resultSet.getString("moduleName");
-        String moduleDescription = resultSet.getString("moduleDescription");
-        return new Module(moduleId, moduleName, moduleDescription);
+        return new Test(testId, testName, mdao.getModule(moduleId));
     }
 }

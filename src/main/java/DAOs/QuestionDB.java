@@ -93,6 +93,24 @@ public class QuestionDB extends DBConnection implements QuestionDAO {
         }
         return questions;
     }
+    
+    @Override
+    public List<Question> allQuestionsUnderATest(int testId) {
+        List<Question> questions = new ArrayList<>();
+        try {
+            ps = getConnection().prepareStatement("SELECT * FROM Test_Questions WHERE testID = ?");
+            ps.setInt(1, testId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                int questionId = rs.getInt("questionID");
+                Question question = getQuestion(questionId);
+                questions.add(question);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return questions;
+    }
 
     private Question extractQuestionFromResultSet(ResultSet resultSet) throws SQLException {
         int questionID = resultSet.getInt("questionID");

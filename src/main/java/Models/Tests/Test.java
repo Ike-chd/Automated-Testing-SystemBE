@@ -1,6 +1,7 @@
 package Models.Tests;
 
 import Models.QA.Question;
+import Models.Courses.Module;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -15,9 +16,13 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Test {
-
+    
+    public Test(int testId, String testName){
+        this.testID = testId;
+        this.testName = testName;
+    }
     private int testID;
     private String testName;
-    private int moduleID;
+    private Module module;
     private final List<Question> questions = new ArrayList<>();
 }

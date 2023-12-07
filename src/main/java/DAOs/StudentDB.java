@@ -62,7 +62,7 @@ public class StudentDB implements StudentDAO {
     @Override
     public boolean insertStudent(Student student) {
         try {
-            ps = DBConnection.getConnection().prepareStatement("INSERT INTO Students (firstname, surname, email, address, idNumber, courseID, password, studentNum) "
+            ps = DBConnection.getConnection().prepareStatement("INSERT INTO Students (firstname, surname, email, address, idNumber, courseID, password) "
                     + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
             setPSValues(student);
             int affectedRows = ps.executeUpdate();
@@ -97,7 +97,6 @@ public class StudentDB implements StudentDAO {
                     + "idNumber = ?, "
                     + "courseID = ?, "
                     + "password = ?, "
-                    + "studentNum = ? "
                     + "WHERE studentID = ?");
             setPSValues(student);
             ps.setInt(8, student.getUserID());
