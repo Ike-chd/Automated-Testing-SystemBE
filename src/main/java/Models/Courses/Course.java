@@ -14,5 +14,5 @@ public class Course {
     private int courseID;
     private String courseName;
     private String courseNumber;
-    private List<Module> modules = new ArrayList<>();
+    private final List<Module> modules = new ArrayList<>();
 }
