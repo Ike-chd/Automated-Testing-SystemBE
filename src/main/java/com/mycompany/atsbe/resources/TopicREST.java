@@ -28,8 +28,8 @@ public class TopicREST {
     }
 
     @Path("/getTopic/{topicId}")
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
     public Response getTopic(@PathParam("topicId") int id) {
         Topic topic;
         try {
@@ -44,6 +44,6 @@ public class TopicREST {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllTopics(){
-        return Response.ok(ts.getAllTopics()).status(Response.Status.CREATED).build();
+        return Response.ok(ts.getAllTopics()).status(Response.Status.FOUND).build();
     }
 }

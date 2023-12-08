@@ -3,6 +3,8 @@ package DAOs;
 import DAOs.CloseStreams.CloseStreams;
 import DAOs.DAOControllers.Users.UserDAO;
 import DBConnection.DBConnection;
+import Models.Users.Admin;
+import Models.Users.FacultyMember;
 import Models.Users.User;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

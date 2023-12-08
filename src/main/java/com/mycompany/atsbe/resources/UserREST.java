@@ -1,5 +1,7 @@
 package com.mycompany.atsbe.resources;
 
+import Models.Users.FacultyMember;
+import Models.Users.Admin;
 import Models.Users.User;
 import Services.ServicesInterfaces.UserService;
 import Services.UserHandler;
@@ -38,7 +40,7 @@ public class UserREST {
     @Path("/createAccount/admin")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createFacMAccount(User admin){
+    public Response createFacMAccount(Admin admin){
         return (us.addAccount(admin)) ? Response.status(Response.Status.CREATED).build()
                 : Response.status(Response.Status.NOT_IMPLEMENTED).build();
     }
@@ -46,7 +48,7 @@ public class UserREST {
     @Path("/createAccount/facM")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createAdminAccount(User facM){
+    public Response createAdminAccount(FacultyMember facM){
         return (us.addAccount(facM)) ? Response.status(Response.Status.CREATED).build()
                 : Response.status(Response.Status.NOT_IMPLEMENTED).build();
     }
