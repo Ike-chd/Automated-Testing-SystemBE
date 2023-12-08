@@ -14,6 +14,6 @@ public class StudentAnswer {
     private int qaId;
     private Student student;
     private Question question;
-    private int correctAns;
+    private boolean correctAns;
     private Test test;
 }
