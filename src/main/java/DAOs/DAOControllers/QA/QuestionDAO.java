@@ -18,5 +18,5 @@ public interface QuestionDAO {
 
     public List<Question> allQuestionUnderATopic(Topic topic);
     
-    public List<Question> allQuestionsUnderATest(int testId);
+    public List<Question> allQuestionsUnderATest(int id);
 }
