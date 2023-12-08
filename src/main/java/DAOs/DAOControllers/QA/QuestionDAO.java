@@ -13,6 +13,6 @@ public interface QuestionDAO {
 
     public boolean updateQuestion(Question question);
 
-    public List<Question> allQuestionUnderATopic(Topic topic);
+    public List<Question> allQuestionUnderATopic(Topic topic); 
     boolean checkQuestion(String question);
 }
