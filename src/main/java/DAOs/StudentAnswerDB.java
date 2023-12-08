@@ -46,7 +46,7 @@ public class StudentAnswerDB implements StudentAnswerDAO {
         try {
             ps = DBConnection.getConnection().prepareStatement("INSERT INTO Student_Answers (studentID, questionID, correctAns, testID) VALUES (?, ?, ?, ?)");
             ps.setInt(2, studentAnswer.getQuestion().getQuestionID());
-            ps.setInt(3, studentAnswer.getCorrectAns());//TODO
+            ps.setBoolean(3, studentAnswer.isCorrectAns());//TODO
             ps.setInt(4, studentAnswer.getTest().getTestID());
             int affectRows = ps.executeUpdate();
             return affectRows > 0;
@@ -61,7 +61,7 @@ public class StudentAnswerDB implements StudentAnswerDAO {
         try {
             ps = DBConnection.getConnection().prepareStatement("UPDATE Student_Answers SET studentID = ?, questionID = ?, correctAns = ?, testID = ? WHERE qaID = ?");
             ps.setInt(2, studentAnswer.getQuestion().getQuestionID());
-            ps.setInt(3, studentAnswer.getCorrectAns());
+            ps.setBoolean(3, studentAnswer.isCorrectAns());
             ps.setInt(4, studentAnswer.getTest().getTestID());
             ps.setInt(5, studentAnswer.getQaId());
             int affectedRows = ps.executeUpdate();
@@ -156,7 +156,7 @@ public class StudentAnswerDB implements StudentAnswerDAO {
         int qaId = resultSet.getInt("qaID");
         int studentId = resultSet.getInt("studentID");
         int questionId = resultSet.getInt("questionID");
-        int correctAns = resultSet.getInt("correctAns");
+        boolean correctAns = resultSet.getBoolean("correctAns");
         int testId = resultSet.getInt("testID");
         return new StudentAnswer(qaId, sdao.getStudent(studentId), qdao.getQuestion(questionId), correctAns, tdao.getTest(testId));
     }
