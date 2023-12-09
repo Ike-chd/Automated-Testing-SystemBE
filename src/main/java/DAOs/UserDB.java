@@ -77,7 +77,7 @@ public class UserDB extends DBConnection implements UserDAO {
     public boolean createAccountReq(User student) {
         int updated = 0;
         try {
-            ps = getConnection().prepareStatement("INSERT INTO accountreq(name, surname, email, idNumber) "
+            ps = getConnection().prepareStatement("INSERT INTO accountreq(name, surname, email, requestID) "
                     + "VALUES(?, ?, ?, ?)");
             ps.setString(1, student.getName());
             ps.setString(2, student.getSurname());

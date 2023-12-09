@@ -12,9 +12,9 @@ public class DBConnection {
     static {
         basicDatasource = new BasicDataSource();
         basicDatasource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        basicDatasource.setUrl(System.getProperty("MYSQL_URL", "jdbc:mysql://localhost:3306/appointmentdb?autoReconnect=true&useSSL=false"));
-        basicDatasource.setUsername(System.getProperty("MYSQL_USERNAME", "root"));
-        basicDatasource.setPassword(System.getProperty("MYSQL_PASSWORD", "root"));
+        basicDatasource.setUrl("jdbc:mysql://localhost:3306/ats?autoReconnect=true&useSSL=false");
+        basicDatasource.setUsername( "root");
+        basicDatasource.setPassword("root");
         basicDatasource.setMinIdle(10);
         basicDatasource.setMaxIdle(10);
         basicDatasource.setMaxOpenPreparedStatements(100);
