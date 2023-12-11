@@ -10,4 +10,5 @@ public interface TestAttemptDAO {
     public List<TestAttempt> getAllTestAttemptsByTest(Test test);
     public List<TestAttempt> getAllTestAttemptsByStudent(Student student);
     public List<TestAttempt> getAllTestAttempts();
+    List<TestAttempt> getAllTestAttemptsByTestAndStudent(Test test, Student student);
 }

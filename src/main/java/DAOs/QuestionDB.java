@@ -143,23 +143,6 @@ public class QuestionDB extends DBConnection implements QuestionDAO {
         return questions;
     }
 
-    @Override
-    public boolean checkQuestion(String question) {
-        try {
-            ps = getConnection().prepareStatement("SELECT * FROM Questions WHERE question = ?");
-            ps.setString(1, question);
-            rs = ps.executeQuery();
-            while(rs.next()){
-                if(rs.getString("question").equalsIgnoreCase(question)){
-                    return true;
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
     private Question extractQuestionFromResultSet(ResultSet resultSet) throws SQLException {
         int questionID = resultSet.getInt("questionID");
         String question = resultSet.getString("question");

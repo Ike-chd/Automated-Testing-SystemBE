@@ -13,6 +13,7 @@ import Models.Tests.Test;
 import Models.Tests.TestAttempt;
 import Models.Users.Student;
 import Services.ServicesInterfaces.ReportService;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -72,21 +73,117 @@ public class ReportHandler implements ReportService {
 
     @Override
     public Map<Topic, Double> getHardestTopicsPerStudent(Student student) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Map<Topic, Double> hardestTopicsPerStudent = new HashMap<>();
+        List<Topic> topics = topdao.allTopics();
+        
+        for (Topic topic : topics) {
+            List<Question> questions = qdao.allQuestionUnderATopic(topic);
+            double totalPercentage = 0;
+            int questionCount = 0;
+
+            for (Question question : questions) {
+                double percentage = getPercentageOfWrongAnswersPerStudent(question, student);
+                totalPercentage += percentage;
+                questionCount++;
+            }
+
+            double averagePercentage = (questionCount == 0) ? 0 : totalPercentage / questionCount;
+            hardestTopicsPerStudent.put(topic, averagePercentage);
+        }
+
+        return hardestTopicsPerStudent;
     }
 
     @Override
     public Map<Test, Double> getHardestTestsPerStudent(Student student) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Map<Test, Double> hardestTestsPerStudent = new HashMap<>();
+        List<Test> tests = tdao.getAllTests();
+
+        for (Test test : tests) {
+            double ratingPercentage = getRatingPercentagePerStudent(test, student);
+            hardestTestsPerStudent.put(test, ratingPercentage);
+        }
+
+        return hardestTestsPerStudent;
     }
 
     @Override
     public Map<Student, Double> getAllStudentsAndTheirAveragesInACourse(Course course) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Map<Student, Double> studentAverages = new HashMap<>();
+        //List<Student> students = TODO;
+
+        for (Student student : students) {
+            double averageRating = getAverageRatingForStudentInCourse(student, course);
+            studentAverages.put(student, averageRating);
+        }
+
+        return studentAverages;
     }
 
     @Override
     public List<TestAttempt> getAllStudentsAndTheirTestAttempt() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        List<TestAttempt> allTestAttempts = tadao.getAllTestAttempts(); 
+        Map<Student, List<TestAttempt>> studentTestAttemptsMap = new HashMap<>();
+        for (TestAttempt testAttempt : allTestAttempts) {
+            Student student = testAttempt.getStudent();
+            studentTestAttemptsMap.computeIfAbsent(student, k -> new ArrayList<>());
+            studentTestAttemptsMap.get(student).add(testAttempt);
+        }
+        List<TestAttempt> result = new ArrayList<>();
+        for (Map.Entry<Student, List<TestAttempt>> entry : studentTestAttemptsMap.entrySet()) {
+            Student student = entry.getKey();
+            List<TestAttempt> testAttempts = entry.getValue();
+            double averageRating = calculateAverageRating(testAttempts);
+            TestAttempt averageTestAttempt = new TestAttempt();
+            averageTestAttempt.setStudent(student);
+            averageTestAttempt.setRating(averageRating);
+            result.add(averageTestAttempt);
+        }
+
+        return result;
+
+    }
+    
+    private double getPercentageOfWrongAnswersPerStudent(Question question, Student student) {
+        int wrongAnswers = 0;
+        int totalAttempts = 0;
+
+        List<StudentAnswer> answers = sadao.getStudentAnswersByQuestionAndStudent(question, student);
+        
+        for (StudentAnswer answer : answers) {
+            if (!answer.isCorrectAns()) {
+                wrongAnswers++;
+            }
+            totalAttempts++;
+        }
+
+        return (totalAttempts == 0) ? 0 : (double) wrongAnswers / totalAttempts * 100;
+    }
+    
+    private double getRatingPercentagePerStudent(Test test, Student student) {
+        double totalRatings = 0;
+        int totalAttempts = 0;
+
+        List<TestAttempt> testAttempts = tadao.getAllTestAttemptsByTestAndStudent(test, student);
+
+        for (TestAttempt testAttempt : testAttempts) {
+            totalRatings += testAttempt.getRating();
+            totalAttempts++;
+        }
+
+        return (totalAttempts == 0) ? 0 : (totalRatings / totalAttempts) * 100;
+    }
+    
+    private double getAverageRatingForStudentInCourse(Student student, Course course) {
+        return 0;//TODO
+    }
+    
+    private double calculateAverageRating(List<TestAttempt> testAttempts) {
+        double totalRating = 0;
+        int totalAttempts = testAttempts.size();
+        for (TestAttempt testAttempt : testAttempts) {
+            totalRating += testAttempt.getRating();
+        }
+        return (totalAttempts == 0) ? 0 : totalRating / totalAttempts;
     }
 }
