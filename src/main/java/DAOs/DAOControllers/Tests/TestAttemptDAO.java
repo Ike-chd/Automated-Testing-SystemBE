@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface TestAttemptDAO {
     public TestAttempt getTestAttempt(int id);
+    public boolean addTestAttempt(TestAttempt testAttempt);
     public List<TestAttempt> getAllTestAttemptsByTest(Test test);
     public List<TestAttempt> getAllTestAttemptsByStudent(Student student);
     public List<TestAttempt> getAllTestAttempts();
