@@ -27,11 +27,11 @@ public class CommentDB extends DBConnection implements CommentDAO {
             ps = getConnection().prepareStatement("SELECT * FROM Comments WHERE commentID = ?");
             ps.setInt(1, commentId);
             rs = ps.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 return extractCommentFromResultSet(rs);
             }
         } catch (SQLException ex) {
-        ex.printStackTrace();
+            ex.printStackTrace();
         } finally {
             try {
                 CloseStreams.closeRsPs(rs, ps);
@@ -52,7 +52,7 @@ public class CommentDB extends DBConnection implements CommentDAO {
             ps.setInt(3, comment.getFaculty().getUserID());
             affectedRows = ps.executeUpdate();
         } catch (SQLException ex) {
-        ex.printStackTrace();
+            ex.printStackTrace();
         } finally {
             try {
                 CloseStreams.closePreparedStatment(ps);
@@ -72,7 +72,7 @@ public class CommentDB extends DBConnection implements CommentDAO {
             ps.setInt(2, comment.getCommentID());
             affectedRows = ps.executeUpdate();
         } catch (SQLException ex) {
-        ex.printStackTrace();
+            ex.printStackTrace();
         } finally {
             try {
                 CloseStreams.closePreparedStatment(ps);
@@ -91,7 +91,7 @@ public class CommentDB extends DBConnection implements CommentDAO {
             ps.setInt(1, comment.getCommentID());
             affectedRows = ps.executeUpdate();
         } catch (SQLException ex) {
-        ex.printStackTrace();
+            ex.printStackTrace();
         } finally {
             try {
                 CloseStreams.closePreparedStatment(ps);
@@ -114,7 +114,7 @@ public class CommentDB extends DBConnection implements CommentDAO {
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
-        } finally{
+        } finally {
             try {
                 CloseStreams.closeRsPs(rs, ps);
             } catch (SQLException ex) {
@@ -135,7 +135,7 @@ public class CommentDB extends DBConnection implements CommentDAO {
                 facultyComments.add(extractCommentFromResultSet(rs));
             }
         } catch (SQLException ex) {
-        ex.printStackTrace();
+            ex.printStackTrace();
         } finally {
             try {
                 CloseStreams.closeRsPs(rs, ps);

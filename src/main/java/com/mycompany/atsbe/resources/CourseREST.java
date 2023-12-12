@@ -23,8 +23,9 @@ public class CourseREST {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response postCourse(Course course) {
-        return (cs.addCourse(course)) ? Response.ok("Course Created").status(Response.Status.CREATED).build()
-                : Response.ok("Course Not Created").status(Response.Status.NOT_ACCEPTABLE).build();
+        return (cs.addCourse(course))
+                ? Response.ok("Course Created").status(Response.Status.CREATED).build()
+                : Response.status(Response.Status.NOT_ACCEPTABLE).build();
     }
 
     @Path("getCourse/{id}")

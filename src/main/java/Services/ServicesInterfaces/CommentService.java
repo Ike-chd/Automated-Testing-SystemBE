@@ -1,11 +1,15 @@
 package Services.ServicesInterfaces;
 
 import Models.Communication.Comment;
+
+import java.util.List;
 import java.util.Optional;
 
 public interface CommentService {
 
-    public Optional<Comment> getComment();
+    void postComment(Comment comment);
 
-    public boolean insertComment();
+    Optional<Comment> getCommentById(int commentId);
+
+    List<Comment> getAllComments();
 }
