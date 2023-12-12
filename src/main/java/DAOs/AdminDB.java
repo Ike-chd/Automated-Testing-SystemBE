@@ -1,86 +1,137 @@
 package DAOs;
 
+import DAOs.CloseStreams.CloseStreams;
+import DAOs.DAOControllers.Users.AccessRoleDAO;
 import DAOs.DAOControllers.Users.AdminDAO;
 import DBConnection.DBConnection;
-import Models.Tests.Test;
-import java.sql.*;
+import Models.Users.Admin;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdminDB extends DBConnection {
-
-    private static Connection connection;
-
-    public static Test getTestByID(int testID) {
-        String query = "SELECT * FROM tests WHERE testID = ?";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setLong(1, testID);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                Test test = new Test();
-                test.setTestID(resultSet.getInt("testID"));
-                test.setTestName(resultSet.getString("testName"));
-                return test;
+public class AdminDB extends DBConnection implements AdminDAO {
+    private PreparedStatement ps;
+    private ResultSet rs;
+    private AccessRoleDAO adao = new AccessRoleDB();
+    @Override
+    public Admin getAdmin(int userId) {
+        try {
+            ps = getConnection().prepareStatement("SELECT * FROM Users WHERE userID = ?");
+            ps.setInt(1, userId);
+            rs = ps.executeQuery();
+            if(rs.next()) {
+                return extractAdminFromResultSet(rs);
             }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closeRsPs(rs,ps);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
-
         return null;
     }
 
-    public static List<Test> getAllTests() {
-        List<Test> tests = new ArrayList<>();
-        String query = "SELECT * FROM tests";
-        try (Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery(query)) {
-            while (resultSet.next()) {
-                Test test = new Test();
-                test.setTestID(resultSet.getInt("testID"));
-                test.setTestName(resultSet.getString("testName"));
-                tests.add(test);
+    @Override
+    public boolean addAdmin(Admin admin) {
+        int rowsAffected = 0;
+        try {
+            ps = getConnection().prepareStatement("INSERT INTO Users (firstname,surname,email,idNumber,password,isSuperAdmin) VALUES(?,?,?,?,?,?)");
+            ps.setString(1, admin.getName());
+            ps.setString(2, admin.getSurname());
+            ps.setString(3, admin.getEmail());
+            ps.setString(4,admin.getIdNumber());
+            ps.setString(5,admin.getPassword());
+            ps.setBoolean(6,admin.isSuperAdmin());
+            rowsAffected = ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closePreparedStatment(ps);
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
-
-        return tests;
+        return rowsAffected == 1;
     }
 
-    public static void createTest(Test test) {
-        String query = "INSERT INTO tests (testName) VALUES (?)";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-            preparedStatement.setString(1, test.getTestName());
-            preparedStatement.executeUpdate();
-
-            ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                test.setTestID(generatedKeys.getInt(1));
+    @Override
+    public boolean removeAdmin(int userId) {
+        int rowsAffected = 0;
+        try {
+            ps = getConnection().prepareStatement("DELETE FROM Users WHERE userId = ?");
+            ps.setInt(1, userId);
+            rowsAffected = ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closePreparedStatment(ps);
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
+        return rowsAffected == 1;
     }
 
-    public static void updateTest(Test test) {
-        String query = "UPDATE tests SET testName = ? WHERE testID = ?";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, test.getTestName());
-            preparedStatement.setLong(2, test.getTestID());
-
-            preparedStatement.executeUpdate();
+    @Override
+    public boolean updateAdmin(Admin admin) {
+        int rowsAffected = 0;
+        try {
+            ps = getConnection().prepareStatement("UPDATE Users SET firstname = ?, surname = ?, email = ?, idNumber = ?, password = ?, isSuperAdmin = ? WHERE userID = ?");
+            ps.setString(1, admin.getName());
+            ps.setString(2, admin.getSurname());
+            ps.setString(3, admin.getEmail());
+            ps.setString(4, admin.getIdNumber());
+            ps.setString(5, admin.getPassword());
+            ps.setBoolean(6, admin.isSuperAdmin());
+            rowsAffected = ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        }finally{
+            try {
+                CloseStreams.closePreparedStatment(ps);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+        return rowsAffected == 1;
     }
 
-    public static void deleteTest(int testID) {
-        String query = "DELETE FROM tests WHERE testID = ?";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setLong(1, testID);
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
+    @Override
+    public List<Admin> getAllAdmins() {
+        List<Admin> admins = new ArrayList<>();
+        try {
+            ps = getConnection().prepareStatement("SELECT * FROM Users WHERE accessRole = 2");
+            rs = ps.executeQuery();
+            while(rs.next()){
+                admins.add(extractAdminFromResultSet(rs));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closeRsPs(rs,ps);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+        return admins;
+    }
+    private Admin extractAdminFromResultSet(ResultSet resultSet) throws SQLException {
+        int userID = resultSet.getInt("userID");
+        String name = resultSet.getString("firstname");
+        String surname = resultSet.getString("surname");
+        String email = resultSet.getString("email");
+        String idNumber = resultSet.getString("idNumber");
+        String password = resultSet.getString("password");
+        int accessRoleID = resultSet.getInt("accessRoleID");
+        return new Admin(userID, name, surname, email, idNumber, password, adao.getAccessRole(accessRoleID));//TODO
     }
 }

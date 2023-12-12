@@ -4,6 +4,7 @@ import DAOs.CourseDB;
 import DAOs.DAOControllers.Courses.CourseDAO;
 import Models.Courses.Course;
 import Services.ServicesInterfaces.CourseService;
+import java.util.List;
 
 import java.util.Optional;
 
@@ -29,5 +30,10 @@ public class CourseHandler implements CourseService {
     @Override
     public boolean deleteCourse(Course course) {
         return cdao.deleteCourse(course);
+    }
+
+    @Override
+    public List<Course> getAllCourses() {
+        return cdao.allCourses();
     }
 }

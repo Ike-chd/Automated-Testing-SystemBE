@@ -1,12 +1,12 @@
 package DAOs;
 
+import DAOs.CloseStreams.CloseStreams;
 import DAOs.DAOControllers.Courses.CourseDAO;
 import DBConnection.DBConnection;
 import Models.Courses.Course;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +14,6 @@ public class CourseDB extends DBConnection implements CourseDAO {
 
     private PreparedStatement ps;
     private ResultSet rs;
-    private Statement s;
 
     @Override
     public Course getCourse(int courseId) {
@@ -26,65 +25,94 @@ public class CourseDB extends DBConnection implements CourseDAO {
                 return extractCourseFromResultSet(rs);
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+        ex.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closeRsPs(rs, ps);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
         return null;
     }
 
     @Override
     public boolean insertCourse(Course course) {
+        int update = 0;
         try {
             ps = getConnection().prepareStatement("INSERT INTO Courses (courseName, courseNumber) VALUES (?, ?)");
             ps.setString(1, course.getCourseName());
             ps.setString(2, course.getCourseNumber());
-            int affectedRows = ps.executeUpdate();
-            return affectedRows > 0;
+            update = ps.executeUpdate();
         } catch (SQLException ex) {
-            ex.printStackTrace();
+        ex.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closePreparedStatment(ps);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
-        return false;
+        return update == 1;
     }
 
     @Override
     public boolean deleteCourse(Course course) {
+        int update = 0;
         try {
             ps = getConnection().prepareStatement("DELETE FROM Courses WHERE courseID = ?");
             ps.setInt(1, course.getCourseID());
-            int affectedRows = ps.executeUpdate();
-            return affectedRows > 0;
+            update = ps.executeUpdate();
         } catch (SQLException ex) {
-            ex.printStackTrace();
+        ex.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closePreparedStatment(ps);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
-        return false;
+        return update == 1;
     }
 
     @Override
     public boolean updateCourse(Course course) {
+        int update = 0;
         try {
             ps = getConnection().prepareStatement("UPDATE Courses SET courseName = ?, courseNumber = ? WHERE courseID = ?");
             ps.setString(1, course.getCourseName());
             ps.setString(2, course.getCourseNumber());
             ps.setInt(3, course.getCourseID());
-            int affectedRows = ps.executeUpdate();
-            return affectedRows > 0;
+            update = ps.executeUpdate();
         } catch (SQLException ex) {
-            ex.printStackTrace();
+        ex.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closePreparedStatment(ps);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
-        return false;
+        return update > 0;
     }
 
     @Override
     public List<Course> allCourses() {
         List<Course> courses = new ArrayList<>();
         try {
-            s = getConnection().createStatement();
-            rs = s.executeQuery("SELECT * FROM Courses");
+            ps = getConnection().prepareStatement("SELECT * FROM Courses");
+            rs = ps.executeQuery();
             while (rs.next()) {
-                Course course = extractCourseFromResultSet(rs);
-                courses.add(course);
+                courses.add(extractCourseFromResultSet(rs));
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
+        }finally {
+            try {
+                CloseStreams.closeRsPs(rs, ps);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
         return courses;
     }

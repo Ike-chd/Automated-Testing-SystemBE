@@ -1,45 +1,43 @@
 package Services;
 
+import DAOs.AnswerDB;
+import DAOs.DAOControllers.QA.AnswerDAO;
 import Models.QA.Answer;
 import Services.ServicesInterfaces.AnswerService;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.Optional;
 
 public class AnswerHandler implements AnswerService {
 
-    private static final Map<Integer, Answer> answerDatabase = new HashMap<>();
+    AnswerDAO adao = new AnswerDB();
 
     @Override
     public Optional<Answer> getAnswer(int answerID) {
-        return Optional.ofNullable(answerDatabase.get(answerID));
+        return Optional.ofNullable(adao.getAnswer(answerID));
     }
 
     @Override
     public boolean addAnswer(Answer answer) {
-        if (!answerDatabase.containsKey(answer.getAnswerID())) {
-            answerDatabase.put(answer.getAnswerID(), answer);
-            return true;
-        }
-        return false;
+        return adao.insertAnswer(answer);
     }
 
     @Override
-    public boolean updateAnswer(int answerID, Answer updatedAnswer) {
-        if (answerDatabase.containsKey(answerID)) {
-            answerDatabase.put(answerID, updatedAnswer);
-            return true;
-        }
-        return false;
+    public boolean updateAnswer(Answer updatedAnswer) {
+        return adao.updateAnswer(updatedAnswer);
     }
 
     @Override
     public boolean deleteAnswer(int answerID) {
-        if (answerDatabase.containsKey(answerID)) {
-            answerDatabase.remove(answerID);
-            return true;
+        return adao.deleteAnswer(answerID);
+    }
+
+    @Override
+    public boolean addAnswers(List<Answer> answers) {
+        boolean allEntered = true;
+        for (Answer answer : answers) {
+            allEntered = allEntered && adao.insertAnswer(answer);
         }
-        return false;
+        return allEntered;
     }
 }

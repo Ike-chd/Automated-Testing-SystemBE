@@ -1,5 +1,8 @@
 package Models.StudentAnswer;
 
+import Models.QA.Question;
+import Models.Tests.Test;
+import Models.Users.Student;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -14,8 +17,8 @@ import lombok.Setter;
 public class StudentAnswer {
 
     private int qaID;
-    private int studentID;
-    private int questionID;
+    private Student student;
+    private Question question;
     private boolean correctAns;
-    private int testID;
+    private Test test;
 }

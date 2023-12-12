@@ -4,6 +4,8 @@ import Models.Courses.Course;
 import Services.CourseHandler;
 import Services.ServicesInterfaces.CourseService;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -11,11 +13,13 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.util.NoSuchElementException;
 
+@Path("/courses")
 public class CourseREST {
 
     CourseService cs = new CourseHandler();
 
     @Path("postCourse")
+    @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response postCourse(Course course) {
@@ -24,6 +28,7 @@ public class CourseREST {
     }
 
     @Path("getCourse/{id}")
+    @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getCourse(@PathParam("id") int id) {
         try {
@@ -34,6 +39,7 @@ public class CourseREST {
     }
 
     @Path("updateCourse")
+    @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateCourse(Course course) {
         return (cs.updateCourse(course)) ? Response.ok("Course updated").status(Response.Status.CREATED).build()
@@ -41,9 +47,17 @@ public class CourseREST {
     }
 
     @Path("deleteCourse")
-    @Consumes(MediaType.APPLICATION_JSON)
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
     public Response deleteCourse(Course course) {
         return (cs.deleteCourse(course)) ? Response.ok("Course deleted").status(Response.Status.CREATED).build()
                 : Response.ok("Course Not delete").status(Response.Status.NOT_ACCEPTABLE).build();
+    }
+    
+    @Path("allCourses")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllCourse() {
+    return Response.ok(cs.getAllCourses()).status(Response.Status.CREATED).build();
     }
 }

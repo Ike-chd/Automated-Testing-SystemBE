@@ -15,9 +15,11 @@ import lombok.Setter;
 @NoArgsConstructor
 public class SuspensionRequest {
 
-    Student student;
-    FacultyMember requestedBy;
-    Admin confirmedBy;
-    Calendar start;
-    Calendar end;
+    private Student student;
+    private FacultyMember requestedBy;
+    private Admin confirmedBy;
+    private Calendar start;
+    private Calendar end;
+    private boolean active;
+    private String reason;
 }

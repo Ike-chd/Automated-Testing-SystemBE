@@ -16,8 +16,8 @@ public class ModuleHandler implements ModuleService {
     }
 
     @Override
-    public boolean addModule(int moduleId) {
-        return mdao.insertModule(moduleId);
+    public boolean addModule(Module module) {
+        return mdao.insertModule(module);
     }
 
     @Override
@@ -26,7 +26,7 @@ public class ModuleHandler implements ModuleService {
     }
 
     @Override
-    public boolean updateModule(int moduleId) {
-        return mdao.updateModule(moduleId);
+    public boolean updateModule(Module module) {
+        return mdao.updateModule(module);
     }
 }

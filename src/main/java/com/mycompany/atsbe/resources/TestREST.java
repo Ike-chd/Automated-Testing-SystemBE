@@ -7,7 +7,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.core.Response;
 
-@Path("tests")
+//@Path("tests")
 public class TestREST {
 
     TestService ts;
@@ -20,7 +20,7 @@ public class TestREST {
 
     @Path("getTest/{testId}")
     public Response getTest(@PathParam("testId") int id) {
-        Test test = ts.<Test>getTest(0).orElseGet(() -> new Test(0, "NotFound", 0));
+        Test test = ts.<Test>getTest(0).orElseGet(() -> new Test(0, "NotFound"));
         return Response.ok(test)
                 .status((test.getTestID() == 0) ? Response.Status.NOT_FOUND : Response.Status.FOUND)
                 .build();

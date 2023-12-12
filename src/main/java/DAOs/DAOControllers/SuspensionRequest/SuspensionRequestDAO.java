@@ -1,6 +1,5 @@
 package DAOs.DAOControllers.SuspensionRequest;
-
-import Models.SuspensionRequest.SuspensionRequest;
+import Models.Communication.SuspensionRequest;
 import Models.Users.Student;
 
 import java.util.List;

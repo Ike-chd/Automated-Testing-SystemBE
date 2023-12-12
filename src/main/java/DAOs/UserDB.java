@@ -1,7 +1,10 @@
 package DAOs;
 
+import DAOs.CloseStreams.CloseStreams;
 import DAOs.DAOControllers.Users.UserDAO;
 import DBConnection.DBConnection;
+import Models.Users.Admin;
+import Models.Users.FacultyMember;
 import Models.Users.User;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,19 +18,32 @@ public class UserDB extends DBConnection implements UserDAO {
     private ResultSet rs;
 
     @Override
-    public void insertUser(User user) {
+    public boolean insertUser(User user) {
+        int updated = 0;
+        int accessRoleID = 0;
         try {
-            ps = getConnection().prepareStatement("INSERT INTO users(firstname, surname, email, idNumber, password)"
-                    + "VALUES(?,?,?,?,?)");
+            if(user instanceof FacultyMember && ((FacultyMember)user).isProfessor()){
+                accessRoleID = 1;
+            } else if(user instanceof FacultyMember){
+                accessRoleID = 3;
+            } else if(user instanceof Admin && ((Admin)user).isSuperAdmin()){
+                accessRoleID = 4;
+            } else{
+                accessRoleID = 2;
+            }
+            ps = getConnection().prepareStatement("INSERT INTO users(firstname, surname, email, idNumber, password, accessRoleID)"
+                    + "VALUES(?,?,?,?,?,?)");
             ps.setString(1, user.getName());
             ps.setString(2, user.getSurname());
             ps.setString(3, user.getEmail());
             ps.setString(4, user.getIdNumber());
             ps.setString(5, user.getPassword());
+            ps.setInt(6, accessRoleID);
             ps.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return updated == 1;
     }
 
     @Override
@@ -68,9 +84,15 @@ public class UserDB extends DBConnection implements UserDAO {
             }
             return null;
         } catch (SQLException ex) {
-            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
+            ex.printStackTrace();
+        }finally{
+            try {
+                CloseStreams.closeRsPs(rs, ps);
+            } catch (SQLException ex) {
+            ex.printStackTrace();
+            }
         }
+        return null;
     }
 
     @Override
@@ -85,7 +107,13 @@ public class UserDB extends DBConnection implements UserDAO {
             ps.setString(4, student.getIdNumber());
             updated = ps.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+        } finally{
+            try {
+                CloseStreams.closePreparedStatment(ps);
+            } catch (SQLException ex) {
+            ex.printStackTrace();
+            }
         }
         return updated == 1;
     }
@@ -95,16 +123,22 @@ public class UserDB extends DBConnection implements UserDAO {
         try {
             ps = getConnection().prepareStatement("SELECT * FROM users "
                     + "WHERE userId = ?");
-            ps.setString(1, user.getUsername());
+            ps.setInt(1, user.getUserID());
             rs = ps.executeQuery();
             if (rs.next()) {
                 return extractUserFromDB(rs);
             }
             return null;
         } catch (SQLException ex) {
-            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
+           ex.printStackTrace();
+        } finally{
+            try {
+                CloseStreams.closeRsPs(rs, ps);
+            } catch (SQLException ex) {
+            ex.printStackTrace();
+            }
         }
+        return null;
     }
 
     public User extractUserFromDB(ResultSet rs) {
@@ -128,5 +162,21 @@ public class UserDB extends DBConnection implements UserDAO {
             Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
+    }
+
+    @Override
+    public User getUserByEmail(String email) {
+        try {
+            ps = getConnection().prepareStatement("SELECT * FROM users "
+                    + "WHERE email = ?");
+            ps.setString(1, email);
+            rs = ps.executeQuery();
+            if(rs.next()){
+                return extractUserFromDB(rs);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
     }
 }

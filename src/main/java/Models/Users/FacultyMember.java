@@ -14,6 +14,9 @@ import lombok.Setter;
 
 public class FacultyMember extends User {
 
-    private String department;
     private boolean isProfessor;
+
+    public FacultyMember(int userID, String name, String surname, String email, String idNumber, String password, AccessRole accessRole) {
+        super(userID, name, surname, email, idNumber, password, accessRole);
+    }
 }

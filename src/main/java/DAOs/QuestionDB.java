@@ -1,5 +1,6 @@
 package DAOs;
 
+import DAOs.CloseStreams.CloseStreams;
 import DAOs.DAOControllers.Courses.TopicDAO;
 import DAOs.DAOControllers.QA.QuestionDAO;
 import DBConnection.DBConnection;
@@ -28,7 +29,13 @@ public class QuestionDB extends DBConnection implements QuestionDAO {
                 return extractQuestionFromResultSet(rs);
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+           ex.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closeRsPs(rs, ps);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
         return null;
     }
@@ -37,13 +44,20 @@ public class QuestionDB extends DBConnection implements QuestionDAO {
     public boolean insertQuestion(Question question) {
         int updated = 0;
         try {
-            ps = getConnection().prepareStatement("INSERT INTO Questions (question, markAllocation, topicID) VALUES (?,?,?)");
+            ps = getConnection().prepareStatement("INSERT INTO Questions (question, markAllocation, topicID) "
+                    + "VALUES (?,?,?)");
             ps.setString(1, question.getQuestion());
             ps.setInt(2, question.getMarkAllocation());
             ps.setInt(3, question.getTopic().getTopicID());
             updated = ps.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closePreparedStatment(ps);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return updated == 1;
     }
@@ -57,6 +71,12 @@ public class QuestionDB extends DBConnection implements QuestionDAO {
             updated = ps.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closePreparedStatment(ps);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return updated == 1;
     }
@@ -72,6 +92,12 @@ public class QuestionDB extends DBConnection implements QuestionDAO {
             updated = ps.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closePreparedStatment(ps);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return updated == 1;
     }
@@ -84,8 +110,29 @@ public class QuestionDB extends DBConnection implements QuestionDAO {
             ps.setInt(1, topic.getTopicID());
             rs = ps.executeQuery();
             while (rs.next()) {
-                Question question = extractQuestionFromResultSet(rs);
-                questions.add(question);
+                questions.add(extractQuestionFromResultSet(rs));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closeRsPs(rs, ps);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return questions;
+    }
+    
+    @Override
+    public List<Question> allQuestionsUnderATest(int testId) {
+        List<Question> questions = new ArrayList<>();
+        try {
+            ps = getConnection().prepareStatement("SELECT * FROM Test_Questions WHERE testID = ?");
+            ps.setInt(1, testId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                questions.add(extractQuestionFromResultSet(rs));
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -99,10 +146,5 @@ public class QuestionDB extends DBConnection implements QuestionDAO {
         int markAllocation = resultSet.getInt("markAllocation");
         int topicID = resultSet.getInt("topicID");
         return new Question(questionID, question, markAllocation, topDao.getTopic(topicID));
-    }
-
-    @Override
-    public Question getQuestion() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

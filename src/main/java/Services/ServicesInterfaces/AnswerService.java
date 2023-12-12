@@ -1,16 +1,19 @@
 package Services.ServicesInterfaces;
 
 import Models.QA.Answer;
+import java.util.List;
 
 import java.util.Optional;
 
 public interface AnswerService {
     
-    Optional<Answer> getAnswer(int answerID);
+    public Optional<Answer> getAnswer(int answerID);
 
-    boolean addAnswer(Answer answer);
+    public boolean addAnswer(Answer answer);
+    
+    public boolean addAnswers(List<Answer> answers);
 
-    boolean updateAnswer(int answerID, Answer answer);
+    public boolean updateAnswer(Answer answer);
 
-    boolean deleteAnswer(int answerID);
+    public boolean deleteAnswer(int answerID);
 }

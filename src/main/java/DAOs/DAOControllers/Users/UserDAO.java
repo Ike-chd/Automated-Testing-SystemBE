@@ -4,7 +4,7 @@ import Models.Users.User;
 
 public interface UserDAO {
 
-    public void insertUser(User user);
+    public boolean insertUser(User user);
 
     public void updateUser(User user);
 
@@ -17,4 +17,6 @@ public interface UserDAO {
     public boolean createAccountReq(User student);
 
     public boolean checkForEmail(String email);
+    
+    public User getUserByEmail(String email);
 }

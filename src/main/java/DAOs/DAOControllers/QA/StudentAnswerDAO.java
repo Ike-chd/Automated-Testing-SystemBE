@@ -1,13 +1,11 @@
 package DAOs.DAOControllers.QA;
 
-import Models.QA.Answer;
 import Models.QA.Question;
 import Models.QA.StudentAnswer;
 import Models.Tests.Test;
 import Models.Users.Student;
 
 import java.util.List;
-import java.util.Map;
 
 public interface StudentAnswerDAO {
 
@@ -26,4 +24,6 @@ public interface StudentAnswerDAO {
     List<StudentAnswer> getStudentAnswersByQuestion(Question question);
 
     List<StudentAnswer> getStudentAnswersByTest(Test test);
+    
+    List<StudentAnswer> getStudentAnswersByQuestionAndStudent(Question question, Student student);
 }

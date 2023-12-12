@@ -10,4 +10,8 @@ import lombok.NoArgsConstructor;
 public class Admin extends User {
 
     private boolean isSuperAdmin;
+
+    public Admin(int userID, String name, String surname, String email, String idNumber, String password, AccessRole accessRole) {
+        super(userID, name, surname, email, idNumber, password, accessRole);
+    }
 }

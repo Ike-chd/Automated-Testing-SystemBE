@@ -11,11 +11,17 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Student extends User {
-
+    private String phoneNumber, address;
     private Course currentCourse;
 
-    public Student(int userID, String username, String name, String surname, String email, String idNumber, String address, String password, Course currentCourse) {
-        super(userID, username, name, surname, email, idNumber, address, password);
+    public Student(String phoneNumber, String address, Course currentCourse, int userID, String name, String surname, String email, String idNumber, String password, AccessRole accessRole) {
+        super(userID, name, surname, email, idNumber, password, accessRole);
+        this.phoneNumber = phoneNumber;
+        this.address = address;
         this.currentCourse = currentCourse;
     }
+
+    
+    
+    
 }
