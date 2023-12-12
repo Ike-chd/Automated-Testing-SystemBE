@@ -2,15 +2,20 @@ package Services;
 
 import DAOs.AnswerDB;
 import DAOs.DAOControllers.QA.AnswerDAO;
+import DAOs.DAOControllers.QA.QuestionDAO;
+import DAOs.QuestionDB;
 import Models.QA.Answer;
+import Models.QA.Question;
 import Services.ServicesInterfaces.AnswerService;
 
 import java.util.List;
 import java.util.Optional;
+import org.ietf.jgss.Oid;
 
 public class AnswerHandler implements AnswerService {
 
     AnswerDAO adao = new AnswerDB();
+    QuestionDAO qdao = new QuestionDB();
 
     @Override
     public Optional<Answer> getAnswer(int answerID) {
@@ -35,7 +40,9 @@ public class AnswerHandler implements AnswerService {
     @Override
     public boolean addAnswers(List<Answer> answers) {
         boolean allEntered = true;
+        Question question = qdao.getQuestion(qdao.getLastInsertID());
         for (Answer answer : answers) {
+            answer.setQuestion(question);
             allEntered = allEntered && adao.insertAnswer(answer);
         }
         return allEntered;

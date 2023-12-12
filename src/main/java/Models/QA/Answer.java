@@ -11,4 +11,8 @@ public class Answer {
     private String answer;
     private boolean isCorrect;
     private Question question;
+
+    public Answer() {
+    }
+    
 }

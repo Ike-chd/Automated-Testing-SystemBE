@@ -1,6 +1,7 @@
 package Services.ServicesInterfaces;
 
 import Models.QA.Answer;
+import Models.QA.Question;
 import java.util.List;
 
 import java.util.Optional;

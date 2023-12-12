@@ -25,7 +25,6 @@ public class StudentREST {
     @Path("createAccount")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.TEXT_PLAIN)
     public Response postStudent(Student student) {
         try {
             return (ss.insertStudent(student)) ? 
