@@ -53,11 +53,11 @@ public class CourseREST {
         return (cs.deleteCourse(course)) ? Response.ok("Course deleted").status(Response.Status.CREATED).build()
                 : Response.ok("Course Not delete").status(Response.Status.NOT_ACCEPTABLE).build();
     }
-    
+
     @Path("allCourses")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllCourse() {
-    return Response.ok(cs.getAllCourses()).status(Response.Status.CREATED).build();
+        return Response.ok(cs.getAllCourses()).status(Response.Status.CREATED).build();
     }
 }

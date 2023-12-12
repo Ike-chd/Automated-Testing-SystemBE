@@ -19,7 +19,7 @@ public class SuspensionRequest {
     private FacultyMember requestedBy;
     private Admin confirmedBy;
     private Calendar start;
-    private Calendar end;
+    private int duration;
     private boolean active;
     private String reason;
 }

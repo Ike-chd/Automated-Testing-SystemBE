@@ -27,16 +27,15 @@ public class QuestionREST {
     @Path("postQuestion")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response postQuestion(Question question, @PathParam("topicId") int id) {
+    public Response postQuestion(Question question) {
         try {
-            question.setTopic(ts.getTopic(id).orElseThrow());
+            qs.addQuestion(question);
             as.addAnswers(question.getAnswers());
         } catch (NoSuchElementException e) {
-            return Response.ok("Topic not found").status(Response.Status.NOT_ACCEPTABLE).build();
+            return Response.ok("Topic not found").status(Response.Status.NOT_FOUND).build();
         }
         return (qs.addQuestion(question)) ? Response.ok("created").status(Response.Status.CREATED).build()
-                : Response.ok("not created").status(Response.Status.NOT_ACCEPTABLE).build();
+                : Response.ok("not created").status(Response.Status.NOT_FOUND).build();
     }
 
     @Path("getQuestion/{id}")

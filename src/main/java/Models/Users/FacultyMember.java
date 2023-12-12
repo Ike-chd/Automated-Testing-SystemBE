@@ -19,4 +19,12 @@ public class FacultyMember extends User {
     public FacultyMember(int userID, String name, String surname, String email, String idNumber, String password, AccessRole accessRole) {
         super(userID, name, surname, email, idNumber, password, accessRole);
     }
+
+    public void setIsProfessor(boolean isProfessor) {
+        this.isProfessor = isProfessor;
+    }
+
+    public boolean isProfessor() {
+        return isProfessor;
+    }
 }

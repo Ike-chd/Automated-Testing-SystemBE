@@ -39,9 +39,9 @@ public class UserDB extends DBConnection implements UserDAO {
             ps.setString(4, user.getIdNumber());
             ps.setString(5, user.getPassword());
             ps.setInt(6, accessRoleID);
-            ps.executeUpdate();
+            updated = ps.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
         return updated == 1;
     }
@@ -57,7 +57,7 @@ public class UserDB extends DBConnection implements UserDAO {
             ps.setString(5, user.getPassword());
             ps.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
+           ex.printStackTrace();
         }
     }
 
@@ -68,7 +68,7 @@ public class UserDB extends DBConnection implements UserDAO {
             ps.setInt(1, userID);
             ps.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
     }
 

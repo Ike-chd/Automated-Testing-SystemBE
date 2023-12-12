@@ -44,6 +44,6 @@ public class TopicREST {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllTopics(){
-        return Response.ok(ts.getAllTopics()).status(Response.Status.FOUND).build();
+        return Response.ok(ts.getAllTopics()).status(Response.Status.CREATED).build();
     }
 }

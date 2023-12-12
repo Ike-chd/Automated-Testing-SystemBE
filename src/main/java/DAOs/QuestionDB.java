@@ -147,4 +147,19 @@ public class QuestionDB extends DBConnection implements QuestionDAO {
         int topicID = resultSet.getInt("topicID");
         return new Question(questionID, question, markAllocation, topDao.getTopic(topicID));
     }
+
+    @Override
+    public int getLastInsertID() {
+        int id = 0;
+        try {
+            ps = getConnection().prepareStatement("SELECT max(questionID) AS max FROM questions");
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                id = rs.getInt("max");
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return id;
+    }
 }

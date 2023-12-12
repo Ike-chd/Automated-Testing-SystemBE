@@ -6,51 +6,20 @@ import DAOs.DAOControllers.SuspensionRequest.SuspensionRequestDAO;
 import DBConnection.DBConnection;
 import Models.Communication.SuspensionRequest;
 import Models.Users.Student;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 
-import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 public class SuspensionRequestDB extends DBConnection implements SuspensionRequestDAO {
-    @Override
-    public SuspensionRequest getSuspensionRequest(int ssId) {
-        return null;
-    }
+   
 
-    @Override
-    public boolean insertSuspensionRequest(SuspensionRequest ssRequest) {
-        return false;
-    }
+    private PreparedStatement ps;
+    private ResultSet rs;
+    private CourseDAO cdao;
 
-    @Override
-    public boolean updateSuspensionRequest(SuspensionRequest ssRequest) {
-        return false;
-    }
-
-    @Override
-    public boolean deleteSuspensionRequest(SuspensionRequest ssRequest) {
-        return false;
-    }
-
-    @Override
-    public List<SuspensionRequest> getAllSuspensionRequests() {
-        return null;
-    }
-
-    @Override
-    public List<SuspensionRequest> getAllActiveSuspensionRequests() {
-        return null;
-    }
-
-    @Override
-    public List<SuspensionRequest> getSuspensionRequestsByStudent(Student student) {
-        return null;
-    }
-//
-//    private PreparedStatement ps;
-//    private ResultSet rs;
-//    private CourseDAO cdao;
-//
 //    @Override
 //    public SuspensionRequest getSuspensionRequest(int ssId) {
 //        try {
@@ -77,11 +46,11 @@ public class SuspensionRequestDB extends DBConnection implements SuspensionReque
 //        try {
 //            ps = getConnection().prepareStatement("INSERT INTO SuspensionRequests (studentID, requestID, duration, confirmID, reason, active, dateInitiated) VALUES (?,?,?,?,?,?,?)");
 //            ps.setInt(1, ssRequest.getStudent().getUserID());
-//            // TODO ps.setInt(2, ssRequest.);
-//            ps.setInt(3, ssRequest.getConfirmId());
-//            ps.setString(4, ssRequest.getReason());
+//            ps.setInt(2, ssRequest.getRequestedBy().getUserID());
+//            ps.setInt(3, ssRequest.getDuration());
+//            ps.setInt(4, ssRequest.getConfirmedBy().getUserID());
 //            ps.setBoolean(5, ssRequest.isActive());
-//            ps.setTimestamp(6, Timestamp.valueOf(ssRequest.getDateInitiated()));
+//            ps.setTimestamp(6, Timestamp.valueOf(ssRequest.));
 //            int affectedRows = ps.executeUpdate();
 //            return affectedRows > 0;
 //        } catch (SQLException e) {
@@ -209,4 +178,39 @@ public class SuspensionRequestDB extends DBConnection implements SuspensionReque
 ////        return new Student(studentId, username, firstname, surname, email, idNumber, password, studentId, cdao.getCourse(courseID));
 //        return null;
 //    }
+
+    @Override
+    public SuspensionRequest getSuspensionRequest(int ssId) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public boolean insertSuspensionRequest(SuspensionRequest ssRequest) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public boolean updateSuspensionRequest(SuspensionRequest ssRequest) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public boolean deleteSuspensionRequest(SuspensionRequest ssRequest) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public List<SuspensionRequest> getAllSuspensionRequests() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public List<SuspensionRequest> getAllActiveSuspensionRequests() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public List<SuspensionRequest> getSuspensionRequestsByStudent(Student student) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }
