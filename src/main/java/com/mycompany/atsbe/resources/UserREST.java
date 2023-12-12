@@ -15,12 +15,12 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-@Path("/account")
+@Path("accounts")
 public class UserREST {
 
     UserService us = new UserHandler();
 
-    @Path("/login")
+    @Path("login")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -28,7 +28,7 @@ public class UserREST {
         return Response.ok(new Gson().toJson(user)).build();
     }
 
-    @Path("/request")
+    @Path("request")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -37,7 +37,7 @@ public class UserREST {
         return Response.ok(new Gson().toJson(student)).status(Response.Status.CREATED).build();
     }
     
-    @Path("/createAccount/admin")
+    @Path("createAccount/admin")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createFacMAccount(Admin admin){
@@ -45,7 +45,7 @@ public class UserREST {
                 : Response.status(Response.Status.NOT_IMPLEMENTED).build();
     }
     
-    @Path("/createAccount/facM")
+    @Path("createAccount/facM")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createAdminAccount(FacultyMember facM){
@@ -53,7 +53,7 @@ public class UserREST {
                 : Response.status(Response.Status.NOT_IMPLEMENTED).build();
     }
     
-    @Path("/getUser/byEmail/{email}")
+    @Path("getUser/byEmail/{email}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPassword(@PathParam("email")String email){

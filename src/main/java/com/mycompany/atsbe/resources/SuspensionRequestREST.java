@@ -11,7 +11,7 @@ import java.util.NoSuchElementException;
 //@Path("/suspension-requests")
 public class SuspensionRequestREST {
 
-//    SuspensionRequestService suspensionRequestService = new SuspensionRequestHandler();
+    SuspensionRequestService suspensionRequestService = new SuspensionRequestHandler();
 //
 //    @GET
 //    @Path("/{ssid}")
@@ -27,7 +27,7 @@ public class SuspensionRequestREST {
 //    }
 //
 //    @POST
-//    @Path("/createSuspensionRequest")
+//    @Path("createSuspensionRequest")
 //    @Consumes(MediaType.APPLICATION_JSON)
 //    public Response createSuspensionRequest(SuspensionRequest suspensionRequest) {
 //        try {
@@ -40,7 +40,7 @@ public class SuspensionRequestREST {
 //    }
 //
 //    @PUT
-//    @Path("/updateSuspensionRequest/{ssid}")
+//    @Path("updateSuspensionRequest/{ssid}")
 //    @Consumes(MediaType.APPLICATION_JSON)
 //    public Response updateSuspensionRequest(@PathParam("ssid") int ssid, SuspensionRequest suspensionRequest) {
 //        try {
@@ -55,7 +55,7 @@ public class SuspensionRequestREST {
 //    }
 //
 //    @DELETE
-//    @Path("/deleteSuspensionRequest/{ssid}")
+//    @Path("deleteSuspensionRequest/{ssid}")
 //    public Response deleteSuspensionRequest(@PathParam("ssid") int ssid) {
 //        try {
 //            return (suspensionRequestService.deleteSuspensionRequest(ssid))

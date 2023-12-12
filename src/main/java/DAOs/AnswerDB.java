@@ -16,7 +16,6 @@ import java.util.List;
 public class AnswerDB extends DBConnection implements AnswerDAO{
     private PreparedStatement ps;
     private ResultSet rs;
-    private Statement s;
     private QuestionDAO qdao = new QuestionDB();
 
     @Override
@@ -110,8 +109,7 @@ public class AnswerDB extends DBConnection implements AnswerDAO{
             ps.setInt(1, question.getQuestionID());
             rs = ps.executeQuery();
             while (rs.next()) {
-                Answer answer = extractAnswerFromResultSet(rs);
-                answers.add(answer);
+                answers.add(extractAnswerFromResultSet(rs));
             }
         } catch (SQLException ex) {
             ex.printStackTrace();

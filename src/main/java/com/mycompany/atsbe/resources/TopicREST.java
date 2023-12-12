@@ -13,12 +13,12 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.util.NoSuchElementException;
 
-@Path("/topics")
+@Path("topics")
 public class TopicREST {
 
     TopicService ts = new TopicHandler();
 
-    @Path("/postTopic")
+    @Path("postTopic")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response postTopic(Topic topic) {
@@ -40,7 +40,7 @@ public class TopicREST {
         return Response.ok(topic).status(Response.Status.FOUND).build();
     }
     
-    @Path("/allTopics")
+    @Path("allTopics")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllTopics(){

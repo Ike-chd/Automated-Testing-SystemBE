@@ -20,14 +20,25 @@ public class UserDB extends DBConnection implements UserDAO {
     @Override
     public boolean insertUser(User user) {
         int updated = 0;
+        int accessRoleID = 0;
         try {
-            ps = getConnection().prepareStatement("INSERT INTO users(firstname, surname, email, idNumber, password)"
-                    + "VALUES(?,?,?,?,?)");
+            if(user instanceof FacultyMember && ((FacultyMember)user).isProfessor()){
+                accessRoleID = 1;
+            } else if(user instanceof FacultyMember){
+                accessRoleID = 3;
+            } else if(user instanceof Admin && ((Admin)user).isSuperAdmin()){
+                accessRoleID = 4;
+            } else{
+                accessRoleID = 2;
+            }
+            ps = getConnection().prepareStatement("INSERT INTO users(firstname, surname, email, idNumber, password, accessRoleID)"
+                    + "VALUES(?,?,?,?,?,?)");
             ps.setString(1, user.getName());
             ps.setString(2, user.getSurname());
             ps.setString(3, user.getEmail());
             ps.setString(4, user.getIdNumber());
             ps.setString(5, user.getPassword());
+            ps.setInt(6, accessRoleID);
             ps.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);

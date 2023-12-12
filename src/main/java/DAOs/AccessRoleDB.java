@@ -14,15 +14,12 @@ import java.util.List;
 public class AccessRoleDB extends DBConnection implements AccessRoleDAO {
     private PreparedStatement ps;
     private ResultSet rs;
-    private Statement s;
 
     @Override
     public AccessRole getAccessRole(int accessRoleId) {
         try {
             ps = getConnection().prepareStatement("SELECT * FROM AccessRoles WHERE accessRoleID = ?");
             ps.setInt(1,accessRoleId);
-            ps = DBConnection.getConnection().prepareStatement("SELECT * FROM AccessRoles WHERE accessRoleID = ?");
-            ps.setInt(1, accessRoleId);
             rs = ps.executeQuery();
             if (rs.next()) {
                 return extractAccessRoleFromResultSet(rs);
@@ -43,8 +40,6 @@ public class AccessRoleDB extends DBConnection implements AccessRoleDAO {
     public boolean insertAccessRole(AccessRole accessRole) {
         try {
             ps = getConnection().prepareStatement("INSERT INTO AccessRoles (accessRole) VALUES (?)");
-            ps.setString(1,accessRole.getRoleName());
-            ps = DBConnection.getConnection().prepareStatement("INSERT INTO AccessRoles (accessRole) VALUES (?)");
             ps.setString(1, accessRole.getRoleName());
             int affectedRows = ps.executeUpdate();
             return affectedRows > 0;
@@ -64,7 +59,6 @@ public class AccessRoleDB extends DBConnection implements AccessRoleDAO {
     public boolean updateAccessRole(AccessRole accessRole) {
         try {
             ps = getConnection().prepareStatement("UPDATE AccessRoles SET accessRole = ? WHERE accessRoleID = ?");
-            ps = DBConnection.getConnection().prepareStatement("UPDATE AccessRoles SET accessRole = ? WHERE accessRoleID = ?");
             ps.setString(1, accessRole.getRoleName());
             ps.setInt(2, accessRole.getAccessRoleID());
             int affectedRows = ps.executeUpdate();
@@ -85,8 +79,6 @@ public class AccessRoleDB extends DBConnection implements AccessRoleDAO {
     public boolean deleteAccessRole(AccessRole accessRole) {
         try {
             ps = getConnection().prepareStatement("DELETE FROM AccessRoles WHERE accessRoleID = ?");
-            ps.setInt(1,accessRole.getAccessRoleID());
-            ps = DBConnection.getConnection().prepareStatement("DELETE FROM AccessRoles WHERE accessRoleID = ?");
             ps.setInt(1, accessRole.getAccessRoleID());
             int affectedRows = ps.executeUpdate();
             return affectedRows > 0;
@@ -106,23 +98,17 @@ public class AccessRoleDB extends DBConnection implements AccessRoleDAO {
     public List<AccessRole> getAccessRoles() {
         List<AccessRole> accessRoles = new ArrayList<>();
         try {
-            s = getConnection().createStatement();
-            s = DBConnection.getConnection().createStatement();
-            rs = s.executeQuery("SELECT * FROM AccessRoles");
+            ps = getConnection().prepareStatement("SELECT * FROM AccessRoles");
+            rs = ps.executeQuery();
             while (rs.next()) {
-                AccessRole accessRole = extractAccessRoleFromResultSet(rs);
-                accessRoles.add(accessRole);
+                accessRoles.add(extractAccessRoleFromResultSet(rs));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally{
             try {
-                if(s != null){
-                    s.close();
-                } else if(rs != null){
-                    rs.close();
-                }
-            }catch (SQLException e) {
+                CloseStreams.closeRsPs(rs,ps);
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }

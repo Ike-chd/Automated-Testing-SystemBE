@@ -7,7 +7,6 @@ import Models.Courses.Course;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +14,6 @@ public class CourseDB extends DBConnection implements CourseDAO {
 
     private PreparedStatement ps;
     private ResultSet rs;
-    private Statement s;
 
     @Override
     public Course getCourse(int courseId) {
@@ -46,7 +44,6 @@ public class CourseDB extends DBConnection implements CourseDAO {
             ps.setString(1, course.getCourseName());
             ps.setString(2, course.getCourseNumber());
             update = ps.executeUpdate();
-
         } catch (SQLException ex) {
         ex.printStackTrace();
         } finally {
@@ -66,7 +63,6 @@ public class CourseDB extends DBConnection implements CourseDAO {
             ps = getConnection().prepareStatement("DELETE FROM Courses WHERE courseID = ?");
             ps.setInt(1, course.getCourseID());
             update = ps.executeUpdate();
-
         } catch (SQLException ex) {
         ex.printStackTrace();
         } finally {
@@ -88,7 +84,6 @@ public class CourseDB extends DBConnection implements CourseDAO {
             ps.setString(2, course.getCourseNumber());
             ps.setInt(3, course.getCourseID());
             update = ps.executeUpdate();
-
         } catch (SQLException ex) {
         ex.printStackTrace();
         } finally {
@@ -105,25 +100,19 @@ public class CourseDB extends DBConnection implements CourseDAO {
     public List<Course> allCourses() {
         List<Course> courses = new ArrayList<>();
         try {
-            s = getConnection().createStatement();
-            rs = s.executeQuery("SELECT * FROM Courses");
+            ps = getConnection().prepareStatement("SELECT * FROM Courses");
+            rs = ps.executeQuery();
             while (rs.next()) {
-                Course course = extractCourseFromResultSet(rs);
-                courses.add(course);
+                courses.add(extractCourseFromResultSet(rs));
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
-        } finally {
-                try {
-                    if(s != null){
-                    s.close();
-                } else if(rs != null){
-                    rs.close();
-                }
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-
+        }finally {
+            try {
+                CloseStreams.closeRsPs(rs, ps);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
         return courses;
     }

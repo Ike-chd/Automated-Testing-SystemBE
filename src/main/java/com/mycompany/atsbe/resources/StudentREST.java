@@ -17,18 +17,17 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.util.NoSuchElementException;
 
-//@Path("/students")
+@Path("students")
 public class StudentREST {
 
     StudentService ss = new StudentHandler();
-    CourseService cs = new CourseHandler();
 
-    @Path("createAccount/{courseId}")
+    @Path("createAccount")
+    @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
-    public Response postStudent(Student student, @PathParam("courseId") int courseId) {
+    public Response postStudent(Student student) {
         try {
-            student.setCurrentCourse(cs.getCourse(courseId).orElseThrow());
             return (ss.insertStudent(student)) ? 
                     Response.ok("student" + student.getName() + " " + student.getSurname() + "created")
                             .status(Response.Status.CREATED)
@@ -55,14 +54,14 @@ public class StudentREST {
         return null;
     }
 
-    @Path("/allStudents")
+    @Path("allStudents")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllStudents() {
         return Response.ok().status(Response.Status.CREATED).build();
     }
 
-    @Path("/updateStudent")
+    @Path("updateStudent")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateStudent(Student student) {

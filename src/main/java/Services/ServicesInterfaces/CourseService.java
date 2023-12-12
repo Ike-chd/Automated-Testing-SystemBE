@@ -1,6 +1,7 @@
 package Services.ServicesInterfaces;
 
 import Models.Courses.Course;
+import java.util.List;
 import java.util.Optional;
 
 public interface CourseService {
@@ -12,4 +13,6 @@ public interface CourseService {
     public boolean updateCourse(Course course);
 
     public boolean deleteCourse(Course course);
+    
+    public List<Course> getAllCourses();
 }

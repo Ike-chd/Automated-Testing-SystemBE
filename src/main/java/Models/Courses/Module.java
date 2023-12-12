@@ -1,8 +1,8 @@
 package Models.Courses;
 
-import Models.Tests.Test;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,6 +15,11 @@ public class Module {
     private int moduleID;
     private String moduleName;
     private String moduleDescription;
-    private final List<Test> tests = new ArrayList<>();
-    
+    private Map<Module, List<Module>> modules = new HashMap<>();
+
+    public Module(int moduleID, String moduleName, String moduleDescription) {
+        this.moduleID = moduleID;
+        this.moduleName = moduleName;
+        this.moduleDescription = moduleDescription;
+    }
 }

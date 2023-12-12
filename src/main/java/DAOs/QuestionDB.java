@@ -110,8 +110,7 @@ public class QuestionDB extends DBConnection implements QuestionDAO {
             ps.setInt(1, topic.getTopicID());
             rs = ps.executeQuery();
             while (rs.next()) {
-                Question question = extractQuestionFromResultSet(rs);
-                questions.add(question);
+                questions.add(extractQuestionFromResultSet(rs));
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -133,9 +132,7 @@ public class QuestionDB extends DBConnection implements QuestionDAO {
             ps.setInt(1, testId);
             rs = ps.executeQuery();
             while (rs.next()) {
-                int questionId = rs.getInt("questionID");
-                Question question = getQuestion(questionId);
-                questions.add(question);
+                questions.add(extractQuestionFromResultSet(rs));
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -150,5 +147,4 @@ public class QuestionDB extends DBConnection implements QuestionDAO {
         int topicID = resultSet.getInt("topicID");
         return new Question(questionID, question, markAllocation, topDao.getTopic(topicID));
     }
-
 }

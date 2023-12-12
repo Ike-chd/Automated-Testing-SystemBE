@@ -8,7 +8,10 @@ import Models.Courses.Topic;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class TopicDB extends DBConnection implements TopicDAO{
     private PreparedStatement ps;
@@ -92,7 +95,23 @@ public class TopicDB extends DBConnection implements TopicDAO{
     }
     @Override
     public List<Topic> allTopics() {
-        return null;
+        List<Topic> topics = new ArrayList<>();
+        try {
+            ps = getConnection().prepareStatement("SELECT * FROM Topics");
+            rs = ps.executeQuery();
+            while(rs.next()){
+                topics.add(extractTopicsFromResultSet(rs));
+            }
+        } catch (SQLException ex) {
+        ex.printStackTrace();
+        }finally{
+            try {
+                CloseStreams.closeRsPs(rs, ps);
+            } catch (SQLException ex) {
+            ex.printStackTrace();
+            }
+        }
+        return topics;
     }
     private Topic extractTopicsFromResultSet(ResultSet resultSet) throws SQLException{
         int topicID = resultSet.getInt("topicID");

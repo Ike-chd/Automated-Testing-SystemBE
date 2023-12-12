@@ -1,16 +1,13 @@
 package DAOs;
 
 import DAOs.CloseStreams.CloseStreams;
-import DAOs.DAOControllers.Courses.CourseDAO;
 import DAOs.DAOControllers.QA.QuestionDAO;
 import DAOs.DAOControllers.QA.StudentAnswerDAO;
 import DAOs.DAOControllers.Tests.TestDAO;
 import DAOs.DAOControllers.Users.StudentDAO;
 import DBConnection.DBConnection;
-import Models.Courses.Course;
 import Models.QA.Question;
 import Models.QA.StudentAnswer;
-import Models.Courses.Topic;
 import Models.Tests.Test;
 import Models.Users.Student;
 
@@ -20,14 +17,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-public class StudentAnswerDB extends DBConnection implements StudentAnswerDAO {
+public class StudentAnswerDB extends DBConnection implements StudentAnswerDAO{
 
     private PreparedStatement ps;
     private ResultSet rs;
-    private Statement s;
     private StudentDAO sdao = new StudentDB();
     private QuestionDAO qdao = new QuestionDB();
     private TestDAO tdao = new TestDB();
@@ -55,14 +49,14 @@ public class StudentAnswerDB extends DBConnection implements StudentAnswerDAO {
 
     @Override
     public boolean insertStudentAnswer(StudentAnswer studentAnswer) {
+        int affectedRows = 0;
         try {
             ps = getConnection().prepareStatement("INSERT INTO Student_Answers (studentID, questionID, correctAns, testID) VALUES (?, ?, ?, ?)");
-            //ps.setString(1, studentAnswer.getStudent().getUsername());TODO
+            ps.setInt(1, studentAnswer.getStudent().getUserID());
             ps.setInt(2, studentAnswer.getQuestion().getQuestionID());
-            ps.setInt(3, studentAnswer.getCorrectAns());//TODO
+            ps.setBoolean(3, studentAnswer.isCorrectAns());
             ps.setInt(4, studentAnswer.getTest().getTestID());
-            int affectRows = ps.executeUpdate();
-            return affectRows > 0;
+            affectedRows = ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -72,20 +66,20 @@ public class StudentAnswerDB extends DBConnection implements StudentAnswerDAO {
                 ex.printStackTrace();
             }
         }
-        return false;
+        return affectedRows == 1;
     }
 
     @Override
     public boolean updateStudentAnswer(StudentAnswer studentAnswer) {
+        int affectedRows = 0;
         try {
             ps = getConnection().prepareStatement("UPDATE Student_Answers SET studentID = ?, questionID = ?, correctAns = ?, testID = ? WHERE qaID = ?");
-            //ps.setString(1, studentAnswer.getStudent().getUsername());TODO
+            ps.setInt(1, studentAnswer.getStudent().getUserID());
             ps.setInt(2, studentAnswer.getQuestion().getQuestionID());
-            ps.setInt(3, studentAnswer.getCorrectAns());
+            ps.setBoolean(3, studentAnswer.isCorrectAns());
             ps.setInt(4, studentAnswer.getTest().getTestID());
             ps.setInt(5, studentAnswer.getQaId());
-            int affectedRows = ps.executeUpdate();
-            return affectedRows > 0;
+            affectedRows = ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -95,16 +89,16 @@ public class StudentAnswerDB extends DBConnection implements StudentAnswerDAO {
                 ex.printStackTrace();
             }
         }
-        return false;
+        return affectedRows == 1;
     }
 
     @Override
     public boolean deleteStudentAnswer(StudentAnswer studentAnswer) {
+        int affectedRows = 0;
         try {
             ps = getConnection().prepareStatement("DELETE FROM Student_Answers WHERE qaID = ?");
             ps.setInt(1, studentAnswer.getQaId());
-            int affectedRows = ps.executeUpdate();
-            return affectedRows > 0;
+            affectedRows = ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -114,29 +108,25 @@ public class StudentAnswerDB extends DBConnection implements StudentAnswerDAO {
                 ex.printStackTrace();
             }
         }
-        return false;
+        return affectedRows == 1;
     }
 
     @Override
     public List<StudentAnswer> getStudentAnswers() {
         List<StudentAnswer> studentAnswers = new ArrayList<>();
         try {
-            s = getConnection().createStatement();
-            rs = s.executeQuery("SELECT * FROM Student_Answers");
+            ps = getConnection().prepareStatement("SELECT * FROM Student_Answers");
+            rs = ps.executeQuery();
             while (rs.next()) {
-                StudentAnswer studentAnswer = extractStudentAnswerFromResultSet(rs);
-                studentAnswers.add(studentAnswer);
+                studentAnswers.add(extractStudentAnswerFromResultSet(rs));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             try {
-                if (s != null) {
-                    s.close();
-                } else if (rs != null) {
-                    rs.close();
-                }
+                CloseStreams.closeRsPs(rs,ps);
             } catch (SQLException e) {
+                e.printStackTrace();
             }
         }
         return studentAnswers;
@@ -147,11 +137,10 @@ public class StudentAnswerDB extends DBConnection implements StudentAnswerDAO {
         List<StudentAnswer> studentAnswers = new ArrayList<>();
         try {
             ps = getConnection().prepareStatement("SELECT * FROM Student_Answers WHERE studentID = ?");
-            //ps.setString(1, student.getUsername());TODO
+            ps.setInt(1, student.getUserID());
             rs = ps.executeQuery();
             while (rs.next()) {
-                StudentAnswer studentAnswer = extractStudentAnswerFromResultSet(rs);
-                studentAnswers.add(studentAnswer);
+                studentAnswers.add(extractStudentAnswerFromResultSet(rs));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -173,8 +162,7 @@ public class StudentAnswerDB extends DBConnection implements StudentAnswerDAO {
             ps.setInt(1, question.getQuestionID());
             rs = ps.executeQuery();
             while (rs.next()) {
-                StudentAnswer studentAnswer = extractStudentAnswerFromResultSet(rs);
-                studentAnswers.add(studentAnswer);
+                studentAnswers.add(extractStudentAnswerFromResultSet(rs));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -196,8 +184,7 @@ public class StudentAnswerDB extends DBConnection implements StudentAnswerDAO {
             ps.setInt(1, test.getTestID());
             rs = ps.executeQuery();
             while (rs.next()) {
-                StudentAnswer studentAnswer = extractStudentAnswerFromResultSet(rs);
-                studentAnswers.add(studentAnswer);
+                studentAnswers.add(extractStudentAnswerFromResultSet(rs));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -215,8 +202,25 @@ public class StudentAnswerDB extends DBConnection implements StudentAnswerDAO {
         int qaId = resultSet.getInt("qaID");
         int studentId = resultSet.getInt("studentID");
         int questionId = resultSet.getInt("questionID");
-        int correctAns = resultSet.getInt("correctAns");
+        boolean correctAns = resultSet.getBoolean("correctAns");
         int testId = resultSet.getInt("testID");
         return new StudentAnswer(qaId, sdao.getStudent(studentId), qdao.getQuestion(questionId), correctAns, tdao.getTest(testId));
+    }
+
+    @Override
+    public List<StudentAnswer> getStudentAnswersByQuestionAndStudent(Question question, Student student) {
+        List<StudentAnswer> answers = new ArrayList<>();
+        try {
+            ps = getConnection().prepareStatement("SELECT * FROM Student_Answers WHERE studentID = ? AND questionID = ?");
+            ps.setInt(1,student.getUserID());
+            ps.setInt(2,question.getQuestionID());
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                answers.add(extractStudentAnswerFromResultSet(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return answers;
     }
 }

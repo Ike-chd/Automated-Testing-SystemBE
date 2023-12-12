@@ -20,5 +20,19 @@ public class Question {
     private String question;
     private int markAllocation;
     private Topic topic;
-    private final List<Answer> answers = new ArrayList<>();
+    private List<Answer> answers = new ArrayList<>();
+
+    public Question(int questionID, String question, int markAllocation, Topic topic) {
+        this.questionID = questionID;
+        this.question = question;
+        this.markAllocation = markAllocation;
+        this.topic = topic;
+    }
+
+    public Question(String question, int markAllocation, Topic topic) {
+        this.question = question;
+        this.markAllocation = markAllocation;
+        this.topic = topic;
+    }
+    
 }

@@ -24,7 +24,7 @@ public class QuestionREST {
     TopicService ts = new TopicHandler();
     AnswerService as = new AnswerHandler();
 
-    @Path("postQuestion/{topicId}")
+    @Path("postQuestion")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)

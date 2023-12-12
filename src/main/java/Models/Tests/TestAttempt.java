@@ -14,4 +14,11 @@ public class TestAttempt {
     private Student student;
     private double rating;
     private final List<StudentAnswer> answers = new ArrayList<>();
+
+    public TestAttempt(int testAttemptID, Test test, Student student, double rating) {
+        this.testAttemptID = testAttemptID;
+        this.test = test;
+        this.student = student;
+        this.rating = rating;
+    }
 }
