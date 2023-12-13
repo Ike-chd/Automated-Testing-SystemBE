@@ -1,82 +1,52 @@
 package Services;
 
-//import Models.SuspensionRequest.SuspensionRequest;
+import DAOs.DAOControllers.SuspensionRequest.SuspensionRequestDAO;
 import Models.Communication.SuspensionRequest;
+import Models.Users.Student;
 import Services.ServicesInterfaces.SuspensionRequestService;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 public class SuspensionRequestHandler implements SuspensionRequestService {
 
-    @Override
-    public Optional<SuspensionRequest> getSuspensionRequest(int ssid) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    private SuspensionRequestDAO suspensionRequestDAO;
+
+    public SuspensionRequestHandler(SuspensionRequestDAO suspensionRequestDAO) {
+        this.suspensionRequestDAO = suspensionRequestDAO;
     }
 
     @Override
-    public boolean addSuspensionRequest(SuspensionRequest suspensionRequest) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public SuspensionRequest getSuspensionRequest(int ssId) {
+        return suspensionRequestDAO.getSuspensionRequest(ssId);
     }
 
     @Override
-    public boolean updateSuspensionRequest(SuspensionRequest suspensionRequest) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public boolean insertSuspensionRequest(SuspensionRequest ssRequest) {
+        return suspensionRequestDAO.insertSuspensionRequest(ssRequest);
     }
 
     @Override
-    public boolean deleteSuspensionRequest(int ssid) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public boolean updateSuspensionRequest(SuspensionRequest ssRequest) {
+        return suspensionRequestDAO.updateSuspensionRequest(ssRequest);
     }
 
     @Override
-    public List<SuspensionRequest> getAllPendingRequests() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public boolean deleteSuspensionRequest(int ssId) {
+        return suspensionRequestDAO.deleteSuspensionRequest(ssId);
     }
 
     @Override
-    public List<SuspensionRequest> getAllActiveRequests() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public List<SuspensionRequest> getAllSuspensionRequests() {
+        return suspensionRequestDAO.getAllSuspensionRequests();
     }
 
     @Override
-    public List<SuspensionRequest> getAllRequests() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public List<SuspensionRequest> getAllActiveSuspensionRequests() {
+        return suspensionRequestDAO.getAllActiveSuspensionRequests();
     }
 
-//    private static final Map<Integer, SuspensionRequest> suspensionRequestDatabase = new HashMap<>();
-//
-//    @Override
-//    public Optional<SuspensionRequest> getSuspensionRequest(int ssid) {
-//        return Optional.ofNullable(suspensionRequestDatabase.get(ssid));
-//    }
-//
-//    @Override
-//    public boolean addSuspensionRequest(SuspensionRequest suspensionRequest) {
-//        if (!suspensionRequestDatabase.containsKey(suspensionRequest.getSsId())) {
-//            suspensionRequestDatabase.put(suspensionRequest.getSsId(), suspensionRequest);
-//            return true;
-//        }
-//        return false;
-//    }
-//
-//    @Override
-//    public boolean updateSuspensionRequest(int ssid, SuspensionRequest updatedSuspensionRequest) {
-//        if (suspensionRequestDatabase.containsKey(ssid)) {
-//            suspensionRequestDatabase.put(ssid, updatedSuspensionRequest);
-//            return true;
-//        }
-//        return false;
-//    }
-//
-//    @Override
-//    public boolean deleteSuspensionRequest(int ssid) {
-//        if (suspensionRequestDatabase.containsKey(ssid)) {
-//            suspensionRequestDatabase.remove(ssid);
-//            return true;
-//        }
-//        return false;
-//    }
+    @Override
+    public List<SuspensionRequest> getSuspensionRequestsByStudent(Student student) {
+        return suspensionRequestDAO.getSuspensionRequestsByStudent(student);
+    }
 }
