@@ -1,12 +1,8 @@
 package com.mycompany.atsbe.resources;
 
 import Models.Users.Student;
-import Services.CourseHandler;
-import Services.ServicesInterfaces.CourseService;
 import Services.ServicesInterfaces.StudentService;
-import Services.ServicesInterfaces.TestService;
 import Services.StudentHandler;
-import com.google.gson.Gson;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
@@ -39,14 +35,14 @@ public class StudentREST {
         }
     }
 
-    @Path("getStudent/id/{id}")
+    @Path("getStudentByid")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getStudentById(@PathParam("id") int id) {
+    public Response getStudentById(int id) {
         return null;
     }
 
-    @Path("getStudent/email/{email}")
+    @Path("getStudent/email")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getStudentByEmail(@PathParam("email") String email) {

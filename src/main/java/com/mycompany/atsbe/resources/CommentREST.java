@@ -19,6 +19,7 @@ public class CommentREST {
     }
 
     @POST
+    @Path("postComment")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response postComment(Comment comment) {
@@ -26,8 +27,8 @@ public class CommentREST {
         return Response.status(Response.Status.CREATED).entity(createdComment).build();
     }
 
-    @Path("{commentId}")
-    @GET
+    @Path("commentId")
+    @POST
     @Produces(MediaType.APPLICATION_JSON)
     public Response getComment(@PathParam("commentId") int commentId) {
         return commentService.getCommentById(commentId)

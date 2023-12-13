@@ -2,6 +2,7 @@ package Models.Communication;
 
 import Models.Users.FacultyMember;
 import Models.Users.Student;
+import java.sql.Timestamp;
 import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,7 +27,9 @@ public class Comment {
     private FacultyMember faculty;
 
     public Comment(int commentId, String comment, Student student, FacultyMember facultyMember) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public Comment(int commentId, String commentText, Student student, FacultyMember facultyMember, Timestamp commentDate) {
     }
 
 }
