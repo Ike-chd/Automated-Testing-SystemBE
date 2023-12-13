@@ -57,6 +57,6 @@ public class UserREST {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPassword(@PathParam("email")String email){
-        return Response.ok(us.getUserByEmial(email)).status(Response.Status.CREATED).build();
+        return Response.ok(us.getUserByEmial(email).orElse(new User())).status(Response.Status.CREATED).build();
     }
 }

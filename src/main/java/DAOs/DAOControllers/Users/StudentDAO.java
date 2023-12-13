@@ -8,7 +8,7 @@ public interface StudentDAO {
 
     public Student getStudent(int id);
 
-    public Student getStudent(String stID);
+    public Student getStudentByEmail(String email);
 
     public List<Student> getStudentsByCourse(Course course);
 
