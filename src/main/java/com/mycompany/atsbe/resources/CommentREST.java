@@ -12,26 +12,25 @@ public class CommentREST {
 
     private final CommentService commentService = new CommentHandler();
 
-    @Path("allComments")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllComments() {
         return Response.ok(commentService.getAllComments()).build();
     }
 
-    @Path("postComment")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response postComment(Comment comment) {
-        commentService.postComment(comment);
-        return Response.ok("Comment posted").build();
+        Comment createdComment = commentService.postComment(comment);
+        return Response.status(Response.Status.CREATED).entity(createdComment).build();
     }
 
     @Path("{commentId}")
-    @POST
+    @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getComment(@PathParam("commentId") int id) {
-        return commentService.getCommentById(id)
+    public Response getComment(@PathParam("commentId") int commentId) {
+        return commentService.getCommentById(commentId)
                 .map(comment -> Response.ok(comment).build())
                 .orElse(Response.status(Response.Status.NOT_FOUND).build());
     }
