@@ -7,6 +7,7 @@ import DAOs.DAOControllers.Users.AccessRoleDAO;
 import DAOs.DAOControllers.Users.StudentDAO;
 import DBConnection.DBConnection;
 import Models.Courses.Course;
+import Models.Users.AccessRole;
 import Models.Users.Student;
 
 import java.sql.PreparedStatement;
@@ -44,10 +45,10 @@ public class StudentDB extends DBConnection implements StudentDAO {
     }
 
     @Override
-    public Student getStudent(String stID) {
+    public Student getStudentByEmail(String email) {
         try {
-            ps = getConnection().prepareStatement("SELECT * FROM Students WHERE studentNum = ?");
-            ps.setString(1, stID);
+            ps = getConnection().prepareStatement("SELECT * FROM Students WHERE email = ?");
+            ps.setString(1, email);
             rs = ps.executeQuery();
             if (rs.next()) {
                 return extractStudentFromResultSet(rs);
@@ -189,8 +190,8 @@ public class StudentDB extends DBConnection implements StudentDAO {
         int courseID = resultSet.getInt("courseID");
         String password = resultSet.getString("password");
         String phoneNumber = resultSet.getString("phoneNumber");
-        int acceessRole = resultSet.getInt("accessRoleID");
-       return new Student(phoneNumber,address,cdao.getCourse(courseID),studentID,name,surname,email,idNumber,password, adao.getAccessRole(acceessRole));
+        AccessRole ar = new AccessRole(8, "Student");
+       return new Student(phoneNumber,address,cdao.getCourse(courseID),studentID,name,surname,email,idNumber,password, ar);
     }
 
 }

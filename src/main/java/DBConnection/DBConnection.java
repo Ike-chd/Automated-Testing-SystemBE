@@ -1,6 +1,7 @@
 package DBConnection;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,11 +24,13 @@ public class DBConnection {
         try {
             con = basicDatasource.getConnection();
         } catch (SQLException e) {
-            Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, "DBConnection failure", e);
+        e.printStackTrace();
         }
     }
 
-    public static Connection getConnection() throws SQLException {
-        return basicDatasource.getConnection();
+    public static Connection getConnection() {
+        return con;
     }
+    
+    
 }

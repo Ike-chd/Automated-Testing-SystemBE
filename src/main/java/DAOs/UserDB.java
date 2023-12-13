@@ -1,6 +1,7 @@
 package DAOs;
 
 import DAOs.CloseStreams.CloseStreams;
+import DAOs.DAOControllers.Users.AccessRoleDAO;
 import DAOs.DAOControllers.Users.UserDAO;
 import DBConnection.DBConnection;
 import Models.Users.Admin;
@@ -16,19 +17,20 @@ public class UserDB extends DBConnection implements UserDAO {
 
     private PreparedStatement ps;
     private ResultSet rs;
+    private AccessRoleDAO adao = new AccessRoleDB();
 
     @Override
     public boolean insertUser(User user) {
         int updated = 0;
         int accessRoleID = 0;
         try {
-            if(user instanceof FacultyMember && ((FacultyMember)user).isProfessor()){
+            if (user instanceof FacultyMember && ((FacultyMember) user).isProfessor()) {
                 accessRoleID = 1;
-            } else if(user instanceof FacultyMember){
+            } else if (user instanceof FacultyMember) {
                 accessRoleID = 3;
-            } else if(user instanceof Admin && ((Admin)user).isSuperAdmin()){
+            } else if (user instanceof Admin && ((Admin) user).isSuperAdmin()) {
                 accessRoleID = 4;
-            } else{
+            } else {
                 accessRoleID = 2;
             }
             ps = getConnection().prepareStatement("INSERT INTO users(firstname, surname, email, idNumber, password, accessRoleID)"
@@ -57,7 +59,7 @@ public class UserDB extends DBConnection implements UserDAO {
             ps.setString(5, user.getPassword());
             ps.executeUpdate();
         } catch (SQLException ex) {
-           ex.printStackTrace();
+            ex.printStackTrace();
         }
     }
 
@@ -85,11 +87,11 @@ public class UserDB extends DBConnection implements UserDAO {
             return null;
         } catch (SQLException ex) {
             ex.printStackTrace();
-        }finally{
+        } finally {
             try {
                 CloseStreams.closeRsPs(rs, ps);
             } catch (SQLException ex) {
-            ex.printStackTrace();
+                ex.printStackTrace();
             }
         }
         return null;
@@ -108,11 +110,11 @@ public class UserDB extends DBConnection implements UserDAO {
             updated = ps.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
-        } finally{
+        } finally {
             try {
                 CloseStreams.closePreparedStatment(ps);
             } catch (SQLException ex) {
-            ex.printStackTrace();
+                ex.printStackTrace();
             }
         }
         return updated == 1;
@@ -130,20 +132,45 @@ public class UserDB extends DBConnection implements UserDAO {
             }
             return null;
         } catch (SQLException ex) {
-           ex.printStackTrace();
-        } finally{
+            ex.printStackTrace();
+        } finally {
             try {
                 CloseStreams.closeRsPs(rs, ps);
             } catch (SQLException ex) {
-            ex.printStackTrace();
+                ex.printStackTrace();
             }
         }
         return null;
     }
 
-    public User extractUserFromDB(ResultSet rs) {
-        User user = new User();
-        return user;
+    public User extractUserFromDB(ResultSet rs) throws SQLException {
+        int userID = rs.getInt("userID");
+        String firstname = rs.getString("firstname");
+        String surname = rs.getString("surname");
+        String email = rs.getString("email");
+        String idNumber = rs.getString("idNumber");
+        String password = rs.getString("password");
+        int accessRole = rs.getInt("accessRoleID");
+        switch (accessRole) {
+            case 1:
+                FacultyMember fac = new FacultyMember(userID, firstname, surname, email, idNumber, password, adao.getAccessRole(accessRole));
+                fac.setIsProfessor(true);
+                return fac;
+            case 2:
+                Admin admin = new Admin(userID, firstname, surname, email, idNumber, password, adao.getAccessRole(accessRole));
+                admin.setSuperAdmin(false);
+                return admin;
+            case 3:
+                FacultyMember f = new FacultyMember(userID, firstname, surname, email, idNumber, password, adao.getAccessRole(accessRole));
+                f.setIsProfessor(false);
+                return f;
+            case 4:
+                Admin a = new Admin(userID, firstname, surname, email, idNumber, password, adao.getAccessRole(accessRole));
+                a.setSuperAdmin(true);
+                return a;
+            default:
+                return null;
+        }
     }
 
     @Override
@@ -153,7 +180,16 @@ public class UserDB extends DBConnection implements UserDAO {
                     + "WHERE email = ?");
             ps.setString(1, email);
             rs = ps.executeQuery();
-            while (rs.next()) {
+            if (rs.next()) {
+                if (rs.getString("email").equals(email)) {
+                    return true;
+                }
+            }
+            ps = getConnection().prepareStatement("SELECT email FROM students "
+                    + "WHERE email = ?");
+            ps.setString(1, email);
+            rs = ps.executeQuery();
+            if (rs.next()) {
                 if (rs.getString("email").equals(email)) {
                     return true;
                 }
@@ -171,7 +207,7 @@ public class UserDB extends DBConnection implements UserDAO {
                     + "WHERE email = ?");
             ps.setString(1, email);
             rs = ps.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 return extractUserFromDB(rs);
             }
         } catch (SQLException ex) {

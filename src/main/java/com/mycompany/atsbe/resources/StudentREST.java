@@ -57,7 +57,7 @@ public class StudentREST {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllStudents() {
-        return Response.ok().status(Response.Status.CREATED).build();
+        return Response.ok(ss.getAllStudent()).status(Response.Status.CREATED).build();
     }
 
     @Path("updateStudent")
