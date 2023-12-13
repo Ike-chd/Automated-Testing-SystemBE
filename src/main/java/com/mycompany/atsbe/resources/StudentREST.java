@@ -62,4 +62,11 @@ public class StudentREST {
     public Response updateStudent(Student student) {
         return Response.ok().status(Response.Status.CREATED).build();
     }
+    
+    @Path("numberOfStudents")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response numberOfStudents(){
+        return Response.ok(ss.getAllStudent().size()).status(Response.Status.FOUND).build();
+    }
 }
