@@ -1,3 +1,4 @@
+package com.mycompany.atsbe.resources;
 
 import Models.Communication.SuspensionRequest;
 import Models.Users.Student;
