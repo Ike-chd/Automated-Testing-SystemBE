@@ -9,7 +9,7 @@ public interface CommentDAO {
 
     public Comment getComment(int commentId);
 
-    public boolean insertComment(Comment commnet);
+    public boolean insertComment(Comment comment);
 
     public boolean updateComment(Comment comment);
 
