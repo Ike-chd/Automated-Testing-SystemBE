@@ -14,20 +14,18 @@ public class DBConnection {
         basicDatasource.setDriverClassName("com.mysql.cj.jdbc.Driver");
         basicDatasource.setUrl("jdbc:mysql://localhost:3306/ats?allowPublicKeyRetrieval=true&autoReconnect=true&useSSL=false");
         basicDatasource.setUsername("root");
-        basicDatasource.setPassword("rootroot");
+        basicDatasource.setPassword("root");
         basicDatasource.setMinIdle(10);
         basicDatasource.setMaxIdle(10);
         basicDatasource.setMaxOpenPreparedStatements(100);
         try {
             con = basicDatasource.getConnection();
         } catch (SQLException e) {
-        e.printStackTrace();
+            e.printStackTrace();
         }
     }
 
     public static Connection getConnection() {
         return con;
     }
-    
-    
 }

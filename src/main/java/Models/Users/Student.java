@@ -11,6 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Student extends User {
+
     private String phoneNumber, address;
     private Course currentCourse;
 
@@ -21,7 +22,10 @@ public class Student extends User {
         this.currentCourse = currentCourse;
     }
 
-    
-    
-    
+    public Student(int userId, String firstname, String surname, String email, String idNumber, String password, int accessRoleID) {
+    }
+
+    public Student() {
+    }
+
 }

@@ -1,9 +1,8 @@
 package Services;
 
 import java.io.*;
-
-import org.jfree.chart.ChartUtils;
 import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.DefaultPieDataset;
 
@@ -26,7 +25,9 @@ public class GraphsAndChartsHandler {
         int width = 640;
         int height = 480;
         File pieChart = new File("PieChart.jpeg");
-        if(!pieChart.exists()) pieChart.createNewFile();
+        if (!pieChart.exists()) {
+            pieChart.createNewFile();
+        }
         ChartUtils.saveChartAsJPEG(pieChart, chart, width, height);
     }
 }

@@ -1,22 +1,22 @@
 package Services.ServicesInterfaces;
 
 import Models.Communication.SuspensionRequest;
+import Models.Users.Student;
 import java.util.List;
-import java.util.Optional;
 
 public interface SuspensionRequestService {
 
-    public Optional<SuspensionRequest> getSuspensionRequest(int ssid);
+    SuspensionRequest getSuspensionRequest(int ssId);
 
-    public boolean addSuspensionRequest(SuspensionRequest suspensionRequest);
+    boolean insertSuspensionRequest(SuspensionRequest ssRequest);
 
-    public boolean updateSuspensionRequest(SuspensionRequest suspensionRequest);
+    boolean updateSuspensionRequest(SuspensionRequest ssRequest);
 
-    public boolean deleteSuspensionRequest(int ssid);
+    boolean deleteSuspensionRequest(int ssId);
 
-    public List<SuspensionRequest> getAllPendingRequests();
+    List<SuspensionRequest> getAllSuspensionRequests();
 
-    public List<SuspensionRequest> getAllActiveRequests();
+    List<SuspensionRequest> getAllActiveSuspensionRequests();
 
-    public List<SuspensionRequest> getAllRequests();
+    List<SuspensionRequest> getSuspensionRequestsByStudent(Student student);
 }
