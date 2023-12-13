@@ -14,7 +14,7 @@ public class DBConnection {
         basicDatasource.setDriverClassName("com.mysql.cj.jdbc.Driver");
         basicDatasource.setUrl("jdbc:mysql://localhost:3306/ats?allowPublicKeyRetrieval=true&autoReconnect=true&useSSL=false");
         basicDatasource.setUsername("root");
-        basicDatasource.setPassword("root");
+        basicDatasource.setPassword("rootroot");
         basicDatasource.setMinIdle(10);
         basicDatasource.setMaxIdle(10);
         basicDatasource.setMaxOpenPreparedStatements(100);

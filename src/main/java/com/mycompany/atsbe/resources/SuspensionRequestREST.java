@@ -15,7 +15,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.util.List;
 
-@Path("/suspension-requests")
+@Path("suspension-requests")
 public class SuspensionRequestREST {
 
     private SuspensionRequestService suspensionRequestService;
@@ -48,8 +48,7 @@ public class SuspensionRequestREST {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
-
-    @PUT
+    @POST
     @Path("update")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -63,8 +62,8 @@ public class SuspensionRequestREST {
         }
     }
 
-    @DELETE
-    @Path("delete")
+    @GET
+    @Path("delete/{ssId}")
     public Response deleteSuspensionRequest(@PathParam("ssId") int ssId) {
         boolean success = suspensionRequestService.deleteSuspensionRequest(ssId);
         if (success) {
@@ -75,6 +74,7 @@ public class SuspensionRequestREST {
     }
 
     @GET
+    @Path("getAllRequests")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllSuspensionRequests() {
         List<SuspensionRequest> suspensionRequests = suspensionRequestService.getAllSuspensionRequests();
@@ -82,7 +82,7 @@ public class SuspensionRequestREST {
     }
 
     @GET
-    @Path("/active")
+    @Path("active")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllActiveSuspensionRequests() {
         List<SuspensionRequest> activeSuspensionRequests = suspensionRequestService.getAllActiveSuspensionRequests();
@@ -90,7 +90,7 @@ public class SuspensionRequestREST {
     }
 
     @GET
-    @Path("/by-student")
+    @Path("by-student/{studentId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getSuspensionRequestsByStudent(@PathParam("studentId") int studentId) {
         Student student = new Student();

@@ -2,17 +2,20 @@ package com.mycompany.atsbe.resources;
 
 import Models.Tests.Test;
 import Services.ServicesInterfaces.TestService;
+import Services.TestHandler;
 import com.google.gson.Gson;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.core.Response;
 
-//@Path("tests")
+@Path("tests")
 public class TestREST {
 
-    TestService ts;
-
+    TestService ts = new TestHandler();
+    
     @Path("postTest")
+    @POST
     public Response postTest() {
         Test test = ts.<Test>getTest(0).orElseGet(() -> new Test());
         return Response.ok(new Gson().toJson(test)).status(Response.Status.NOT_FOUND).build();

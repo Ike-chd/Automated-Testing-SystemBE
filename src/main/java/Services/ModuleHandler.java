@@ -5,6 +5,7 @@ import DAOs.ModuleDB;
 import Services.ServicesInterfaces.ModuleService;
 import java.util.Optional;
 import Models.Courses.Module;
+import java.util.List;
 
 public class ModuleHandler implements ModuleService {
 
@@ -28,5 +29,10 @@ public class ModuleHandler implements ModuleService {
     @Override
     public boolean updateModule(Module module) {
         return mdao.updateModule(module);
+    }
+
+    @Override
+    public List<Module> getAllModules() {
+        return mdao.allModules();
     }
 }
