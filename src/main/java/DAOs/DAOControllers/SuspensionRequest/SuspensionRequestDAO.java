@@ -1,4 +1,5 @@
 package DAOs.DAOControllers.SuspensionRequest;
+
 import Models.Communication.SuspensionRequest;
 import Models.Users.Student;
 
@@ -12,7 +13,7 @@ public interface SuspensionRequestDAO {
 
     boolean updateSuspensionRequest(SuspensionRequest ssRequest);
 
-    boolean deleteSuspensionRequest(SuspensionRequest ssRequest);
+    boolean deleteSuspensionRequest(int ssId);
 
     List<SuspensionRequest> getAllSuspensionRequests();
 
