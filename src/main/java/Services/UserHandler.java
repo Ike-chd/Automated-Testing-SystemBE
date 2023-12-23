@@ -4,8 +4,11 @@ import DAOs.DAOControllers.Users.StudentDAO;
 import DAOs.DAOControllers.Users.UserDAO;
 import DAOs.StudentDB;
 import DAOs.UserDB;
+import Models.Users.Admin;
+import Models.Users.FacultyMember;
 import Models.Users.User;
 import Services.ServicesInterfaces.UserService;
+import java.util.List;
 import java.util.Optional;
 
 public class UserHandler implements UserService {
@@ -45,5 +48,15 @@ public class UserHandler implements UserService {
     @Override
     public boolean addAccount(User user) {
         return udao.insertUser(user);
+    }
+    
+    @Override
+    public List<FacultyMember> getAllFacM(){
+        return udao.getAllFacM();
+    }
+    
+    @Override
+    public List<Admin> getAllAdmins(){
+        return udao.getAllAdmin();
     }
 }

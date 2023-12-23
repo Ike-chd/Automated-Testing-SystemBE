@@ -19,4 +19,6 @@ public interface StudentDAO {
     public boolean deleteStudent(int student);
 
     public boolean updateStudent(Student student);
+    
+    Student getStudentForLogIn(int id);
 }

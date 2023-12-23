@@ -25,5 +25,16 @@ public class User {
         this.password = password;
         this.accessRole = accessRole;
     }
+
+    public User(int userID, String name, String surname, String email, String idNumber, AccessRole accessRole) {
+        this.userID = userID;
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.idNumber = idNumber;
+        this.accessRole = accessRole;
+    }
+    
+    
     
 }

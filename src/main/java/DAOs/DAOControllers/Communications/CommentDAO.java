@@ -13,9 +13,11 @@ public interface CommentDAO {
 
     public boolean updateComment(Comment comment);
 
-    public boolean deleteComment(Comment comment);
+    public boolean deleteComment(int comment);
+    
+    public List<Comment> getAllComments();
 
-    public List<Comment> getAllStudentComments(Student student);
+    public List<Comment> getAllStudentComments(int studentID);
 
-    public List<Comment> getAllCommentsByFaculty(FacultyMember faculty);
+    public List<Comment> getAllCommentsByFaculty(int facultyID);
 }

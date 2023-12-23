@@ -28,32 +28,46 @@ public class QuestionREST {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response postQuestion(Question question) {
+        boolean isAdded = false;
         try {
-            qs.addQuestion(question);
+            isAdded = qs.addQuestion(question);
             as.addAnswers(question.getAnswers());
         } catch (NoSuchElementException e) {
             return Response.ok("Topic not found").status(Response.Status.NOT_FOUND).build();
         }
-        return (qs.addQuestion(question)) ? Response.ok("created").status(Response.Status.CREATED).build()
+        return (isAdded) ? Response.ok("created").status(Response.Status.CREATED).build()
                 : Response.ok("not created").status(Response.Status.NOT_FOUND).build();
     }
 
-    @Path("getQuestion/{id}")
+//    @Path("getQuestion/{id}")
+//    @GET
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public Response getQuestion(@PathParam("id") int id) {
+//        try {
+//            return Response.ok(qs.getQuestion(id).orElseThrow()).status(Response.Status.CREATED).build();
+//        } catch (NoSuchElementException e) {
+//            return Response.status(Response.Status.NOT_FOUND).build();
+//        }
+//    }
+//    
+//    public Response getAllQuestions(){
+//        return null;
+//    }
+//    
+//    public Response getAllQuestionsByTopic(){
+//        return null;
+//    }
+    @Path("deleteQuestion/{questionId}")
+    @GET
+    public Response deleteQuestion(@PathParam("{questionId}") int questionId){
+        return (qs.deleteQuestion(questionId)) ? Response.ok().status(Response.Status.OK).build()
+                : Response.ok().status(Response.Status.NOT_IMPLEMENTED).build();
+    }
+    
+    @Path("getQuestions/byTopic/{topicID}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getQuestion(@PathParam("id") int id) {
-        try {
-            return Response.ok(qs.getQuestion(id).orElseThrow()).status(Response.Status.CREATED).build();
-        } catch (NoSuchElementException e) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-    }
-    
-    public Response getAllQuestions(){
-        return null;
-    }
-    
-    public Response getAllQuestionsByTopic(){
-        return null;
+    public Response getQuestionsByTopic(@PathParam("topicID") int topicID){
+        return Response.ok(qs.getAllQuestionsUnderTopic(topicID)).status(Response.Status.CREATED).build();
     }
 }

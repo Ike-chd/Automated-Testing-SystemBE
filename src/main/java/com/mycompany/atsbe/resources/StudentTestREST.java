@@ -9,13 +9,13 @@ import jakarta.ws.rs.core.Response;
 
 import java.util.NoSuchElementException;
 
-//@Path("/student-tests")
+@Path("student-tests")
 public class StudentTestREST {
 
-//    StudentTestService studentTestService = new StudentTestHandler();
-//
+    StudentTestService studentTestService = new StudentTestHandler();
+
 //    @GET
-//    @Path("/{testID}")
+//    @Path("{testID}")
 //    @Produces(MediaType.APPLICATION_JSON)
 //    public Response getStudentTestById(@PathParam("testID") int testID) {
 //        try {
@@ -27,21 +27,21 @@ public class StudentTestREST {
 //        }
 //    }
 //
-//    @POST
-//    @Path("/createStudentTest")
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    public Response createStudentTest(StudentTest studentTest) {
-//        try {
-//            return (studentTestService.addStudentTest(studentTest))
-//                    ? Response.ok("Student Test created").status(Response.Status.CREATED).build()
-//                    : Response.ok("Student Test not created").status(Response.Status.NOT_ACCEPTABLE).build();
-//        } catch (Exception e) {
-//            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-//        }
-//    }
-//
+    @POST
+    @Path("createStudentTest")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createStudentTest(StudentTest studentTest) {
+        try {
+            return (studentTestService.addStudentTest(studentTest))
+                    ? Response.ok("Student Test created").status(Response.Status.CREATED).build()
+                    : Response.ok("Student Test not created").status(Response.Status.NOT_ACCEPTABLE).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
 //    @PUT
-//    @Path("/updateStudentTest/{testID}")
+//    @Path("updateStudentTest/{testID}")
 //    @Consumes(MediaType.APPLICATION_JSON)
 //    public Response updateStudentTest(@PathParam("testID") int testID, StudentTest studentTest) {
 //        try {
@@ -56,7 +56,7 @@ public class StudentTestREST {
 //    }
 //
 //    @DELETE
-//    @Path("/deleteStudentTest/{testID}")
+//    @Path("deleteStudentTest/{testID}")
 //    public Response deleteStudentTest(@PathParam("testID") int testID) {
 //        try {
 //            return (studentTestService.deleteStudentTest(testID))

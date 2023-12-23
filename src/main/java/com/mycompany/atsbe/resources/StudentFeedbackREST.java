@@ -9,13 +9,13 @@ import jakarta.ws.rs.core.Response;
 
 import java.util.NoSuchElementException;
 
-//@Path("/student-feedbacks")
+@Path("student-feedbacks")
 public class StudentFeedbackREST {
 
-//    StudentFeedbackService studentFeedbackService = new StudentFeedbackHandler();
-//
+    StudentFeedbackService studentFeedbackService = new StudentFeedbackHandler();
+
 //    @GET
-//    @Path("/{feedbackID}")
+//    @Path("{feedbackID}")
 //    @Produces(MediaType.APPLICATION_JSON)
 //    public Response getStudentFeedbackById(@PathParam("feedbackID") int feedbackID) {
 //        try {
@@ -27,21 +27,21 @@ public class StudentFeedbackREST {
 //        }
 //    }
 //
-//    @POST
-//    @Path("/createStudentFeedback")
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    public Response createStudentFeedback(StudentFeedback studentFeedback) {
-//        try {
-//            return (studentFeedbackService.addStudentFeedback(studentFeedback))
-//                    ? Response.ok("Student Feedback created").status(Response.Status.CREATED).build()
-//                    : Response.ok("Student Feedback not created").status(Response.Status.NOT_ACCEPTABLE).build();
-//        } catch (Exception e) {
-//            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-//        }
-//    }
-//
+    @POST
+    @Path("createStudentFeedback")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createStudentFeedback(StudentFeedback studentFeedback) {
+        try {
+            return (studentFeedbackService.addStudentFeedback(studentFeedback))
+                    ? Response.ok("Student Feedback created").status(Response.Status.CREATED).build()
+                    : Response.ok("Student Feedback not created").status(Response.Status.NOT_ACCEPTABLE).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
 //    @PUT
-//    @Path("/updateStudentFeedback/{feedbackID}")
+//    @Path("updateStudentFeedback/{feedbackID}")
 //    @Consumes(MediaType.APPLICATION_JSON)
 //    public Response updateStudentFeedback(@PathParam("feedbackID") int feedbackID, StudentFeedback studentFeedback) {
 //        try {
@@ -56,7 +56,7 @@ public class StudentFeedbackREST {
 //    }
 //
 //    @DELETE
-//    @Path("/deleteStudentFeedback/{feedbackID}")
+//    @Path("deleteStudentFeedback/{feedbackID}")
 //    public Response deleteStudentFeedback(@PathParam("feedbackID") int feedbackID) {
 //        try {
 //            return (studentFeedbackService.deleteStudentFeedback(feedbackID))

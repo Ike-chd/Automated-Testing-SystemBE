@@ -15,4 +15,6 @@ public interface ModuleService {
     public boolean updateModule(Module module);
     
     public List<Module> getAllModules();
+    
+    public List<Module> getAllModulesByCourse(int id);
 }

@@ -10,6 +10,8 @@ import Models.Users.User;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -153,12 +155,14 @@ public class UserDB extends DBConnection implements UserDAO {
         int accessRole = rs.getInt("accessRoleID");
         switch (accessRole) {
             case 1:
-                FacultyMember fac = new FacultyMember(userID, firstname, surname, email, idNumber, password, adao.getAccessRole(accessRole));
+                FacultyMember fac = new FacultyMember(userID, firstname, surname, email, idNumber, adao.getAccessRole(accessRole));
                 fac.setIsProfessor(true);
+                fac.setPassword(password);
                 return fac;
             case 2:
-                Admin admin = new Admin(userID, firstname, surname, email, idNumber, password, adao.getAccessRole(accessRole));
+                Admin admin = new Admin(userID, firstname, surname, email, idNumber, adao.getAccessRole(accessRole));
                 admin.setSuperAdmin(false);
+                admin.setPassword(password);
                 return admin;
             case 3:
                 FacultyMember f = new FacultyMember(userID, firstname, surname, email, idNumber, password, adao.getAccessRole(accessRole));
@@ -212,6 +216,87 @@ public class UserDB extends DBConnection implements UserDAO {
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public List<FacultyMember> getAllFacM() {
+        List<FacultyMember> facM = new ArrayList<>();
+        try {
+            ps = getConnection().prepareStatement("SELECT * FROM users "
+                    + "WHERE accessRoleID = 1 OR accessRoleID = 3");
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                facM.add((FacultyMember)extractUserFromDB(rs));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return facM;
+    }
+
+    @Override
+    public List<Admin> getAllAdmin() {
+        List<Admin> admins = new ArrayList<>();
+        try {
+            ps = getConnection().prepareStatement("SELECT * FROM users "
+                    + "WHERE accessRoleID = 2 OR accessRoleID = 4");
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                admins.add((Admin)extractUserFromDB(rs));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return admins;
+    }
+
+    @Override
+    public User getUserForLogIn(int user) {
+        try {
+            ps = getConnection().prepareStatement("SELECT * FROM users "
+                    + "WHERE userId = ?");
+            ps.setInt(1, user);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                int userID = rs.getInt("userID");
+                String firstname = rs.getString("firstname");
+                String surname = rs.getString("surname");
+                String email = rs.getString("email");
+                String idNumber = rs.getString("idNumber");
+                String password = rs.getString("password");
+                int accessRole = rs.getInt("accessRoleID");
+                switch (accessRole) {
+                    case 1:
+                        FacultyMember fac = new FacultyMember(userID, firstname, surname, email, idNumber, password, adao.getAccessRole(accessRole));
+                        fac.setIsProfessor(true);
+                        return fac;
+                    case 2:
+                        Admin admin = new Admin(userID, firstname, surname, email, idNumber, password, adao.getAccessRole(accessRole));
+                        admin.setSuperAdmin(false);
+                        return admin;
+                    case 3:
+                        FacultyMember f = new FacultyMember(userID, firstname, surname, email, idNumber, password, adao.getAccessRole(accessRole));
+                        f.setIsProfessor(false);
+                        return f;
+                    case 4:
+                        Admin a = new Admin(userID, firstname, surname, email, idNumber, password, adao.getAccessRole(accessRole));
+                        a.setSuperAdmin(true);
+                        return a;
+                    default:
+                        return null;
+                }
+            }
+            return null;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closeRsPs(rs, ps);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
         return null;
     }

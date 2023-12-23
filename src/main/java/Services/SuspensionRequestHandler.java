@@ -1,6 +1,7 @@
 package Services;
 
 import DAOs.DAOControllers.SuspensionRequest.SuspensionRequestDAO;
+import DAOs.SuspensionRequestDB;
 import Models.Communication.SuspensionRequest;
 import Models.Users.Student;
 import Services.ServicesInterfaces.SuspensionRequestService;
@@ -9,11 +10,7 @@ import java.util.List;
 
 public class SuspensionRequestHandler implements SuspensionRequestService {
 
-    private SuspensionRequestDAO suspensionRequestDAO;
-
-    public SuspensionRequestHandler(SuspensionRequestDAO suspensionRequestDAO) {
-        this.suspensionRequestDAO = suspensionRequestDAO;
-    }
+    private SuspensionRequestDAO suspensionRequestDAO = new SuspensionRequestDB();
 
     @Override
     public SuspensionRequest getSuspensionRequest(int ssId) {
@@ -48,5 +45,10 @@ public class SuspensionRequestHandler implements SuspensionRequestService {
     @Override
     public List<SuspensionRequest> getSuspensionRequestsByStudent(Student student) {
         return suspensionRequestDAO.getSuspensionRequestsByStudent(student);
+    }
+
+    @Override
+    public List<SuspensionRequest> getAllUnApproved() {
+        return suspensionRequestDAO.getAllUnApprovedSReq();
     }
 }

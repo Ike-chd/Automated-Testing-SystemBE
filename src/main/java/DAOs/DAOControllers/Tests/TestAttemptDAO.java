@@ -11,4 +11,5 @@ public interface TestAttemptDAO {
     public List<TestAttempt> getAllTestAttemptsByStudent(Student student);
     public List<TestAttempt> getAllTestAttempts();
     List<TestAttempt> getAllTestAttemptsByTestAndStudent(Test test, Student student);
+    public boolean insertTestAttempt(TestAttempt testAttempt);
 }

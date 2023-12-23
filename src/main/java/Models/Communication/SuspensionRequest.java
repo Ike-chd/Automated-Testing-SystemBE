@@ -7,8 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.sql.Timestamp;
+import java.sql.Date;
 
 @Getter
 @Setter
@@ -20,7 +19,7 @@ public class SuspensionRequest {
     private Student student;
     private FacultyMember requestedBy;
     private Admin confirmedBy;
-    private Timestamp dateInitiated; 
+    private long start; 
     private int duration;
     private boolean active;
     private String reason;

@@ -93,11 +93,11 @@ public class StudentAnswerDB extends DBConnection implements StudentAnswerDAO{
     }
 
     @Override
-    public boolean deleteStudentAnswer(StudentAnswer studentAnswer) {
+    public boolean deleteStudentAnswer(int studentAnswer) {
         int affectedRows = 0;
         try {
             ps = getConnection().prepareStatement("DELETE FROM Student_Answers WHERE qaID = ?");
-            ps.setInt(1, studentAnswer.getQaId());
+            ps.setInt(1, studentAnswer);
             affectedRows = ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

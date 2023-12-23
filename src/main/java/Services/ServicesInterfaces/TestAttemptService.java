@@ -1,15 +1,15 @@
 package Services.ServicesInterfaces;
 
-import Models.Tests.Test;
+import Models.Tests.TestAttempt;
 import java.util.Optional;
 
 public interface TestAttemptService {
     
-    Optional<Test> getTestAttempt(int attemptID);
+    Optional<TestAttempt> getTestAttempt(int attemptID);
 
-    boolean addTestAttempt(Test test);
+    boolean addTestAttempt(TestAttempt testAttempt);
 
-    boolean updateTestAttempt(int attemptID, Test test);
+    boolean updateTestAttempt(TestAttempt testAttempt);
 
     boolean deleteTestAttempt(int attemptID);
 }

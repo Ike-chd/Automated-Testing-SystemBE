@@ -13,7 +13,7 @@ public interface QuestionDAO {
 
     public boolean updateQuestion(Question question);
 
-    public List<Question> allQuestionUnderATopic(Topic topic);
+    public List<Question> allQuestionUnderATopic(int topicId);
     
     public List<Question> allQuestionsUnderATest(int id);
     

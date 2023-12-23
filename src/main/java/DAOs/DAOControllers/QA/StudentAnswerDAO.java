@@ -15,7 +15,7 @@ public interface StudentAnswerDAO {
 
     boolean updateStudentAnswer(StudentAnswer studentAnswer);
 
-    boolean deleteStudentAnswer(StudentAnswer studentAnswer);
+    boolean deleteStudentAnswer(int studentAnswer);
 
     List<StudentAnswer> getStudentAnswers();
 

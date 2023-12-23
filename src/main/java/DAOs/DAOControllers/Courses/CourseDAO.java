@@ -9,9 +9,11 @@ public interface CourseDAO {
 
     public boolean insertCourse(Course course);
 
-    public boolean deleteCourse(Course course);
+    public boolean deleteCourse(int course);
 
     public boolean updateCourse(Course course);
 
     public List<Course> allCourses();
+
+    public void deleteAllModulesInCourse(int courseID);
 }

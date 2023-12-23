@@ -23,11 +23,11 @@ public class TopicREST {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response postTopic(Topic topic) {
         Response response = (ts.addTopic(topic)) ? Response.ok().status(Response.Status.CREATED).build()
-                : Response.ok().status(Response.Status.CREATED).build();
+                : Response.ok().status(Response.Status.NOT_ACCEPTABLE).build();
         return response;
     }
 
-    @Path("/getTopic/{topicId}")
+    @Path("getTopic/{topicId}")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response getTopic(@PathParam("topicId") int id) {
@@ -45,5 +45,21 @@ public class TopicREST {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllTopics(){
         return Response.ok(ts.getAllTopics()).status(Response.Status.CREATED).build();
+    }
+    
+    @Path("allTopics/inTest/{testID}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllTopicsInATest(@PathParam("testID")int id){
+        return Response.ok(ts.getAllTopicsInATest(id)).status(Response.Status.CREATED).build();
+    }
+    
+    
+    @Path("deleteTopic/{topicId}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response deleteTopic(@PathParam("{topicID}") int topicId){
+        return (ts.deleteTopic(topicId)) ? Response.ok("Topic deleted").status(Response.Status.ACCEPTED).build()
+                : Response.ok("Failed to delete Topic").status(Response.Status.NOT_ACCEPTABLE).build();
     }
 }

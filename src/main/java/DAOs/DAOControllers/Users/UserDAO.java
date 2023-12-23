@@ -1,6 +1,9 @@
 package DAOs.DAOControllers.Users;
 
+import Models.Users.Admin;
+import Models.Users.FacultyMember;
 import Models.Users.User;
+import java.util.List;
 
 public interface UserDAO {
 
@@ -19,4 +22,10 @@ public interface UserDAO {
     public boolean checkForEmail(String email);
     
     public User getUserByEmail(String email);
+    
+    public List<FacultyMember> getAllFacM();
+    
+    public List<Admin> getAllAdmin();
+    
+    public User getUserForLogIn(int user);
 }

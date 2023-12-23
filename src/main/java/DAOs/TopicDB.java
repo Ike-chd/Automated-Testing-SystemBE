@@ -118,4 +118,46 @@ public class TopicDB extends DBConnection implements TopicDAO{
         String infoLink = resultSet.getString("infoLink");
         return new Topic(topicID,topicName,description,infoLink);
     }
+    
+    @Override
+    public void insertTopicIntoTest(int testId, int topicId){
+        try {
+            ps = getConnection().prepareStatement("INSERT INTO test_topics (tt_testID, tt_topicID) VALUES (?,?)");
+            ps.setInt(1, testId);
+            ps.setInt(2, topicId);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closePreparedStatment(ps);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+    
+    @Override
+    public List<Topic> getAllTopicsInATest(int id){
+        List<Topic> questions = new ArrayList<>();
+        try {
+            ps = getConnection().prepareStatement("SELECT * FROM test_topics WHERE tt_testID = ?");
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                int tID = rs.getInt("tt_topicID");
+                try (PreparedStatement ps2 = getConnection().prepareStatement("SELECT * FROM Topics WHERE topicID = ?")) {
+                    ps2.setInt(1, tID);
+                    try (ResultSet rs2 = ps2.executeQuery()) {
+                        while (rs2.next()) {
+                            questions.add(extractTopicsFromResultSet(rs2));
+                        }
+                    }
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return questions;
+    }
 }

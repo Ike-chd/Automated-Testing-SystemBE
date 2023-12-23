@@ -15,4 +15,6 @@ public interface TopicService {
     public boolean deleteTopic(int topicId);
 
     public List<Topic> getAllTopics();
+    
+    public List<Topic> getAllTopicsInATest(int testId);
 }

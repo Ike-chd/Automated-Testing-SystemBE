@@ -8,7 +8,6 @@ import Models.Users.AccessRole;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 public class AccessRoleDB extends DBConnection implements AccessRoleDAO {
@@ -76,10 +75,10 @@ public class AccessRoleDB extends DBConnection implements AccessRoleDAO {
     }
 
     @Override
-    public boolean deleteAccessRole(AccessRole accessRole) {
+    public boolean deleteAccessRole(int accessRole) {
         try {
             ps = getConnection().prepareStatement("DELETE FROM AccessRoles WHERE accessRoleID = ?");
-            ps.setInt(1, accessRole.getAccessRoleID());
+            ps.setInt(1, accessRole);
             int affectedRows = ps.executeUpdate();
             return affectedRows > 0;
         } catch (SQLException e) {

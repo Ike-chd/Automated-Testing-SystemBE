@@ -9,12 +9,16 @@ public interface AnswerDAO {
     public Answer getAnswer(int answerI);
 
     public boolean insertAnswer(Answer answer);
-    
+
     public boolean[] insertAnswers(List<Answer> answers);
 
     public boolean updateAnswer(Answer answer);
 
     public boolean deleteAnswer(int id);
 
-    public List<Answer> allQuestionAnswers(Question question);
+    public List<Answer> allQuestionAnswers(int questionId);
+
+    public int getAnswerByQuestionID(int questionID);
+
+    public List<Answer> getAllCorrectAnswers(int questionId);
 }

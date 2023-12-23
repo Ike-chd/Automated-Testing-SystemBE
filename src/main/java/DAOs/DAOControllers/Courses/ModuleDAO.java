@@ -14,4 +14,16 @@ public interface ModuleDAO {
     public boolean updateModule(Module module);
 
     public List<Module> allModules();
+    
+    public int getModuleIdByName(String moduleName);
+    
+    public boolean addPrereqModule(int module1, int module2);
+    
+    public int getLastPrimaryKey();
+
+    public List<Module> getAllPrereqModulesByModuleID(int moduleId);
+    
+    public List<Module> getAllModulesInACourse(int moduleId);
+
+    public boolean insertModuleIntoCourse(int courseID, int moduleID);
 }

@@ -10,7 +10,6 @@ import Services.ServicesInterfaces.AnswerService;
 
 import java.util.List;
 import java.util.Optional;
-import org.ietf.jgss.Oid;
 
 public class AnswerHandler implements AnswerService {
 
@@ -46,5 +45,10 @@ public class AnswerHandler implements AnswerService {
             allEntered = allEntered && adao.insertAnswer(answer);
         }
         return allEntered;
+    }
+
+    @Override
+    public List<Answer> getAllAnsByQues(int questionId) {
+        return adao.allQuestionAnswers(questionId);
     }
 }

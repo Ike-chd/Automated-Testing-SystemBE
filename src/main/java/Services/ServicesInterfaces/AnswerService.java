@@ -1,7 +1,6 @@
 package Services.ServicesInterfaces;
 
 import Models.QA.Answer;
-import Models.QA.Question;
 import java.util.List;
 
 import java.util.Optional;
@@ -17,4 +16,6 @@ public interface AnswerService {
     public boolean updateAnswer(Answer answer);
 
     public boolean deleteAnswer(int answerID);
+    
+    public List<Answer> getAllAnsByQues(int questionId);
 }

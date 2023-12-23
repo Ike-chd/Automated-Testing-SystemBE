@@ -131,4 +131,25 @@ public class TestAttemptDB extends DBConnection implements TestAttemptDAO {
         double rating = resultSet.getDouble("Rating");
         return new TestAttempt(testAttemptID,tdao.getTest(testID_attempt),sdao.getStudent(studentID_attemp),rating);
     }
+
+    @Override
+    public boolean insertTestAttempt(TestAttempt testAttempt) {
+        int affectedRows = 0;
+//        try {
+//            ps = getConnection().prepareStatement("INSERT INTO TestAttempt (questionID_ans, answer, correctAnswer) VALUES(?,?,?)");
+//            ps.setInt(1, answer.getQuestion().getQuestionID());
+//            ps.setString(2, answer.getAnswer());
+//            ps.setBoolean(3, answer.isCorrect());
+//            affectedRows = ps.executeUpdate();
+//        } catch (SQLException ex) {
+//           ex.printStackTrace();
+//        } finally {
+//            try {
+//                CloseStreams.closePreparedStatment(ps);
+//            } catch (SQLException e) {
+//                e.printStackTrace();
+//            }
+//        }
+        return affectedRows == 1;
+    }
 }

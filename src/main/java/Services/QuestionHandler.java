@@ -6,6 +6,7 @@ import DAOs.DAOControllers.QA.QuestionDAO;
 import DAOs.QuestionDB;
 import Models.QA.Question;
 import Services.ServicesInterfaces.QuestionService;
+import java.util.List;
 import java.util.Optional;
 
 public class QuestionHandler implements QuestionService {
@@ -15,7 +16,6 @@ public class QuestionHandler implements QuestionService {
 
     @Override
     public Optional<Question> getQuestion(int questionId) {
-        Question question = qdao.getQuestion(questionId);
         return Optional.ofNullable(qdao.getQuestion(questionId));
     }
 
@@ -31,7 +31,15 @@ public class QuestionHandler implements QuestionService {
 
     @Override
     public boolean deleteQuestion(int questionId) {
-        return qdao.deleteQuestion(questionId);
+        if (adao.deleteAnswer(adao.getAnswerByQuestionID(questionId))) {
+            return qdao.deleteQuestion(questionId);
+        }
+        return false;
+    }
+
+    @Override
+    public List<Question> getAllQuestionsUnderTopic(int topicId) {
+        return qdao.allQuestionUnderATopic(topicId);
     }
 
 }

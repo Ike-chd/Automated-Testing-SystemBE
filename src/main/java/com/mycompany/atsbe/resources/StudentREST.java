@@ -35,10 +35,10 @@ public class StudentREST {
         }
     }
 
-    @Path("getStudentByid")
+    @Path("getStudentByid/{studentId}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getStudentById(int id) {
+    public Response getStudentById(@PathParam("{studentId}")int id) {
         return null;
     }
 
@@ -67,6 +67,6 @@ public class StudentREST {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public Response numberOfStudents(){
-        return Response.ok(ss.getAllStudent().size()).status(Response.Status.FOUND).build();
+        return Response.ok(ss.getAllStudent().size()).status(Response.Status.CREATED).build();
     }
 }

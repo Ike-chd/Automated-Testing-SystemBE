@@ -1,8 +1,7 @@
 package DAOs.DAOControllers.Tests;
 
-import Models.Courses.Topic;
 import Models.Tests.Test;
-import Models.Courses.Module;
+import Models.QA.Question;
 import java.util.List;
 
 public interface TestDAO {
@@ -11,11 +10,17 @@ public interface TestDAO {
 
     public boolean insetTest(Test test);
 
-    public boolean deleteTest(Test test);
+    public boolean deleteTest(int testId);
 
     public boolean updateTest(Test test);
 
-    public List<Test> allModuleTests(Module module);
-
     List<Test> getAllTests();
+    
+    public List<Test> getAllTestsByModuleID(int moduleID);
+
+    public int getLastInsertID();
+
+    public void insertTestQuestions(int id, int questionID);
+    
+    public List<Question> getAllQuestionsInTest(int testId);
 }

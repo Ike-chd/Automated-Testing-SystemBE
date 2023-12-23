@@ -5,9 +5,16 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CommentService {
-    List<Comment> getAllComments();
+    
+    public List<Comment> getAllComments();
+    
+    public List<Comment> getAllCommentsForMe(int stuID);
+    
+    public List<Comment> getAllCommentsIMade(int FacID);
 
-    Comment postComment(Comment comment);
+    public boolean insertComment(Comment comment);
 
-    Optional<Comment> getCommentById(int commentId);
+    public Optional<Comment> getCommentById(int commentId);
+    
+    public boolean deleteComment(int commentId);
 }

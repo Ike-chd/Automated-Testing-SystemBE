@@ -14,4 +14,8 @@ public interface TopicDAO {
     public boolean updateTopic(Topic topic);
 
     public List<Topic> allTopics();
+
+    public void insertTopicIntoTest(int id, int topicID);
+
+    public List<Topic> getAllTopicsInATest(int TestID);
 }

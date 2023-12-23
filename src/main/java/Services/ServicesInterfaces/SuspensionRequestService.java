@@ -19,4 +19,6 @@ public interface SuspensionRequestService {
     List<SuspensionRequest> getAllActiveSuspensionRequests();
 
     List<SuspensionRequest> getSuspensionRequestsByStudent(Student student);
+    
+    List<SuspensionRequest> getAllUnApproved();
 }

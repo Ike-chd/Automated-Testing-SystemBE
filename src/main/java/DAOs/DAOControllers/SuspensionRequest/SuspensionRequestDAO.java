@@ -20,4 +20,6 @@ public interface SuspensionRequestDAO {
     List<SuspensionRequest> getAllActiveSuspensionRequests();
 
     List<SuspensionRequest> getSuspensionRequestsByStudent(Student student);
+    
+    List<SuspensionRequest> getAllUnApprovedSReq();
 }

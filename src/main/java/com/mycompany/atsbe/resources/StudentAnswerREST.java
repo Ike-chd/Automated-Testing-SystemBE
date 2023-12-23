@@ -9,13 +9,13 @@ import jakarta.ws.rs.core.Response;
 
 import java.util.NoSuchElementException;
 
-//@Path("/student-answers")
+@Path("student-answers")
 public class StudentAnswerREST {
 
-//    StudentAnswerService studentAnswerService = new StudentAnswerHandler();
-//
+    StudentAnswerService studentAnswerService = new StudentAnswerHandler();
+
 //    @GET
-//    @Path("/{qaID}")
+//    @Path("{qaID}")
 //    @Produces(MediaType.APPLICATION_JSON)
 //    public Response getStudentAnswerById(@PathParam("qaID") int qaID) {
 //        try {
@@ -27,21 +27,21 @@ public class StudentAnswerREST {
 //        }
 //    }
 //
-//    @POST
-//    @Path("/createStudentAnswer")
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    public Response createStudentAnswer(StudentAnswer studentAnswer) {
-//        try {
-//            return (studentAnswerService.addStudentAnswer(studentAnswer))
-//                    ? Response.ok("Student Answer created").status(Response.Status.CREATED).build()
-//                    : Response.ok("Student Answer not created").status(Response.Status.NOT_ACCEPTABLE).build();
-//        } catch (Exception e) {
-//            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-//        }
-//    }
-//
+    @POST
+    @Path("createStudentAnswer")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createStudentAnswer(StudentAnswer studentAnswer) {
+        try {
+            return (studentAnswerService.addStudentAnswer(studentAnswer))
+                    ? Response.ok("Student Answer created").status(Response.Status.CREATED).build()
+                    : Response.ok("Student Answer not created").status(Response.Status.NOT_ACCEPTABLE).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
 //    @PUT
-//    @Path("/updateStudentAnswer/{qaID}")
+//    @Path("updateStudentAnswer/{qaID}")
 //    @Consumes(MediaType.APPLICATION_JSON)
 //    public Response updateStudentAnswer(@PathParam("qaID") int qaID, StudentAnswer studentAnswer) {
 //        try {
@@ -56,7 +56,7 @@ public class StudentAnswerREST {
 //    }
 //
 //    @DELETE
-//    @Path("/deleteStudentAnswer/{qaID}")
+//    @Path("deleteStudentAnswer/{qaID}")
 //    public Response deleteStudentAnswer(@PathParam("qaID") int qaID) {
 //        try {
 //            return (studentAnswerService.deleteStudentAnswer(qaID))

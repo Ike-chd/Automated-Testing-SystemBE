@@ -86,11 +86,11 @@ public class FacultyMemberDB extends DBConnection implements FacultyMemberDAO {
     }
 
     @Override
-    public boolean deleteFacultyMember(FacultyMember facultyMember)  {
+    public boolean deleteFacultyMember(int facultyMember)  {
         int rowsAffected = 0;
         try {
             ps = getConnection().prepareStatement("DELETE FROM Users WHERE userID = ?");
-            ps.setInt(1, facultyMember.getUserID());
+            ps.setInt(1, facultyMember);
             rowsAffected = ps.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -125,6 +125,34 @@ public class FacultyMemberDB extends DBConnection implements FacultyMemberDAO {
         return facultyMembers;
     }
 
+    @Override
+    public FacultyMember getFacultyMemberForLogIn(int userId) {
+        try {
+            ps = getConnection().prepareStatement("SELECT * FROM Users WHERE userID = ?");
+            ps.setInt(1, userId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                int userID = rs.getInt("userID");
+                String firstname = rs.getString("firstname");
+                String surname = rs.getString("surname");
+                String email = rs.getString("email");
+                String idNumber = rs.getString("idNumber");
+                String password = rs.getString("password");
+                int accessRoleID = rs.getInt("accessRoleID");
+                return new FacultyMember(userID,firstname,surname,email,idNumber,password,adao.getAccessRole(accessRoleID));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closeRsPs(rs, ps);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return null;
+    }
+
     private FacultyMember extractFacultyMemberFromResultSet(ResultSet resultSet) throws SQLException {
         int userID = resultSet.getInt("userID");
         String firstname = resultSet.getString("firstname");
@@ -133,6 +161,8 @@ public class FacultyMemberDB extends DBConnection implements FacultyMemberDAO {
         String idNumber = resultSet.getString("idNumber");
         String password = resultSet.getString("password");
         int accessRoleID = resultSet.getInt("accessRoleID");
-        return new FacultyMember(userID,firstname,surname,email,idNumber,password,adao.getAccessRole(accessRoleID));
+        FacultyMember member = new FacultyMember(userID,firstname,surname,email,idNumber,adao.getAccessRole(accessRoleID));
+        member.setPassword(password);
+        return member;
     }
 }

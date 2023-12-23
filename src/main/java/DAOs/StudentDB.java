@@ -180,6 +180,37 @@ public class StudentDB extends DBConnection implements StudentDAO {
         return affectedRows == 1;
     }
 
+    @Override
+    public Student getStudentForLogIn(int id) {
+        try {
+            ps = getConnection().prepareStatement("SELECT * FROM Students WHERE studentID = ?");
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                int studentID = rs.getInt("studentID");
+                String name = rs.getString("firstname");
+                String surname = rs.getString("surname");
+                String email = rs.getString("email");
+                String address = rs.getString("address");
+                String idNumber = rs.getString("idNumber");
+                int courseID = rs.getInt("courseID");
+                String password = rs.getString("password");
+                String phoneNumber = rs.getString("phoneNumber");
+                AccessRole ar = new AccessRole(8, "Student");
+                return new Student(phoneNumber,address,cdao.getCourse(courseID),studentID,name,surname,email,idNumber,password, ar);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally{
+            try {
+                CloseStreams.closeRsPs(rs, ps);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return null;
+    }
+
     private Student extractStudentFromResultSet(ResultSet resultSet) throws SQLException {
         int studentID = resultSet.getInt("studentID");
         String name = resultSet.getString("firstname");
@@ -191,7 +222,9 @@ public class StudentDB extends DBConnection implements StudentDAO {
         String password = resultSet.getString("password");
         String phoneNumber = resultSet.getString("phoneNumber");
         AccessRole ar = new AccessRole(8, "Student");
-       return new Student(phoneNumber,address,cdao.getCourse(courseID),studentID,name,surname,email,idNumber,password, ar);
+        Student student = new Student(phoneNumber,address,cdao.getCourse(courseID),studentID,name,surname,email,idNumber, ar);
+        student.setPassword(password);
+       return student;
     }
 
 }

@@ -12,7 +12,7 @@ public interface AccessRoleDAO {
 
     boolean updateAccessRole(AccessRole accessRole);
 
-    boolean deleteAccessRole(AccessRole accessRole);
+    boolean deleteAccessRole(int accessRole);
 
     List<AccessRole> getAccessRoles();
 }

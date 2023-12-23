@@ -59,4 +59,32 @@ public class UserREST {
     public Response getPassword(@PathParam("email")String email){
         return Response.ok(us.getUserByEmial(email).orElse(new User())).status(Response.Status.CREATED).build();
     }
+    
+    @Path("allFacM")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllFacltyMembers(){
+        return Response.ok(us.getAllFacM()).status(Response.Status.CREATED).build();
+    }
+    
+    @Path("allAdmins")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllAdministrators(){
+        return Response.ok(us.getAllAdmins()).status(Response.Status.CREATED).build();
+    }
+    
+    @Path("numberOfFacM")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response getNumOfFacltyMembers(){
+        return Response.ok(us.getAllFacM().size()).status(Response.Status.CREATED).build();
+    }
+    
+    @Path("numberOfAdmins")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response getNumOfAdministrators(){
+        return Response.ok(us.getAllAdmins().size()).status(Response.Status.CREATED).build();
+    }
 }

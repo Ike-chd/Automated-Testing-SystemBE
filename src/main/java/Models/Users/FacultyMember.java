@@ -20,8 +20,10 @@ public class FacultyMember extends User {
         super(userID, name, surname, email, idNumber, password, accessRole);
     }
 
-    public FacultyMember(int userId, String firstname, String surname, String email, String idNumber, String password, int accessRoleID) {
+    public FacultyMember(int userID, String name, String surname, String email, String idNumber, AccessRole accessRole) {
+        super(userID, name, surname, email, idNumber, accessRole);
     }
+
 
     public void setIsProfessor(boolean isProfessor) {
         this.isProfessor = isProfessor;

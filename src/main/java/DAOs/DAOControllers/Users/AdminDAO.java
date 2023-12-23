@@ -10,4 +10,5 @@ public interface AdminDAO {
     boolean removeAdmin(int userId);
     boolean updateAdmin(Admin admin);
     List<Admin> getAllAdmins();
+    Admin getAdminForLogIn(int userId);
 }

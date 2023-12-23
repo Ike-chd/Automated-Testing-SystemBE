@@ -57,11 +57,11 @@ public class CourseDB extends DBConnection implements CourseDAO {
     }
 
     @Override
-    public boolean deleteCourse(Course course) {
+    public boolean deleteCourse(int course) {
         int update = 0;
         try {
             ps = getConnection().prepareStatement("DELETE FROM Courses WHERE courseID = ?");
-            ps.setInt(1, course.getCourseID());
+            ps.setInt(1, course);
             update = ps.executeUpdate();
         } catch (SQLException ex) {
         ex.printStackTrace();
@@ -122,5 +122,22 @@ public class CourseDB extends DBConnection implements CourseDAO {
         String courseName = resultSet.getString("courseName");
         String courseNumber = resultSet.getString("courseNumber");
         return new Course(courseId, courseName, courseNumber);
+    }
+
+    @Override
+    public void deleteAllModulesInCourse(int courseID) {
+        try {
+            ps = getConnection().prepareStatement("DELETE FROM course_module WHERE course_id = ?");
+            ps.setInt(1, courseID);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+        ex.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closePreparedStatment(ps);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

@@ -1,45 +1,57 @@
 package Services;
 
+import DAOs.AnswerDB;
+import DAOs.DAOControllers.QA.AnswerDAO;
+import DAOs.DAOControllers.QA.QuestionDAO;
+import DAOs.DAOControllers.Tests.TestAttemptDAO;
+import DAOs.QuestionDB;
+import DAOs.TestAttemptDB;
+import Models.QA.Answer;
+import Models.QA.Question;
+import Models.QA.StudentAnswer;
 import Models.Tests.Test;
+import Models.Tests.TestAttempt;
 import Services.ServicesInterfaces.TestAttemptService;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 public class TestAttemptHandler implements TestAttemptService {
-
-    private static final Map<Integer, Test> testAttemptDatabase = new HashMap<>();
+    private TestAttemptDAO tadao = new TestAttemptDB();
+    private AnswerDAO adao = new AnswerDB();
+    private QuestionDAO qdao = new QuestionDB();
 
     @Override
-    public Optional<Test> getTestAttempt(int attemptID) {
-        return Optional.ofNullable(testAttemptDatabase.get(attemptID));
+    public Optional<TestAttempt> getTestAttempt(int attemptID) {
+        return Optional.ofNullable(tadao.getTestAttempt(attemptID));
     }
 
     @Override
-    public boolean addTestAttempt(Test test) {
-        if (!testAttemptDatabase.containsKey(test.getTestID())) {
-            testAttemptDatabase.put(test.getTestID(), test);
-            return true;
+    public boolean addTestAttempt(TestAttempt testAttempt) {
+        return tadao.insertTestAttempt(testAttempt);
+    }
+    
+    public void evaluateAnswers(List<StudentAnswer> answers, List<Question> questions){
+        for (Question question : questions) {
+            List<Answer> ca = adao.getAllCorrectAnswers(question.getQuestionID());
         }
-        return false;
+    }
+    
+    public List<StudentAnswer> getAllStudentAnswersByQuestion(){
+        return null;
     }
 
     @Override
-    public boolean updateTestAttempt(int attemptID, Test updatedTest) {
-        if (testAttemptDatabase.containsKey(attemptID)) {
-            testAttemptDatabase.put(attemptID, updatedTest);
-            return true;
-        }
+    public boolean updateTestAttempt(TestAttempt testAttempt) {
+        
         return false;
     }
 
     @Override
     public boolean deleteTestAttempt(int attemptID) {
-        if (testAttemptDatabase.containsKey(attemptID)) {
-            testAttemptDatabase.remove(attemptID);
-            return true;
-        }
+        
         return false;
     }
 }

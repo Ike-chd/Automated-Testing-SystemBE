@@ -11,7 +11,9 @@ public interface FacultyMemberDAO {
 
     public boolean updateFacultyMember(FacultyMember facultyMember);
 
-    public boolean deleteFacultyMember(FacultyMember facultyMember);
+    public boolean deleteFacultyMember(int facultyMember);
 
     public List<FacultyMember> getAllFacultyMembers();
+    
+    FacultyMember getFacultyMemberForLogIn(int userId);
 }

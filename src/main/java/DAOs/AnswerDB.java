@@ -9,7 +9,6 @@ import Models.QA.Question;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +42,7 @@ public class AnswerDB extends DBConnection implements AnswerDAO{
     public boolean insertAnswer(Answer answer) {
         int affectedRows = 0;
         try {
-            ps = getConnection().prepareStatement("INSERT INTO Answers (questionID, answer, correctAnswer) VALUES(?,?,?)");
+            ps = getConnection().prepareStatement("INSERT INTO Answers (questionID_ans, answer, correctAnswer) VALUES(?,?,?)");
             ps.setInt(1, answer.getQuestion().getQuestionID());
             ps.setString(2, answer.getAnswer());
             ps.setBoolean(3, answer.isCorrect());
@@ -64,7 +63,7 @@ public class AnswerDB extends DBConnection implements AnswerDAO{
     public boolean updateAnswer(Answer answer) {
         int affectedRows = 0;
         try {
-            ps = getConnection().prepareStatement("UPDATE Answers SET questionID = ?, answer = ?, correctAnswer = ? WHERE answerID = ?");
+            ps = getConnection().prepareStatement("UPDATE Answers SET questionID_ans = ?, answer = ?, correctAnswer = ? WHERE answerID = ?");
             ps.setInt(1, answer.getQuestion().getQuestionID());
             ps.setString(2, answer.getAnswer());
             ps.setBoolean(3, answer.isCorrect());
@@ -102,11 +101,11 @@ public class AnswerDB extends DBConnection implements AnswerDAO{
     }
 
     @Override
-    public List<Answer> allQuestionAnswers(Question question) {
+    public List<Answer> allQuestionAnswers(int questionId) {
         List<Answer> answers = new ArrayList<>();
         try {
-            ps = getConnection().prepareStatement("SELECT * FROM Answers WHERE questionID = ?");
-            ps.setInt(1, question.getQuestionID());
+            ps = getConnection().prepareStatement("SELECT * FROM Answers WHERE questionID_ans = ?");
+            ps.setInt(1, questionId);
             rs = ps.executeQuery();
             while (rs.next()) {
                 answers.add(extractAnswerFromResultSet(rs));
@@ -126,7 +125,7 @@ public class AnswerDB extends DBConnection implements AnswerDAO{
     private Answer extractAnswerFromResultSet(ResultSet resultSet) throws SQLException {
         int answerId = resultSet.getInt("answerID");
         String answer = resultSet.getString("answer");
-        int questionID = resultSet.getInt("questionID");
+        int questionID = resultSet.getInt("questionID_ans");
         boolean correctAnswer = resultSet.getBoolean("correctAnswer");
         return new Answer(answerId, answer, correctAnswer, qdao.getQuestion(questionID));
     }
@@ -140,5 +139,49 @@ public class AnswerDB extends DBConnection implements AnswerDAO{
             i++;
         }
         return insertedAnswers;
+    }
+
+    @Override
+    public int getAnswerByQuestionID(int questionID) {
+        try {
+            ps = getConnection().prepareStatement("SELECT * FROM Answers WHERE questionID_ans = ?");
+            ps.setInt(1, questionID);
+            rs = ps.executeQuery();
+            if(rs.next()){
+                return extractAnswerFromResultSet(rs).getAnswerID();
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }finally{
+            try {
+                CloseStreams.closeRsPs(rs, ps);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return 0;
+    }
+    
+    @Override
+    public List<Answer> getAllCorrectAnswers(int questionId){
+        List<Answer> answers = new ArrayList<>();
+        try {
+            ps = getConnection().prepareStatement("SELECT * FROM Answers WHERE questionID = ? AND correctAnswer = ?");
+            ps.setInt(1, questionId);
+            ps.setBoolean(2, true);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                answers.add(extractAnswerFromResultSet(rs));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closeRsPs(rs, ps);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return answers;
     }
 }

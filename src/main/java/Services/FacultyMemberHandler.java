@@ -34,6 +34,6 @@ public class FacultyMemberHandler implements FacultyMemberService {
 
     @Override
     public boolean deleteFacultyMember(FacultyMember facultyMember) {
-        return fdao.deleteFacultyMember(facultyMember);
+        return fdao.deleteFacultyMember(facultyMember.getUserID());
     }
 }

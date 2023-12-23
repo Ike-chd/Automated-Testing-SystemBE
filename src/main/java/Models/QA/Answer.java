@@ -11,6 +11,10 @@ public class Answer {
     private String answer;
     private boolean isCorrect;
     private Question question;
+    
+    public void setIsCorrect(boolean isCorrect){
+        this.isCorrect = isCorrect;
+    }
 
     public Answer() {
     }

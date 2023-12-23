@@ -103,11 +103,11 @@ public class QuestionDB extends DBConnection implements QuestionDAO {
     }
 
     @Override
-    public List<Question> allQuestionUnderATopic(Topic topic) {
+    public List<Question> allQuestionUnderATopic(int topicID) {
         List<Question> questions = new ArrayList<>();
         try {
             ps = getConnection().prepareStatement("SELECT * FROM Questions WHERE topicID = ?");
-            ps.setInt(1, topic.getTopicID());
+            ps.setInt(1, topicID);
             rs = ps.executeQuery();
             while (rs.next()) {
                 questions.add(extractQuestionFromResultSet(rs));
@@ -132,7 +132,15 @@ public class QuestionDB extends DBConnection implements QuestionDAO {
             ps.setInt(1, testId);
             rs = ps.executeQuery();
             while (rs.next()) {
-                questions.add(extractQuestionFromResultSet(rs));
+                int qID = rs.getInt("questionID");
+                try (PreparedStatement ps2 = getConnection().prepareStatement("SELECT * FROM Questions WHERE questionID = ?")) {
+                    ps2.setInt(1, qID);
+                    try (ResultSet rs2 = ps2.executeQuery()) {
+                        while (rs2.next()) {
+                            questions.add(extractQuestionFromResultSet(rs2));
+                        }
+                    }
+                }
             }
         } catch (SQLException ex) {
             ex.printStackTrace();

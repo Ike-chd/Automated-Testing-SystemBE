@@ -35,5 +35,10 @@ public class TopicHandler implements TopicService {
     public List<Topic> getAllTopics() {
         return topdao.allTopics();
     }
+    
+    @Override
+    public List<Topic> getAllTopicsInATest(int testId) {
+        return topdao.getAllTopicsInATest(testId);
+    }
 
 }
