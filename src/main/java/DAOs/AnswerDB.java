@@ -45,7 +45,7 @@ public class AnswerDB extends DBConnection implements AnswerDAO{
             ps = getConnection().prepareStatement("INSERT INTO Answers (questionID_ans, answer, correctAnswer) VALUES(?,?,?)");
             ps.setInt(1, answer.getQuestion().getQuestionID());
             ps.setString(2, answer.getAnswer());
-            ps.setBoolean(3, answer.isCorrect());
+            ps.setBoolean(3, answer.getIsCorrect());
             affectedRows = ps.executeUpdate();
         } catch (SQLException ex) {
            ex.printStackTrace();
@@ -66,7 +66,7 @@ public class AnswerDB extends DBConnection implements AnswerDAO{
             ps = getConnection().prepareStatement("UPDATE Answers SET questionID_ans = ?, answer = ?, correctAnswer = ? WHERE answerID = ?");
             ps.setInt(1, answer.getQuestion().getQuestionID());
             ps.setString(2, answer.getAnswer());
-            ps.setBoolean(3, answer.isCorrect());
+            ps.setBoolean(3, answer.getIsCorrect());
             ps.setInt(4, answer.getAnswerID());
             affectedRows = ps.executeUpdate();
         } catch (SQLException ex) {
@@ -166,7 +166,7 @@ public class AnswerDB extends DBConnection implements AnswerDAO{
     public List<Answer> getAllCorrectAnswers(int questionId){
         List<Answer> answers = new ArrayList<>();
         try {
-            ps = getConnection().prepareStatement("SELECT * FROM Answers WHERE questionID = ? AND correctAnswer = ?");
+            ps = getConnection().prepareStatement("SELECT * FROM Answers WHERE questionID_ans = ? AND correctAnswer = ?");
             ps.setInt(1, questionId);
             ps.setBoolean(2, true);
             rs = ps.executeQuery();

@@ -16,6 +16,10 @@ public class Answer {
         this.isCorrect = isCorrect;
     }
 
+    public boolean getIsCorrect() {
+        return isCorrect;
+    }
+
     public Answer() {
     }
     

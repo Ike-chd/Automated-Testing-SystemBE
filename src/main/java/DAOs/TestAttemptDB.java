@@ -135,21 +135,24 @@ public class TestAttemptDB extends DBConnection implements TestAttemptDAO {
     @Override
     public boolean insertTestAttempt(TestAttempt testAttempt) {
         int affectedRows = 0;
-//        try {
-//            ps = getConnection().prepareStatement("INSERT INTO TestAttempt (questionID_ans, answer, correctAnswer) VALUES(?,?,?)");
-//            ps.setInt(1, answer.getQuestion().getQuestionID());
-//            ps.setString(2, answer.getAnswer());
-//            ps.setBoolean(3, answer.isCorrect());
-//            affectedRows = ps.executeUpdate();
-//        } catch (SQLException ex) {
-//           ex.printStackTrace();
-//        } finally {
-//            try {
-//                CloseStreams.closePreparedStatment(ps);
-//            } catch (SQLException e) {
-//                e.printStackTrace();
-//            }
-//        }
+        try {
+            ps = getConnection().prepareStatement("INSERT INTO Test_Attempt (studentID_attemp, testID_attempt, Rating, StartDateTime, EndDateTime, marks) VALUES(?,?,?,?,?,?)");
+            ps.setInt(1, testAttempt.getStudent().getUserID());
+            ps.setInt(2, testAttempt.getTest().getTestID());
+            ps.setDouble(3, testAttempt.getRating());
+            ps.setLong(4, testAttempt.getStartTime());
+            ps.setLong(5, testAttempt.getEndTime());
+            ps.setInt(6, testAttempt.getTotalMarks());
+            affectedRows = ps.executeUpdate();
+        } catch (SQLException ex) {
+           ex.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closePreparedStatment(ps);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
         return affectedRows == 1;
     }
 }

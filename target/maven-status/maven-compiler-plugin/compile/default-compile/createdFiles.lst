@@ -72,6 +72,7 @@ DAOs/DAOControllers/QA/StudentAnswerDAO.class
 Models/QA/Answer.class
 com/mycompany/atsbe/resources/StudentTestREST.class
 Models/Users/FacultyMember.class
+com/mycompany/atsbe/resources/ReportREST.class
 DAOs/SuspensionRequestDB.class
 com/mycompany/atsbe/resources/StudentREST.class
 Services/ServicesInterfaces/FacultyMemberService.class

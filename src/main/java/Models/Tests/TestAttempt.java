@@ -15,7 +15,8 @@ public class TestAttempt {
     private double rating;
     private List<StudentAnswer> answers = new ArrayList<>();
     private int totalMarks;
-    
+    private long startTime;
+    private long endTime;
 
     public TestAttempt(int testAttemptID, Test test, Student student, double rating) {
         this.testAttemptID = testAttemptID;
