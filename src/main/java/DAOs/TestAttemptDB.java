@@ -102,15 +102,14 @@ public class TestAttemptDB extends DBConnection implements TestAttemptDAO {
     }
 
     @Override
-    public List<TestAttempt> getAllTestAttemptsByTestAndStudent(Test test, Student student) {
-        List<TestAttempt> attempts = new ArrayList<>();
+    public TestAttempt getAllTestAttemptsByTestAndStudent(int testID, int studentID) {
         try {
             ps = getConnection().prepareStatement("SELECT * FROM Test_Attempt WHERE studentID_attemp = ? AND testID_attempt = ?");
-            ps.setInt(1,student.getUserID());
-            ps.setInt(2,test.getTestID());
+            ps.setInt(1,studentID);
+            ps.setInt(2,testID);
             rs = ps.executeQuery();
-            while (rs.next()) {
-                attempts.add(extractTestAttemptFromResultSet(rs));
+            if (rs.next()) {
+                return extractTestAttemptFromResultSet(rs);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -121,15 +120,20 @@ public class TestAttemptDB extends DBConnection implements TestAttemptDAO {
                 e.printStackTrace();
             }
         }
-        return attempts;
+        return null;
     }
 
     private TestAttempt extractTestAttemptFromResultSet(ResultSet resultSet) throws SQLException {
+        TestAttempt ta;
         int testAttemptID = resultSet.getInt("attemptId");
         int testID_attempt = resultSet.getInt("testID_attempt");
         int studentID_attemp = resultSet.getInt("studentID_attemp");
         double rating = resultSet.getDouble("Rating");
-        return new TestAttempt(testAttemptID,tdao.getTest(testID_attempt),sdao.getStudent(studentID_attemp),rating);
+        ta = new TestAttempt(testAttemptID,tdao.getTest(testID_attempt),sdao.getStudent(studentID_attemp),rating);
+        ta.setStartTime(resultSet.getLong("startDateTime"));
+        ta.setEndTime(resultSet.getLong("endDateTime"));
+        ta.setTotalMarks(resultSet.getInt("marks"));
+        return ta;
     }
 
     @Override

@@ -1,20 +1,16 @@
 package com.mycompany.atsbe.resources;
 
 import Models.Communication.SuspensionRequest;
-import Models.Users.Student;
 import Services.ServicesInterfaces.SuspensionRequestService;
 import Services.SuspensionRequestHandler;
 import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
-import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import java.util.List;
 
 @Path("suspension-requests")
 public class SuspensionRequestREST {
@@ -48,19 +44,19 @@ public class SuspensionRequestREST {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
-//    @POST
-//    @Path("updatesrq")
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response updateSuspensionRequest(@PathParam("ssId") int ssId, SuspensionRequest ssRequest) {
-//        ssRequest.setSsId(ssId);
-//        boolean success = suspensionRequestService.updateSuspensionRequest(ssRequest);
-//        if (success) {
-//            return Response.ok().entity(ssRequest).build();
-//        } else {
-//            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-//        }
-//    }
+    
+    @POST
+    @Path("updatesrq/{ssrID}/{confirmID}/{confirmed}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateSuspensionRequest(@PathParam("ssrID")int ssrID, @PathParam("confirmID")int confirmID, @PathParam("confirmed")int confirmed) {
+        boolean success = srs.confirmSuspensionRequest(ssrID, confirmID, confirmed);
+        if (success) {
+            return Response.status(Response.Status.CREATED).build();
+        } else {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 //
 //    @GET
 //    @Path("delete/{ssId}")

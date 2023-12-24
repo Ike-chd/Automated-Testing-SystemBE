@@ -12,6 +12,10 @@ public interface SuspensionRequestDAO {
     boolean insertSuspensionRequest(SuspensionRequest ssRequest);
 
     boolean updateSuspensionRequest(SuspensionRequest ssRequest);
+    
+    public boolean confirmSuspensionRequest(int ssid, int conid);
+    
+    public boolean updateActiveStatus(int ssID, boolean active);
 
     boolean deleteSuspensionRequest(int ssId);
 

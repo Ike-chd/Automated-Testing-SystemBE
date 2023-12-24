@@ -11,6 +11,8 @@ public interface SuspensionRequestService {
     boolean insertSuspensionRequest(SuspensionRequest ssRequest);
 
     boolean updateSuspensionRequest(SuspensionRequest ssRequest);
+    
+    public boolean confirmSuspensionRequest(int ssID, int conID, int con);
 
     boolean deleteSuspensionRequest(int ssId);
 

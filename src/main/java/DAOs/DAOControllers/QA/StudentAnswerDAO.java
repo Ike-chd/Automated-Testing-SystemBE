@@ -25,5 +25,5 @@ public interface StudentAnswerDAO {
 
     List<StudentAnswer> getStudentAnswersByTest(Test test);
     
-    List<StudentAnswer> getStudentAnswersByQuestionAndStudent(Question question, Student student);
+    List<StudentAnswer> getStudentAnswersByQuestionAndStudent(int questionID, int studentID);
 }

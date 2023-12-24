@@ -38,6 +38,7 @@ Models/StudentFeedback/StudentFeedback.class
 Services/SMSHandler$1.class
 DAOs/DAOControllers/Tests/TestAttemptDAO.class
 Models/Reports/FacultyReport.class
+Services/SuspensionRequestHandler$1$1.class
 Models/QA/StudentAnswer.class
 Services/UserHandler.class
 DAOs/ModuleDB.class
@@ -65,6 +66,7 @@ Services/CommentHandler.class
 Services/CourseHandler.class
 com/mycompany/atsbe/resources/CourseREST.class
 com/mycompany/atsbe/resources/TestREST.class
+Services/SuspensionRequestHandler$1.class
 com/triplethread/src/messaging/SenderImp.class
 com/mycompany/atsbe/resources/JakartaEE91Resource.class
 Services/QuestionHandler.class

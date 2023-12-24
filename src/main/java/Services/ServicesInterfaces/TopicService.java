@@ -3,6 +3,7 @@ package Services.ServicesInterfaces;
 import Models.Courses.Topic;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface TopicService {
 
@@ -17,4 +18,6 @@ public interface TopicService {
     public List<Topic> getAllTopics();
     
     public List<Topic> getAllTopicsInATest(int testId);
+    
+    public Set<Integer> getAllTopicsInACourse(int courseID);
 }

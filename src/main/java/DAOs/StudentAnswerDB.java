@@ -208,12 +208,12 @@ public class StudentAnswerDB extends DBConnection implements StudentAnswerDAO{
     }
 
     @Override
-    public List<StudentAnswer> getStudentAnswersByQuestionAndStudent(Question question, Student student) {
+    public List<StudentAnswer> getStudentAnswersByQuestionAndStudent(int questionID, int studentID) {
         List<StudentAnswer> answers = new ArrayList<>();
         try {
             ps = getConnection().prepareStatement("SELECT * FROM Student_Answers WHERE studentID = ? AND questionID = ?");
-            ps.setInt(1,student.getUserID());
-            ps.setInt(2,question.getQuestionID());
+            ps.setInt(1,studentID);
+            ps.setInt(2,questionID);
             rs = ps.executeQuery();
             while (rs.next()) {
                 answers.add(extractStudentAnswerFromResultSet(rs));

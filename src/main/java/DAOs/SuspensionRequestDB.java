@@ -94,6 +94,26 @@ public class SuspensionRequestDB extends DBConnection implements SuspensionReque
         }
         return affectedRows == 1;
     }
+    
+    @Override
+    public boolean confirmSuspensionRequest(int ssid, int conid) {
+        int affectedRows = 0;
+        try {
+            ps = getConnection().prepareStatement("UPDATE SuspensionRequests SET confirmID = ? WHERE SSID = ?");
+            ps.setInt(1, conid);
+            ps.setInt(2, ssid);
+            affectedRows = ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closeRsPs(rs, ps);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return affectedRows == 1;
+    }
 
     @Override
     public boolean deleteSuspensionRequest(int ssId) {
@@ -200,8 +220,7 @@ public class SuspensionRequestDB extends DBConnection implements SuspensionReque
     public List<SuspensionRequest> getAllUnApprovedSReq() {
         List<SuspensionRequest> suspensionRequests = new ArrayList<>();
         try {
-            ps = getConnection().prepareStatement("SELECT * FROM SuspensionRequests WHERE active = ?");
-            ps.setBoolean(1, false);
+            ps = getConnection().prepareStatement("SELECT * FROM SuspensionRequests WHERE confirmID IS NULL");
             rs = ps.executeQuery();
             while(rs.next()){
                 suspensionRequests.add(extractSuspensionRequestFromResultSet(rs));
@@ -210,5 +229,25 @@ public class SuspensionRequestDB extends DBConnection implements SuspensionReque
             ex.printStackTrace();
         }
         return suspensionRequests;
+    }
+
+    @Override
+    public boolean updateActiveStatus(int ssID, boolean active) {
+        int affectedRows = 0;
+        try {
+            ps = getConnection().prepareStatement("UPDATE SuspensionRequests SET active = ? WHERE SSID = ?");
+            ps.setBoolean(1, active);
+            ps.setInt(2, ssID);
+            affectedRows = ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closeRsPs(rs, ps);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return affectedRows == 1;
     }
 }

@@ -1,11 +1,13 @@
 package Services;
 
+import DAOs.DAOControllers.Courses.ModuleDAO;
 import DAOs.DAOControllers.Courses.TopicDAO;
 import DAOs.DAOControllers.QA.QuestionDAO;
 import DAOs.DAOControllers.QA.StudentAnswerDAO;
 import DAOs.DAOControllers.Tests.TestAttemptDAO;
 import DAOs.DAOControllers.Tests.TestDAO;
 import DAOs.DAOControllers.Users.StudentDAO;
+import DAOs.ModuleDB;
 import DAOs.QuestionDB;
 import DAOs.StudentAnswerDB;
 import DAOs.StudentDB;
@@ -13,6 +15,7 @@ import DAOs.TestAttemptDB;
 import DAOs.TestDB;
 import DAOs.TopicDB;
 import Models.Courses.Course;
+import Models.Courses.Module;
 import Models.Courses.Topic;
 import Models.QA.Question;
 import Models.QA.StudentAnswer;
@@ -20,29 +23,86 @@ import Models.Tests.Test;
 import Models.Tests.TestAttempt;
 import Models.Users.Student;
 import Services.ServicesInterfaces.ReportService;
+import Services.ServicesInterfaces.TestService;
+import Services.ServicesInterfaces.TopicService;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class ReportHandler implements ReportService {
 
     TestAttemptDAO tadao = new TestAttemptDB();
     TestDAO tdao = new TestDB();
+    TestService ts = new TestHandler();
     TopicDAO topdao = new TopicDB();
     QuestionDAO qdao = new QuestionDB();
     StudentAnswerDAO sadao = new StudentAnswerDB();
     StudentDAO sdao = new StudentDB();
+    ModuleDAO mdao = new ModuleDB();
+    TopicService tops = new TopicHandler();
 
     @Override
-    public Map<Topic, Double> getHardestTopics() {
-        Map<Topic, Double> hardestTopics = new HashMap<>();
+    public Map<String, Double> getAllModulesAndAverageForEachPerStudent(int courseID, int studentID) {
+        Map<String, Double> avgs = new HashMap<>();
+        List<Module> modules = mdao.getAllModulesInACourse(courseID);
+        for (Module module : modules) {
+            double total = 0;
+            double tatotal = 0;
+            List<Test> tests = tdao.getAllTestsByModuleID(module.getModuleID());
+            for (Test test : tests) {
+                TestAttempt attempt = tadao.getAllTestAttemptsByTestAndStudent(test.getTestID(), studentID);
+                if (attempt != null) {
+                    total += ts.getTotalTestMarks(test.getTestID());
+                    tatotal += attempt.getTotalMarks();
+                }
+            }
+            if (total > 0) {
+                avgs.put(module.getModuleName(), (tatotal / total) * 100);
+            } else {
+                avgs.put(module.getModuleName(), 0.0);
+            }
+        }
+        return avgs;
+    }
+
+    public Map<String, Double> getAllModulesAndAverage() {
+        Map<String, Double> avgs = new HashMap<>();
+        List<Module> modules = mdao.allModules();
+        for (Module module : modules) {
+            double total = 0;
+            double tatotal = 0;
+            List<Test> tests = tdao.getAllTestsByModuleID(module.getModuleID());
+            for (Test test : tests) {
+                List<TestAttempt> attempts = tadao.getAllTestAttemptsByTest(test);
+                if (!attempts.isEmpty()) {
+                    total += ts.getTotalTestMarks(test.getTestID()) * attempts.size();
+                    for (TestAttempt attempt : attempts) {
+                        tatotal += attempt.getTotalMarks();
+                    }
+                }
+            }
+            if (total > 0) {
+                avgs.put(module.getModuleName(), (tatotal / total) * 100);
+            } else {
+                avgs.put(module.getModuleName(), 0.0);
+            }
+        }
+        return avgs;
+    }
+
+    @Override
+    public Map<String, Double> getHardestTopics() {
+        Map<String, Double> hardestTopics = new HashMap<>();
         List<Topic> topics = topdao.allTopics();
         for (Topic topic : topics) {
             List<Question> questions = qdao.allQuestionUnderATopic(topic.getTopicID());
+            double allQuestions = 0.0;
             for (Question question : questions) {
-                hardestTopics.put(topic, getPercentageOfWrongAnswers(question));
+                allQuestions += getPercentageOfWrongAnswers(question);
             }
+            hardestTopics.put(topic.getTopicName(), allQuestions);
         }
         return hardestTopics;
     }
@@ -59,11 +119,11 @@ public class ReportHandler implements ReportService {
     }
 
     @Override
-    public Map<Test, Double> getHardestTests() {
-        Map<Test, Double> hardestTests = new HashMap<>();
+    public Map<String, Double> getHardestTests() {
+        Map<String, Double> hardestTests = new HashMap<>();
         List<Test> tests = tdao.getAllTests();
         for (Test test : tests) {
-            hardestTests.put(test, getRatingPercentage(test));
+            hardestTests.put(test.getTestName(), getRatingPercentage(test));
         }
         return hardestTests;
     }
@@ -76,38 +136,47 @@ public class ReportHandler implements ReportService {
             ratings += testAttempt.getRating();
             numOfRatings++;
         }
-        return (ratings/numOfRatings)*100;
+        return (numOfRatings==0) ? 0 : (ratings / numOfRatings) * 100;
     }
 
     @Override
-    public Map<Topic, Double> getHardestTopicsPerStudent(Student student) {
-        Map<Topic, Double> hardestTopicsPerStudent = new HashMap<>();
-        List<Topic> topics = topdao.allTopics();
-        for (Topic topic : topics) {
-            List<Question> questions = qdao.allQuestionUnderATopic(topic.getTopicID());
+    public Map<String, Double> getHardestTopicsPerStudent(int courseID, int studentID) {
+        Map<String, Double> hardestTopicsPerStudent = new HashMap<>();
+        Set<Integer> topicIDs = tops.getAllTopicsInACourse(courseID);
+        for (Integer topicID : topicIDs) {
+            List<Question> questions = qdao.allQuestionUnderATopic(topicID);
             double totalPercentage = 0;
             int questionCount = 0;
             for (Question question : questions) {
-                double percentage = getPercentageOfWrongAnswersPerStudent(question, student);
+                double percentage = getPercentageOfWrongAnswersPerStudent(question.getQuestionID(), studentID);
                 totalPercentage += percentage;
                 questionCount++;
             }
             double averagePercentage = (questionCount == 0) ? 0 : totalPercentage / questionCount;
-            hardestTopicsPerStudent.put(topic, averagePercentage);
+            hardestTopicsPerStudent.put(topdao.getTopic(topicID).getTopicName(), averagePercentage);
         }
         return hardestTopicsPerStudent;
     }
 
     @Override
-    public Map<Test, Double> getHardestTestsPerStudent(Student student) {
-        Map<Test, Double> hardestTestsPerStudent = new HashMap<>();
-        List<Test> tests = tdao.getAllTests();
-
+    public Map<String, Double> getHardestTestsPerStudent(int courseID, int studentID) {
+        Map<String, Double> hardestTestsPerStudent = new HashMap<>();
+        List<Test> tests = ts.allTestsInACourse(courseID);
         for (Test test : tests) {
-            double ratingPercentage = getRatingPercentagePerStudent(test, student);
-            hardestTestsPerStudent.put(test, ratingPercentage);
+            TestAttempt attempt = tadao.getAllTestAttemptsByTestAndStudent(test.getTestID(), studentID);
+            hardestTestsPerStudent.put(test.getTestName(), attempt.getRating());
         }
+        return hardestTestsPerStudent;
+    }
 
+    @Override
+    public Map<String, Double> totalMarksPerTestForStudent(int courseID, int studentID) {
+        Map<String, Double> hardestTestsPerStudent = new HashMap<>();
+        List<Test> tests = ts.allTestsInACourse(courseID);
+        for (Test test : tests) {
+            TestAttempt attempt = tadao.getAllTestAttemptsByTestAndStudent(test.getTestID(), studentID);
+            hardestTestsPerStudent.put(test.getTestName(), attempt.getTotalMarks() * 1.0);
+        }
         return hardestTestsPerStudent;
     }
 
@@ -124,7 +193,7 @@ public class ReportHandler implements ReportService {
 
     @Override
     public List<TestAttempt> getAllStudentsAndTheirTestAttempt() {
-        List<TestAttempt> allTestAttempts = tadao.getAllTestAttempts(); 
+        List<TestAttempt> allTestAttempts = tadao.getAllTestAttempts();
         Map<Student, List<TestAttempt>> studentTestAttemptsMap = new HashMap<>();
         for (TestAttempt testAttempt : allTestAttempts) {
             Student student = testAttempt.getStudent();
@@ -145,13 +214,13 @@ public class ReportHandler implements ReportService {
         return result;
 
     }
-    
-    private double getPercentageOfWrongAnswersPerStudent(Question question, Student student) {
+
+    private double getPercentageOfWrongAnswersPerStudent(int questionID, int studentID) {
         int wrongAnswers = 0;
         int totalAttempts = 0;
 
-        List<StudentAnswer> answers = sadao.getStudentAnswersByQuestionAndStudent(question, student);
-        
+        List<StudentAnswer> answers = sadao.getStudentAnswersByQuestionAndStudent(questionID, studentID);
+
         for (StudentAnswer answer : answers) {
             if (!answer.isCorrectAns()) {
                 wrongAnswers++;
@@ -159,27 +228,26 @@ public class ReportHandler implements ReportService {
             totalAttempts++;
         }
 
-        return (totalAttempts == 0) ? 0 : (double) wrongAnswers / totalAttempts * 100;
+        return (totalAttempts == 0) ? 0 : (double) ((wrongAnswers / totalAttempts) * 100);
     }
-    
-    private double getRatingPercentagePerStudent(Test test, Student student) {
-        double totalRatings = 0;
-        int totalAttempts = 0;
 
-        List<TestAttempt> testAttempts = tadao.getAllTestAttemptsByTestAndStudent(test, student);
-
-        for (TestAttempt testAttempt : testAttempts) {
-            totalRatings += testAttempt.getRating();
-            totalAttempts++;
-        }
-
-        return (totalAttempts == 0) ? 0 : (totalRatings / totalAttempts) * 100;
-    }
-    
+//    private double getRatingPercentagePerStudent(Test test, Student student) {
+//        double totalRatings = 0;
+//        int totalAttempts = 0;
+//
+//        List<TestAttempt> testAttempts = tadao.getAllTestAttemptsByTestAndStudent(test, student);
+//
+//        for (TestAttempt testAttempt : testAttempts) {
+//            totalRatings += testAttempt.getRating();
+//            totalAttempts++;
+//        }
+//
+//        return (totalAttempts == 0) ? 0 : (totalRatings / totalAttempts) * 100;
+//    }
     private double getAverageRatingForStudentInCourse(Student student, Course course) {
         return 0;//TODO
     }
-    
+
     private double calculateAverageRating(List<TestAttempt> testAttempts) {
         double totalRating = 0;
         int totalAttempts = testAttempts.size();

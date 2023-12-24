@@ -79,7 +79,7 @@ public class TestHandler implements TestService {
         }
         return tests;
     }
-    
+
     @Override
     public List<Test> getAllTestsByModule(int id) {
         List<Test> tests = tdao.getAllTestsByModuleID(id);
@@ -91,10 +91,14 @@ public class TestHandler implements TestService {
 
     @Override
     public int getTotalTestMarks(int testId) {
-        List<Question> questions = tdao.getAllQuestionsInTest(testId);
+        List<Topic> topics = topdao.getAllTopicsInATest(testId);
+        List<Question> questions = new ArrayList<>();
+        for (Topic topic : topics) {
+            questions.addAll(qdao.allQuestionUnderATopic(topic.getTopicID()));
+        }
         int total = 0;
         for (Question question : questions) {
-            total = +question.getMarkAllocation();
+            total += question.getMarkAllocation();
         }
         return total;
     }
@@ -115,7 +119,7 @@ public class TestHandler implements TestService {
         }
         return allTestsInACourse;
     }
-    
+
     public List<Test> allTestsInAModule(int courseId) {
         List<Test> allTestsInACourse = new ArrayList<>();
         for (Module module : mdao.getAllModulesInACourse(courseId)) {

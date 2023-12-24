@@ -52,7 +52,8 @@ public class TestAttemptHandler implements TestAttemptService {
             for (int i = 0; i < answers.size(); i++) {
                 if (answers.get(i).getQuestion().getQuestionID() == question.getQuestionID()) {
                     sans.add(answers.remove(i));
-                }
+                    i--;
+                }  
             }
             if (sans.size() == numOfAnswers) {
                 boolean correct = true;
