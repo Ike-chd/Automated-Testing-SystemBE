@@ -54,6 +54,12 @@ public class TopicREST {
         return Response.ok(ts.getAllTopicsInATest(id)).status(Response.Status.CREATED).build();
     }
     
+    @Path("numberOfTopics")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getNumberOfTopics(){
+        return Response.ok(ts.getAllTopics().size()).status(Response.Status.CREATED).build();
+    }
     
     @Path("deleteTopic/{topicId}")
     @GET

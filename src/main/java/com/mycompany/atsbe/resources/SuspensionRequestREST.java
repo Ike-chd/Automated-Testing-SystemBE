@@ -17,22 +17,6 @@ public class SuspensionRequestREST {
 
     private SuspensionRequestService srs = new SuspensionRequestHandler();
 
-//    public SuspensionRequestREST(SuspensionRequestService suspensionRequestService) {
-//        this.suspensionRequestService = suspensionRequestService;
-//    }
-//
-//    @GET
-//    @Path("getRequest")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response getSuspensionRequest(@PathParam("ssId") int ssId) {
-//        SuspensionRequest suspensionRequest = suspensionRequestService.getSuspensionRequest(ssId);
-//        if (suspensionRequest != null) {
-//            return Response.ok().entity(suspensionRequest).build();
-//        } else {
-//            return Response.status(Response.Status.NOT_FOUND).build();
-//        }
-//    }
-//
     @Path("admitsrq")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -69,13 +53,12 @@ public class SuspensionRequestREST {
 //        }
 //    }
 //
-//    @GET
-//    @Path("getAllRequests")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response getAllSuspensionRequests() {
-//        List<SuspensionRequest> suspensionRequests = suspensionRequestService.getAllSuspensionRequests();
-//        return Response.ok().entity(suspensionRequests).build();
-//    }
+    @GET
+    @Path("getAllRequests")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllSuspensionRequests() {
+        return Response.ok(srs.getAllSuspensionRequests()).status(Response.Status.CREATED).build();
+    }
 //
 //    @GET
 //    @Path("active")
@@ -99,6 +82,13 @@ public class SuspensionRequestREST {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUnApprovedSuspensionRequests(){
-        return Response.ok(srs.getAllUnApproved()).status(Response.Status.FOUND).build();
+        return Response.ok(srs.getAllUnApproved()).status(Response.Status.CREATED).build();
+    }
+    
+    @Path("getNumOfUnApprovedSuspensionRequests")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response getNumOfUnApprovedSuspensionRequests(){
+        return Response.ok(srs.getAllUnApproved().size()).status(Response.Status.CREATED).build();
     }
 }

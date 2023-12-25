@@ -164,7 +164,11 @@ public class ReportHandler implements ReportService {
         List<Test> tests = ts.allTestsInACourse(courseID);
         for (Test test : tests) {
             TestAttempt attempt = tadao.getAllTestAttemptsByTestAndStudent(test.getTestID(), studentID);
+            if(attempt != null){
             hardestTestsPerStudent.put(test.getTestName(), attempt.getRating());
+            } else {
+                hardestTestsPerStudent.put(test.getTestName(), 0.0);
+            }
         }
         return hardestTestsPerStudent;
     }
@@ -216,18 +220,15 @@ public class ReportHandler implements ReportService {
     }
 
     private double getPercentageOfWrongAnswersPerStudent(int questionID, int studentID) {
-        int wrongAnswers = 0;
-        int totalAttempts = 0;
-
+        double wrongAnswers = 0.0;
+        double totalAttempts = 0.0;
         List<StudentAnswer> answers = sadao.getStudentAnswersByQuestionAndStudent(questionID, studentID);
-
-        for (StudentAnswer answer : answers) {
-            if (!answer.isCorrectAns()) {
+        for (int i = 0; i < answers.size(); i++) {
+            if (!answers.get(i).isCorrectAns()) {
                 wrongAnswers++;
             }
             totalAttempts++;
         }
-
         return (totalAttempts == 0) ? 0 : (double) ((wrongAnswers / totalAttempts) * 100);
     }
 
@@ -257,33 +258,18 @@ public class ReportHandler implements ReportService {
         return (totalAttempts == 0) ? 0 : totalRating / totalAttempts;
     }
 
-//    @Override
-//    public Map<Topic, Double> getHardestTopics() {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
-//
-//    @Override
-//    public Map<Test, Double> getHardestTests() {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
-//
-//    @Override
-//    public Map<Topic, Double> getHardestTopicsPerStudent(Student student) {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
-//
-//    @Override
-//    public Map<Test, Double> getHardestTestsPerStudent(Student student) {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
-//
-//    @Override
-//    public Map<Student, Double> getAllStudentsAndTheirAveragesInACourse(Course course) {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
-//
-//    @Override
-//    public List<TestAttempt> getAllStudentsAndTheirTestAttempt() {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
+    @Override
+    public double getCourseAVG(int courseID, int studentID) {
+        Map<String, Double> allMAVG = getAllModulesAndAverageForEachPerStudent(courseID, studentID);
+        Set<String> mnames = allMAVG.keySet();
+        double avg = 0.0;
+        double totamlM = 0.0;
+        for (String mname : mnames) {
+            if(allMAVG.get(mname) > 0){
+                avg += allMAVG.get(mname);
+                totamlM++;
+            }
+        }
+        return avg/totamlM;
+    }
 }

@@ -55,7 +55,7 @@ public class AnswerREST {
 //        }
 //    }
 
-    @DELETE
+    @GET
     @Path("deleteAnswer/{answerID}")
     public Response deleteAnswer(@PathParam("answerID") int answerID) {
         try {
@@ -73,6 +73,6 @@ public class AnswerREST {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllAnsInQues(@PathParam("questionID") int questionId){
-        return Response.ok(as.getAllAnsByQues(questionId)).status(Response.Status.FOUND).build();
+        return Response.ok(as.getAllAnsByQues(questionId)).status(Response.Status.CREATED).build();
     }
 }

@@ -40,6 +40,6 @@ public class CommentHandler implements CommentService {
 
     @Override
     public boolean deleteComment(int commentId) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return cdao.deleteComment(commentId);
     }
 }

@@ -18,4 +18,6 @@ public interface TestAttemptDAO {
     public TestAttempt getAllTestAttemptsByTestAndStudent(int testID, int studentID);
 
     public boolean insertTestAttempt(TestAttempt testAttempt);
+    
+    public boolean checkForTestAttempt(int testID, int studentID);
 }

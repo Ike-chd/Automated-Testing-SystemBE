@@ -3,7 +3,6 @@ package com.mycompany.atsbe.resources;
 import Models.Tests.Test;
 import Services.ServicesInterfaces.TestService;
 import Services.TestHandler;
-import com.google.gson.Gson;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
@@ -40,11 +39,11 @@ public class TestREST {
         return Response.ok(ts.getAllTestsByModule(id)).status(Response.Status.CREATED).build();
     }
     
-    @Path("getAllMyTests/{courseID}")
+    @Path("getAllMyTests/{courseID}/{studentID}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllStudentTests(@PathParam("courseID")int id){
-        return Response.ok(ts.allTestsInACourse(id)).status(Response.Status.CREATED).build();
+    public Response getAllStudentTests(@PathParam("courseID")int id, @PathParam("studentID")int stuID){
+        return Response.ok(ts.allTestsInACourse(id, stuID)).status(Response.Status.CREATED).build();
     }
     
     @Path("getWeight/{moduleId}")
@@ -74,5 +73,12 @@ public class TestREST {
     @GET
     public Response getTestTotal(@PathParam("{testId}") int testId){
         return Response.ok(ts.getTotalTestMarks(testId)).status(Response.Status.CREATED).build();
+    }
+    
+    @Path("numberOfTests")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getNumberOfTests(){
+        return Response.ok(ts.getAllTests().size()).status(Response.Status.CREATED).build();
     }
 }

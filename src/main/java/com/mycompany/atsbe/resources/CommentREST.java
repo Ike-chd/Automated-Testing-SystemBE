@@ -46,13 +46,12 @@ public class CommentREST {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
-//
-//    @Path("commentId")
-//    @POST
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response getComment(@PathParam("commentId") int commentId) {
-//        return commentService.getCommentById(commentId)
-//                .map(comment -> Response.ok(comment).build())
-//                .orElse(Response.status(Response.Status.NOT_FOUND).build());
-//    }
+    
+    @Path("deleteComment/{commentID}")
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getComment(@PathParam("commentId") int commentId) {
+        return cs.deleteComment(commentId) ? Response.status(Response.Status.CREATED).build()
+                : Response.status(Response.Status.NOT_IMPLEMENTED).build();
+    }
 }

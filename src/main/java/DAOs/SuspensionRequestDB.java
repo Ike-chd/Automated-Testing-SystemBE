@@ -198,6 +198,29 @@ public class SuspensionRequestDB extends DBConnection implements SuspensionReque
         }
         return studentSuspensionRequest;
     }
+    
+    @Override
+    public boolean checkForActiveSuspensionByStudent(int studentID) {
+        List<SuspensionRequest> studentSuspensionRequest = new ArrayList<>();
+        try {
+            ps = getConnection().prepareStatement("SELECT * FROM SuspensionRequests WHERE studentID = ? AND active = ?");
+            ps.setInt(1, studentID);
+            ps.setBoolean(1, true);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closeRsPs(rs, ps);
+            } catch (SQLException ex) {
+               ex.printStackTrace();
+            }
+        }
+        return false;
+    }
 
     private SuspensionRequest extractSuspensionRequestFromResultSet(ResultSet resultSet) throws SQLException {
         int ssId = resultSet.getInt("SSID");

@@ -38,7 +38,8 @@ public class UserHandler implements UserService {
         User user = null;
         if(checkIfEmailExists(email)) {
             if((user = udao.getUserByEmail(email)) == null) {
-                return Optional.ofNullable(user = sdao.getStudentByEmail(email));
+                user = sdao.getStudentByEmail(email);
+                return Optional.ofNullable(user);
             }
             return Optional.ofNullable(user);
         }

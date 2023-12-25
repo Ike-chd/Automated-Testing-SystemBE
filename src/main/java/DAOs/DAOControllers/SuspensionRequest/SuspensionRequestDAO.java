@@ -26,4 +26,6 @@ public interface SuspensionRequestDAO {
     List<SuspensionRequest> getSuspensionRequestsByStudent(Student student);
     
     List<SuspensionRequest> getAllUnApprovedSReq();
+    
+    public boolean checkForActiveSuspensionByStudent(int studentID);
 }

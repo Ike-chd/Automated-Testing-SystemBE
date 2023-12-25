@@ -99,4 +99,11 @@ public class ModuleREST {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
     }
+    
+    @Path("numberOfModules")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getNumberOfModules(){
+        return Response.ok(ms.getAllModules().size()).status(Response.Status.CREATED).build();
+    }
 }

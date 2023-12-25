@@ -20,6 +20,13 @@ public class ReportREST {
         return Response.ok(rs.getAllModulesAndAverageForEachPerStudent(courseID, studentID)).status(Response.Status.CREATED).build();
     }
     
+    @Path("courseAVG/{courseID}/{studentID}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response getCAVG(@PathParam("courseID")int courseID, @PathParam("studentID")int studentID){
+        return Response.ok(rs.getCourseAVG(courseID, studentID)).status(Response.Status.CREATED).build();
+    }
+    
     @Path("htopics")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -31,7 +38,7 @@ public class ReportREST {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getHardestTopicsfs(@PathParam("courseID")int courseID, @PathParam("studentID")int studentID){
-        return Response.ok(rs.getHardestTestsPerStudent(courseID, studentID)).status(Response.Status.CREATED).build();
+        return Response.ok(rs.getHardestTopicsPerStudent(courseID, studentID)).status(Response.Status.CREATED).build();
     }
     
     @Path("htests/")

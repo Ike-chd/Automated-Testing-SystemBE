@@ -5,9 +5,11 @@ import DAOs.DAOControllers.Courses.ModuleDAO;
 import DAOs.DAOControllers.Courses.TopicDAO;
 import DAOs.DAOControllers.QA.AnswerDAO;
 import DAOs.DAOControllers.QA.QuestionDAO;
+import DAOs.DAOControllers.Tests.TestAttemptDAO;
 import DAOs.DAOControllers.Tests.TestDAO;
 import DAOs.ModuleDB;
 import DAOs.QuestionDB;
+import DAOs.TestAttemptDB;
 import DAOs.TestDB;
 import DAOs.TopicDB;
 import Models.Courses.Topic;
@@ -27,6 +29,7 @@ public class TestHandler implements TestService {
     private ModuleDAO mdao = new ModuleDB();
     private TopicDAO topdao = new TopicDB();
     private AnswerDAO adao = new AnswerDB();
+    private TestAttemptDAO tadao = new TestAttemptDB();
 
     @Override
     public Optional<Test> getTest(int TestID) {
@@ -104,6 +107,29 @@ public class TestHandler implements TestService {
     }
 
     @Override
+    public List<Test> allTestsInACourse(int courseId, int stuID) {
+        List<Test> allTestsInACourse = new ArrayList<>();
+        for (Module module : mdao.getAllModulesInACourse(courseId)) {
+            allTestsInACourse.addAll(tdao.getAllTestsByModuleID(module.getModuleID()));
+        }
+        for (Test test : allTestsInACourse) {
+            for (Topic topic : topdao.getAllTopicsInATest(test.getTestID())) {
+                test.getQuestions().addAll(qdao.allQuestionUnderATopic(topic.getTopicID()));
+            }
+            for (Question question : test.getQuestions()) {
+                question.getAnswers().addAll(adao.allQuestionAnswers(question.getQuestionID()));
+            }
+        }
+        for (int i = 0; i < allTestsInACourse.size(); i++) {
+            if(checkIfTestAttemptExists(allTestsInACourse.get(i).getTestID(), stuID)){
+                allTestsInACourse.remove(i);
+                i--;
+            }
+        }
+        return allTestsInACourse;
+    }
+    
+    @Override
     public List<Test> allTestsInACourse(int courseId) {
         List<Test> allTestsInACourse = new ArrayList<>();
         for (Module module : mdao.getAllModulesInACourse(courseId)) {
@@ -126,5 +152,9 @@ public class TestHandler implements TestService {
             allTestsInACourse.addAll(tdao.getAllTestsByModuleID(module.getModuleID()));
         }
         return allTestsInACourse;
+    }
+    
+    public boolean checkIfTestAttemptExists(int testID, int studentID){
+        return tadao.checkForTestAttempt(testID, studentID);
     }
 }

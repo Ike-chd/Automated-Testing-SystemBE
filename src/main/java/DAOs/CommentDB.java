@@ -172,8 +172,8 @@ public class CommentDB extends DBConnection implements CommentDAO {
 
     private Comment extractCommentFromResultSet(ResultSet resultSet) throws SQLException {
         int commentId = resultSet.getInt("commentID");
-        int studentID = resultSet.getInt("studentID");
-        int userID = resultSet.getInt("userID");
+        int studentID = resultSet.getInt("studentID_comment");
+        int userID = resultSet.getInt("userID_comment");
         String commentText = resultSet.getString("comment");
         long commentDate = resultSet.getLong("commentDate");
         return new Comment(commentId, commentText, studentDAO.getStudent(studentID), facultyMemberDAO.getFacultyMember(userID), commentDate);

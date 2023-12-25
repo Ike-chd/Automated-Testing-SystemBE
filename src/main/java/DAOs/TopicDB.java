@@ -139,7 +139,7 @@ public class TopicDB extends DBConnection implements TopicDAO{
     
     @Override
     public List<Topic> getAllTopicsInATest(int id){
-        List<Topic> questions = new ArrayList<>();
+        List<Topic> topics = new ArrayList<>();
         try {
             ps = getConnection().prepareStatement("SELECT * FROM test_topics WHERE tt_testID = ?");
             ps.setInt(1, id);
@@ -150,7 +150,7 @@ public class TopicDB extends DBConnection implements TopicDAO{
                     ps2.setInt(1, tID);
                     try (ResultSet rs2 = ps2.executeQuery()) {
                         while (rs2.next()) {
-                            questions.add(extractTopicsFromResultSet(rs2));
+                            topics.add(extractTopicsFromResultSet(rs2));
                         }
                     }
                 }
@@ -158,6 +158,6 @@ public class TopicDB extends DBConnection implements TopicDAO{
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        return questions;
+        return topics;
     }
 }

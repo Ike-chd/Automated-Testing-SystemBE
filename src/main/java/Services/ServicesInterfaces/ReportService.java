@@ -13,6 +13,8 @@ public interface ReportService {
     public Map<String, Double> getHardestTests();
 
     public Map<String, Double> getAllModulesAndAverageForEachPerStudent(int courseID, int studentID);
+    
+    public double getCourseAVG(int courseID, int studentID);
 
     public Map<String, Double> getHardestTopicsPerStudent(int courseID, int studentID);
 

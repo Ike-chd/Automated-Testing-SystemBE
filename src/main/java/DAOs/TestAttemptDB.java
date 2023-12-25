@@ -16,24 +16,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TestAttemptDB extends DBConnection implements TestAttemptDAO {
+
     private PreparedStatement ps;
     private ResultSet rs;
     private TestDAO tdao = new TestDB();
     private StudentDAO sdao = new StudentDB();
+
     @Override
     public TestAttempt getTestAttempt(int id) {
         try {
             ps = getConnection().prepareStatement("SELECT * FROM Test_Attempt WHERE attemptId = ?");
             ps.setInt(1, id);
             rs = ps.executeQuery();
-            if(rs.next()) {
+            if (rs.next()) {
                 return extractTestAttemptFromResultSet(rs);
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             try {
-                CloseStreams.closeRsPs(rs,ps);
+                CloseStreams.closeRsPs(rs, ps);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -46,9 +48,9 @@ public class TestAttemptDB extends DBConnection implements TestAttemptDAO {
         List<TestAttempt> attempts = new ArrayList<>();
         try {
             ps = getConnection().prepareStatement("SELECT * FROM Test_Attempt WHERE testID_attempt = ?");
-            ps.setInt(1,test.getTestID());
+            ps.setInt(1, test.getTestID());
             rs = ps.executeQuery();
-            while(rs.next()) {
+            while (rs.next()) {
                 TestAttempt attempt = extractTestAttemptFromResultSet(rs);
                 attempts.add(attempt);
             }
@@ -63,16 +65,16 @@ public class TestAttemptDB extends DBConnection implements TestAttemptDAO {
         List<TestAttempt> attempts = new ArrayList<>();
         try {
             ps = getConnection().prepareStatement("SELECT * FROM Test_Attempt WHERE studentID_attemp = ?");
-            ps.setInt(1,student.getUserID());
+            ps.setInt(1, student.getUserID());
             rs = ps.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 attempts.add(extractTestAttemptFromResultSet(rs));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             try {
-                CloseStreams.closeRsPs(rs,ps);
+                CloseStreams.closeRsPs(rs, ps);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -86,14 +88,14 @@ public class TestAttemptDB extends DBConnection implements TestAttemptDAO {
         try {
             ps = getConnection().prepareStatement("SELECT * FROM Test_Attempt");
             rs = ps.executeQuery();
-            while(rs.next()) {
+            while (rs.next()) {
                 attempts.add(extractTestAttemptFromResultSet(rs));
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             try {
-                CloseStreams.closeRsPs(rs,ps);
+                CloseStreams.closeRsPs(rs, ps);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -105,8 +107,8 @@ public class TestAttemptDB extends DBConnection implements TestAttemptDAO {
     public TestAttempt getAllTestAttemptsByTestAndStudent(int testID, int studentID) {
         try {
             ps = getConnection().prepareStatement("SELECT * FROM Test_Attempt WHERE studentID_attemp = ? AND testID_attempt = ?");
-            ps.setInt(1,studentID);
-            ps.setInt(2,testID);
+            ps.setInt(1, studentID);
+            ps.setInt(2, testID);
             rs = ps.executeQuery();
             if (rs.next()) {
                 return extractTestAttemptFromResultSet(rs);
@@ -115,7 +117,7 @@ public class TestAttemptDB extends DBConnection implements TestAttemptDAO {
             e.printStackTrace();
         } finally {
             try {
-                CloseStreams.closeRsPs(rs,ps);
+                CloseStreams.closeRsPs(rs, ps);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -129,7 +131,7 @@ public class TestAttemptDB extends DBConnection implements TestAttemptDAO {
         int testID_attempt = resultSet.getInt("testID_attempt");
         int studentID_attemp = resultSet.getInt("studentID_attemp");
         double rating = resultSet.getDouble("Rating");
-        ta = new TestAttempt(testAttemptID,tdao.getTest(testID_attempt),sdao.getStudent(studentID_attemp),rating);
+        ta = new TestAttempt(testAttemptID, tdao.getTest(testID_attempt), sdao.getStudent(studentID_attemp), rating);
         ta.setStartTime(resultSet.getLong("startDateTime"));
         ta.setEndTime(resultSet.getLong("endDateTime"));
         ta.setTotalMarks(resultSet.getInt("marks"));
@@ -149,7 +151,7 @@ public class TestAttemptDB extends DBConnection implements TestAttemptDAO {
             ps.setInt(6, testAttempt.getTotalMarks());
             affectedRows = ps.executeUpdate();
         } catch (SQLException ex) {
-           ex.printStackTrace();
+            ex.printStackTrace();
         } finally {
             try {
                 CloseStreams.closePreparedStatment(ps);
@@ -158,5 +160,27 @@ public class TestAttemptDB extends DBConnection implements TestAttemptDAO {
             }
         }
         return affectedRows == 1;
+    }
+
+    @Override
+    public boolean checkForTestAttempt(int testID, int studentID) {
+        try {
+            ps = getConnection().prepareStatement("SELECT * FROM Test_Attempt WHERE studentID_attemp = ? AND testID_attempt = ?");
+            ps.setInt(1, studentID);
+            ps.setInt(2, testID);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                CloseStreams.closeRsPs(rs, ps);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
     }
 }

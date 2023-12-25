@@ -71,4 +71,11 @@ public class CourseREST {
         return (cs.updateModules(courseId, modules)) ? Response.status(Response.Status.CREATED).build()
                 : Response.status(Response.Status.NOT_ACCEPTABLE).build();
     }
+    
+    @Path("numberOfCourses")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getNumberOfCourses(){
+        return Response.ok(cs.getAllCourses().size()).status(Response.Status.CREATED).build();
+    }
 }

@@ -22,5 +22,7 @@ public interface TestService {
 
     int getTotalTestMarks(int testId);
     
+    public List<Test> allTestsInACourse(int courseId, int stuID);
+    
     public List<Test> allTestsInACourse(int courseId);
 }
