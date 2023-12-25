@@ -205,7 +205,7 @@ public class SuspensionRequestDB extends DBConnection implements SuspensionReque
         try {
             ps = getConnection().prepareStatement("SELECT * FROM SuspensionRequests WHERE studentID = ? AND active = ?");
             ps.setInt(1, studentID);
-            ps.setBoolean(1, true);
+            ps.setBoolean(2, true);
             rs = ps.executeQuery();
             if (rs.next()) {
                 return true;
