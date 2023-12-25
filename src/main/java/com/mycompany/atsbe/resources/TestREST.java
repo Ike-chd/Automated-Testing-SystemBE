@@ -46,6 +46,13 @@ public class TestREST {
         return Response.ok(ts.allTestsInACourse(id, stuID)).status(Response.Status.CREATED).build();
     }
     
+    @Path("NumOfAllMyTests/{courseID}/{studentID}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response getNumOfAllStudentTests(@PathParam("courseID")int id, @PathParam("studentID")int stuID){
+        return Response.ok(ts.allTestsInACourse(id, stuID).size()).status(Response.Status.CREATED).build();
+    }
+    
     @Path("getWeight/{moduleId}")
     @GET
     @Produces(MediaType.TEXT_PLAIN)

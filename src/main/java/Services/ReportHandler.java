@@ -108,14 +108,14 @@ public class ReportHandler implements ReportService {
     }
 
     public double getPercentageOfWrongAnswers(Question question) {
-        int percentageOfWrongAnswers = 0;
-        int numOfAnswers = 0;
+        double percentageOfWrongAnswers = 0;
+        double numOfAnswers = 0;
         List<StudentAnswer> answers = sadao.getStudentAnswersByQuestion(question);
         for (StudentAnswer answer : answers) {
             percentageOfWrongAnswers += (answer.isCorrectAns()) ? 0 : 1;
             numOfAnswers++;
         }
-        return (percentageOfWrongAnswers / numOfAnswers) * 100;
+        return (numOfAnswers == 0) ? 0 : (percentageOfWrongAnswers / numOfAnswers) * 100;
     }
 
     @Override
@@ -130,13 +130,13 @@ public class ReportHandler implements ReportService {
 
     public double getRatingPercentage(Test test) {
         double ratings = 0;
-        int numOfRatings = 0;
+        double numOfRatings = 0;
         List<TestAttempt> testAttempts = tadao.getAllTestAttemptsByTest(test);
         for (TestAttempt testAttempt : testAttempts) {
             ratings += testAttempt.getRating();
             numOfRatings++;
         }
-        return (numOfRatings==0) ? 0 : (ratings / numOfRatings) * 100;
+        return (numOfRatings == 0) ? 0 : (ratings / numOfRatings) * 100;
     }
 
     @Override
@@ -164,8 +164,8 @@ public class ReportHandler implements ReportService {
         List<Test> tests = ts.allTestsInACourse(courseID);
         for (Test test : tests) {
             TestAttempt attempt = tadao.getAllTestAttemptsByTestAndStudent(test.getTestID(), studentID);
-            if(attempt != null){
-            hardestTestsPerStudent.put(test.getTestName(), attempt.getRating());
+            if (attempt != null) {
+                hardestTestsPerStudent.put(test.getTestName(), attempt.getRating());
             } else {
                 hardestTestsPerStudent.put(test.getTestName(), 0.0);
             }
@@ -265,11 +265,11 @@ public class ReportHandler implements ReportService {
         double avg = 0.0;
         double totamlM = 0.0;
         for (String mname : mnames) {
-            if(allMAVG.get(mname) > 0){
+            if (allMAVG.get(mname) > 0) {
                 avg += allMAVG.get(mname);
                 totamlM++;
             }
         }
-        return avg/totamlM;
+        return avg / totamlM;
     }
 }

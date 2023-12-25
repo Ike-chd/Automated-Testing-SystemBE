@@ -26,6 +26,13 @@ public class CommentREST {
         return Response.ok(cs.getAllCommentsForMe(stuID)).status(Response.Status.CREATED).build();
     }
     
+    @Path("stu/NumOfAllComments/{stuID}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response NumOfAllStuComments(@PathParam("stuID")int stuID) {
+        return Response.ok(cs.getAllCommentsForMe(stuID).size()).status(Response.Status.CREATED).build();
+    }
+    
     @Path("fac/allComments/{facID}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)

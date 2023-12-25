@@ -100,6 +100,17 @@ public class ModuleREST {
         }
     }
     
+    @GET
+    @Path("NumOfAllModules/byCourse/{courseID}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response NumOfAllModulesByCourse(@PathParam("courseID")int id) {
+        try {
+            return Response.ok(ms.getAllModulesByCourse(id).size()).status(Response.Status.OK).build();
+        } catch (NoSuchElementException e) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+    }
+    
     @Path("numberOfModules")
     @GET
     @Produces(MediaType.APPLICATION_JSON)

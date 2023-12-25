@@ -1,8 +1,10 @@
 package Services;
 
+import DAOs.DAOControllers.SuspensionRequest.SuspensionRequestDAO;
 import DAOs.DAOControllers.Users.StudentDAO;
 import DAOs.DAOControllers.Users.UserDAO;
 import DAOs.StudentDB;
+import DAOs.SuspensionRequestDB;
 import DAOs.UserDB;
 import Models.Users.Admin;
 import Models.Users.FacultyMember;
@@ -15,6 +17,7 @@ public class UserHandler implements UserService {
 
     UserDAO udao = new UserDB();
     StudentDAO sdao = new StudentDB();
+    SuspensionRequestDAO srdao = new SuspensionRequestDB();
 
     @Override
     public boolean addAccountRequest(User student) {
@@ -39,6 +42,11 @@ public class UserHandler implements UserService {
         if(checkIfEmailExists(email)) {
             if((user = udao.getUserByEmail(email)) == null) {
                 user = sdao.getStudentByEmail(email);
+                if(user !=null){
+                    if(srdao.checkForActiveSuspensionByStudent(user.getUserID())){
+                        user.setName("is suspended");
+                    }
+                }
                 return Optional.ofNullable(user);
             }
             return Optional.ofNullable(user);
